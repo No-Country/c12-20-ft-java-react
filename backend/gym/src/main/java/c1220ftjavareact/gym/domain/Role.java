@@ -5,10 +5,10 @@ import c1220ftjavareact.gym.domain.exception.RoleNotFoundException;
 import java.util.List;
 
 public enum Role {
-    CLIENT, USER, ADMIN;
+    CUSTOMER, EMPLOYEE, ADMIN;
 
     public static Role stringToRole(final String value){
-        return List.of(CLIENT, USER, ADMIN)
+        return List.of(CUSTOMER, EMPLOYEE, ADMIN)
                 .stream()
                 .filter(role -> role.equals(value))
                 .findFirst()

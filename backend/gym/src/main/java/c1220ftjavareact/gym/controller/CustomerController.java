@@ -14,14 +14,14 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/v1/clients")
+@RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
-public class ClientController {
+public class CustomerController {
     private final UserService service;
 
     @PostMapping
-    public HttpEntity<Void> registerClient(@Valid @RequestBody UserSaveDTO userDTO){
-        service.registerClient(userDTO);
+    public HttpEntity<Void> registerCustomer(@Valid @RequestBody UserSaveDTO userDTO){
+        service.registerCustomer(userDTO);
 
         return ResponseEntity.created(URI.create("/api/v1/clients")).build();
     }

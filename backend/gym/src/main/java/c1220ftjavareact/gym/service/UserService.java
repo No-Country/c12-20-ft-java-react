@@ -4,7 +4,9 @@ import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
 
 public interface UserService {
 
-    void registerClient(UserSaveDTO model);
+    void registerCustomer(UserSaveDTO model);
 
-    void registerUser(UserSaveDTO model);
+    void registerEmployee(UserSaveDTO model);
+
+    void registerAdmin(String password);
 }
