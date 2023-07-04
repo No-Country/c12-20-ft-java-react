@@ -1,1 +1,33 @@
-
+enableLoggingRequestDetails: false
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+logging:
+  level:
+    root: INFO
+    web: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+  pattern:
+    dateformat: HH:mm:ss
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    password: admin
+    url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
+    username: root
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  jwt:
+    secret: yGhqRjT4eibeqKq25Ps5DM2pWUdkVhPS
