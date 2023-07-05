@@ -8,8 +8,9 @@ import c1220ftjavareact.gym.domain.dto.PaymentDTO;
 import c1220ftjavareact.gym.repository.entity.PaymentEntity;
 import c1220ftjavareact.gym.service.interfaces.PaymentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;

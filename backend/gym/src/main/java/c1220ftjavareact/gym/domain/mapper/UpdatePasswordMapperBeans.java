@@ -13,6 +13,7 @@ public class UpdatePasswordMapperBeans {
     @Bean
     public UpdatePasswordMapper<User> userToUpdatePassword() {
         return (user) -> UpdatePassword.builder()
+                .id(user.getId())
                 .user(user)
                 .enable(true)
                 .build();

@@ -5,17 +5,15 @@ import c1220ftjavareact.gym.repository.SubscriptionRepository;
 import c1220ftjavareact.gym.domain.dto.SubscriptionDTO;
 import c1220ftjavareact.gym.repository.entity.SubscriptionEntity;
 import c1220ftjavareact.gym.service.interfaces.SubscriptionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final SubscriptionMapper subscriptionMapper;
-
-    @Autowired
-    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, SubscriptionMapper subscriptionMapper) {
-        this.subscriptionRepository = subscriptionRepository;
-        this.subscriptionMapper = subscriptionMapper;
-    }
 
     @Override
     public SubscriptionDTO createSubscription(SubscriptionDTO subscriptionDTO) {

@@ -16,9 +16,7 @@ import java.time.LocalDateTime;
 public class UpdatePassword {
 
     @Id
-    @OneToOne
-    @JoinColumn(name = "id_user")
-    private User user;
+    private Long id;
 
     @Column(name = "code", nullable = false)
     private String code;
@@ -27,9 +25,12 @@ public class UpdatePassword {
     private boolean enable;
 
     @Column(name = "expiration_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm")
     private LocalDateTime expirationDate;
+
+    @OneToOne
+    @JoinColumn(name = "id_user")
+    private User user;
 
     public void chageState() {
         this.setEnable(this.isEnable() ? false : true);

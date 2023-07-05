@@ -10,9 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ImpRoomService implements IRoomService {
-
     private final RoomRepository roomRepository;
-
     private final IMapperRoom<RoomInDto, Room> iMapperRoom;
 
     public ImpRoomService(RoomRepository roomRepository, IMapperRoom<RoomInDto, Room> iMapperRoom) {
