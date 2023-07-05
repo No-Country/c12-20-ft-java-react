@@ -1,9 +1,9 @@
 package c1220ftjavareact.gym.service;
 
-import c1220ftjavareact.gym.domain.entity.User;
+import c1220ftjavareact.gym.repository.entity.User;
 import c1220ftjavareact.gym.security.jwt.JwtService;
+import c1220ftjavareact.gym.service.interfaces.AuthService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SpringAuthService implements AuthService{
+public class SpringAuthService implements AuthService {
     private final AuthenticationManager manager;
     private final JwtService<UserDetails> jwtService;
 

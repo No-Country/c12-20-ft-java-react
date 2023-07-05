@@ -7,11 +7,11 @@ import java.util.List;
 public enum Role {
     CUSTOMER, EMPLOYEE, ADMIN;
 
-    public static Role stringToRole(final String value){
+    public static Role stringToRole(final String value) {
         return List.of(CUSTOMER, EMPLOYEE, ADMIN)
                 .stream()
                 .filter(role -> role.equals(value))
                 .findFirst()
-                .orElseThrow(()-> new RoleNotFoundException("Rol: "+value+" invalido, los roles validos son CLIENT, USER, ADMIN"));
+                .orElseThrow(() -> new RoleNotFoundException("Rol: " + value + " invalido, los roles validos son CLIENT, USER, ADMIN"));
     }
 }

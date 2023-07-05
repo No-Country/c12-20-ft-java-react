@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.service;
+package c1220ftjavareact.gym.service.interfaces;
 
 import c1220ftjavareact.gym.domain.dto.UserAuthDTO;
 import c1220ftjavareact.gym.domain.dto.UserKeysDTO;
@@ -15,5 +15,8 @@ public interface UserService {
     void authenticate(UserAuthDTO model);
 
     UserKeysDTO generateUserKeys(String email);
+
+    UserKeysDTO updateUserKeys(String token);
+
 
 }

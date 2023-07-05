@@ -1,10 +1,9 @@
 package c1220ftjavareact.gym.security.filter;
 
-import c1220ftjavareact.gym.domain.entity.User;
+import c1220ftjavareact.gym.repository.entity.User;
 import c1220ftjavareact.gym.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
             @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
-        if(this.isNotRequiredFilter(authorizationHeader)){
+        if (this.isNotRequiredFilter(authorizationHeader)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -44,9 +43,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         var user =
                 (userEmail != null)
-                        ? this.userService.loadUserByUsername(userEmail)
+                        ? (User) this.userService.loadUserByUsername(userEmail)
                         : User.builder().build();
-        if(jwtService.isTokenValid(jwt, user) && SecurityContextHolder.getContext().getAuthentication() == null){
+
+        if (
+                jwtService.isTokenValid(jwt, user) &&
+                        SecurityContextHolder.getContext().getAuthentication() == null
+        ) {
             var authUser = new UsernamePasswordAuthenticationToken(
                     user.getUsername(),
                     user.getPassword(),
@@ -58,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private Boolean isNotRequiredFilter(String authHeader){
+    private Boolean isNotRequiredFilter(String authHeader) {
         return authHeader == null || authHeader.equals("") || !authHeader.startsWith("Bearer ");
     }
 }

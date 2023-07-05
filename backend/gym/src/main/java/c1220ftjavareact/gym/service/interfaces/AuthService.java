@@ -1,6 +1,6 @@
-package c1220ftjavareact.gym.service;
+package c1220ftjavareact.gym.service.interfaces;
 
-import c1220ftjavareact.gym.domain.entity.User;
+import c1220ftjavareact.gym.repository.entity.User;
 
 public interface AuthService {
 

@@ -1,7 +1,7 @@
 package c1220ftjavareact.gym.controller;
 
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
-import c1220ftjavareact.gym.service.UserService;
+import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class CustomerController {
     private final UserService service;
 
     @PostMapping
-    public HttpEntity<Void> registerCustomer(@Valid @RequestBody UserSaveDTO userDTO){
+    public HttpEntity<Void> registerCustomer(@Valid @RequestBody UserSaveDTO userDTO) {
         service.registerCustomer(userDTO);
 
         return ResponseEntity.created(URI.create("/api/v1/customers")).build();

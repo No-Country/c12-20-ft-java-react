@@ -1,6 +1,5 @@
 package c1220ftjavareact.gym.security.jwt;
 
-import c1220ftjavareact.gym.service.AssertionConcern;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,8 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Date;
@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-public class JwtServiceAdapter extends AssertionConcern implements JwtService<UserDetails> {
+public class JwtServiceAdapter implements JwtService<UserDetails> {
 
     @Value("${spring.jwt.secret}")
     private String SECRET_KEY;
@@ -66,13 +66,14 @@ public class JwtServiceAdapter extends AssertionConcern implements JwtService<Us
     }
 
     @Override
-    public Boolean isTokenValid(String token, UserDetails userDetails){
-        this.assertArgumentNotEmpty(token, "The token is empty, token is invalid");
-
+    public Boolean isTokenValid(String token, UserDetails userDetails) {
+        Assert.isTrue(StringUtils.hasText(token), "The token is empty, token is invalid");
         final String userEmail = this.extractSubject(token);
-        this.assertArgumentNotNull(userDetails, "The user details is null, token is invalid");
-        this.assertArgumentNotEmpty(userEmail, "Email in token is empty, token is invalid");
-        this.assertArgumentEquals(userEmail, userDetails.getUsername(), "Email does match, token is invalid");
+
+        Assert.notNull(userDetails, "The user details is null, token is invalid");
+        Assert.isTrue(userEmail.equals(userDetails.getUsername()), "Email does match, token is invalid");
+
+        Assert.isTrue(StringUtils.hasText(userEmail), "The token is empty, token is invalid");
         return !isTokenExpired(token);
     }
 
@@ -83,17 +84,18 @@ public class JwtServiceAdapter extends AssertionConcern implements JwtService<Us
 
     @Override
     public <S> S extractClaim(String token, String name, Class<S> type) {
-        if(!this.hasClaim(token, name)) return null;
-        var claims =this.extractAllClaims(token);
+        if (!this.hasClaim(token, name)) return null;
+        var claims = this.extractAllClaims(token);
 
         return type.cast(claims.get(name));
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> resolver){
+    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         final Claims claims = this.extractAllClaims(token);
         return resolver.apply(claims);
     }
-    private Claims extractAllClaims(String token){
+
+    private Claims extractAllClaims(String token) {
         //this.assertArgumentNotEmpty(token, "The token is empty, token is invalid");
         return Jwts
                 .parserBuilder()

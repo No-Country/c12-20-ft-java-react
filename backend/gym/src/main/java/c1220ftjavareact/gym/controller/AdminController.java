@@ -1,7 +1,7 @@
 package c1220ftjavareact.gym.controller;
 
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
-import c1220ftjavareact.gym.service.UserService;
+import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +22,15 @@ public class AdminController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public HttpEntity<Void> registerEmployee(@Valid @RequestBody UserSaveDTO userDTO){
+    public HttpEntity<Void> registerEmployee(@Valid @RequestBody UserSaveDTO userDTO) {
         service.registerEmployee(userDTO);
 
         return ResponseEntity.created(URI.create("/api/v1/admins")).build();
     }
 
     @PostMapping(value = "/create")
-    public HttpEntity<Void> registerAdmin(){
+    public HttpEntity<Void> registerAdmin() {
         service.registerAdmin();
         return ResponseEntity.created(URI.create("/api/v1/admins")).build();
     }
-
 }

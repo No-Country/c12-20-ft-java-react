@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.domain.entity;
+package c1220ftjavareact.gym.repository.entity;
 
 import c1220ftjavareact.gym.domain.Role;
 import lombok.*;
@@ -50,7 +50,19 @@ public class User implements UserDetails {
         this.lastname = lastname;
     }
 
-    public void changeRole(Role role){
+    public String fullname() {
+        var fullname = new StringBuilder();
+        fullname
+                .append(this.getName().substring(0, 1).toUpperCase())
+                .append(this.getName().substring(1))
+                .append(" ")
+                .append(this.getLastname().substring(0, 1).toUpperCase())
+                .append(this.getName().substring(1));
+        return fullname.toString();
+
+    }
+
+    public void changeRole(Role role) {
         this.role = role;
     }
 

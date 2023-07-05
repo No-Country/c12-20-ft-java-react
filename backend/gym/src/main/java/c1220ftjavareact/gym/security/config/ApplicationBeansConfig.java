@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +23,7 @@ public class ApplicationBeansConfig {
     public UserDetailsService userDetailsService() {
         return email -> repository
                 .findByEmail(email)
-                .orElseThrow(()->new UsernameNotFoundException("User with: "+email+" mail not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User with: " + email + " mail not found"));
     }
 
     @Bean
@@ -33,5 +34,24 @@ public class ApplicationBeansConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
+    }
+
+    @Bean
+    public JavaMailSenderImpl javaMailSender() {
+        var sender = new JavaMailSenderImpl();
+        sender.setHost("smtp.gmail.com");
+        sender.setPort(587);
+
+        sender.setUsername("marcoslopezdev18@gmail.com");
+        sender.setPassword("hwlaqmmmdvfabysp");
+
+        var props = sender.getJavaMailProperties();
+
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.debug", "true");
+        props.put("mail.smtp.ssl.trust", "*");
+        return sender;
     }
 }

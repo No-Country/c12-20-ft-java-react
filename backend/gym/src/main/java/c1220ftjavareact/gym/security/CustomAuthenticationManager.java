@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.security;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -9,7 +8,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -34,7 +32,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         try {
             var user = this.service.loadUserByUsername(email);
 
-            if(!this.encoder.matches(password, user.getPassword()))
+            if (!this.encoder.matches(password, user.getPassword()))
                 throw new BadCredentialsException("The password does not match the account password");
 
             var auth = UsernamePasswordAuthenticationToken.authenticated(

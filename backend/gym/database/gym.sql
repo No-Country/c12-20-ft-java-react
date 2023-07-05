@@ -119,6 +119,22 @@ CREATE TABLE `training_session` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `update_password`
+--
+
+DROP TABLE IF EXISTS `update_password`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `update_password` (
+  `id_user` int NOT NULL,
+  `code` varchar(200) NOT NULL,
+  `expiration_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_user`),
+  CONSTRAINT `user_update_password_fk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `user`
 --
 
@@ -132,11 +148,15 @@ CREATE TABLE `user` (
   `email` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL,
   `role` enum('CUSTOMER','EMPLOYEE','ADMIN') NOT NULL,
-  `create_day` date NOT NULL,
+  `create_day` date NOT NULL DEFAULT (curdate()),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping events for database 'gym'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -147,4 +167,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-04 21:23:07
+-- Dump completed on 2023-07-04 23:41:50
