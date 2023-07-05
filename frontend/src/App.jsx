@@ -1,8 +1,11 @@
+import { Fragment } from "react";
+import DasboardAdmin from "./components/DashboardAdmin";
+
 function App() {
   return (
     <>
-      <h1>Hello, World!</h1>
-    </>
+      <DasboardAdmin />
+  </>  
   );
 }
 export default App;
