@@ -12,8 +12,8 @@ import java.time.LocalTime;
 @Data
 public class TrainingSessionSaveDTO {
 
-    private Long activity_id;
-    private Long room_id;
+    private Long activityId;
+    private Long roomId;
     private int capacity;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime time_start;

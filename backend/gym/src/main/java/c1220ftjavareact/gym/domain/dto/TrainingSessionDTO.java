@@ -13,15 +13,15 @@ import java.time.LocalTime;
 @Data
 public class TrainingSessionDTO {
 
-    private Long training_id;
+    private Long trainingId;
     private int capacity;
     @JsonFormat(pattern = "HH:mm")
-    private LocalTime time_start;
+    private LocalTime timeStart;
     @JsonFormat(pattern = "HH:mm")
-    private LocalTime time_finish;
+    private LocalTime timeFinish;
 
-    private Long room_id;
-    private String room_name;
+    private Long roomId;
+    private String roomName;
     private boolean monday;
     private boolean tuesday;
     private boolean wednesday;

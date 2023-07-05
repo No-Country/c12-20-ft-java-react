@@ -2,6 +2,7 @@ package c1220ftjavareact.gym.service.interfaces;
 
 import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.repository.entity.TrainingSession;
 
 import java.util.List;
 
@@ -27,6 +28,9 @@ public interface ITrainingSessionService {
 
     /// obtener una sesion en particular
     TrainingSessionDTO getTrainingSessionById(Long id);
+
+    /// obtener entidad de sesion
+    TrainingSession getTrainingEntity(Long id);
 
     /// actualizar la informacion de una sesion
     void updateTrainingSessionById(TrainingSessionDTO trainingSession, Long id);

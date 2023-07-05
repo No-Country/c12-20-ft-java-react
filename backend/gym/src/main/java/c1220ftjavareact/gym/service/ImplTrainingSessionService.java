@@ -4,6 +4,8 @@ import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
 import c1220ftjavareact.gym.repository.entity.TrainingSession;
 import c1220ftjavareact.gym.repository.TrainingSessionRepository;
+import c1220ftjavareact.gym.service.interfaces.IActivityService;
+import c1220ftjavareact.gym.service.interfaces.IRoomService;
 import c1220ftjavareact.gym.service.interfaces.ITrainingSessionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -32,9 +34,10 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Transactional
     public void saveTrainingSession(TrainingSessionSaveDTO trainingSession) {
         /// VERIFICAR EXISTE ACTIVITY
-        iActivityService.finbyId(trainingSession.getActivityId()); /// tira una excepcion si no encuentra
+        iActivityService.getActivityById(trainingSession.getActivityId()); /// tira una excepcion si no encuentra
         /// VERIFICAR EXISTE ROOM
-        iRoomService.findById(trainingSession.getRoomId());
+        //iRoomService.findById(trainingSession.getRoomId());
+
         /// VERIFICAR DISPONIBILIDAD (POR HACER)
 
         /// LOGICA (POR HACER)
@@ -53,8 +56,8 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
         for(TrainingSession item : listSessions) {
             TrainingSessionDTO aux = mapper.map(item,TrainingSessionDTO.class);
-            aux.setRoom_id(item.getRoom().getId());
-            aux.setRoom_name(item.getRoom().getName());
+            aux.setRoomId(item.getRoom().getId());
+            //aux.setRoomName(item.getRoom().getName()); ACTIVAR
             listSessionsDto.add(aux);
         }
 
@@ -75,10 +78,22 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         }
 
         TrainingSessionDTO dto = mapper.map(trainingSession,TrainingSessionDTO.class);
-        dto.setRoom_id(trainingSession.getRoom().getId());
-        dto.setRoom_name(trainingSession.getRoom().getName());
+        dto.setRoomId(trainingSession.get().getRoom().getId());
+        //dto.setRoomName(trainingSession.get().getRoom().getName()); ACTIVAR
 
         return dto;
+    }
+
+    /// Obtener entidad de training session
+    @Override
+    public TrainingSession getTrainingEntity(Long id) {
+        Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
+        
+        if(trainingSession.isEmpty()) {
+            /// throw exception
+        }
+
+        return trainingSession.get();
     }
 
 
