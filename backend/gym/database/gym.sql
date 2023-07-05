@@ -35,22 +35,68 @@ CREATE TABLE `activity` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `activity`
+-- Table structure for table `payment`
 --
 
-LOCK TABLES `activity` WRITE;
-/*!40000 ALTER TABLE `activity` DISABLE KEYS */;
-/*!40000 ALTER TABLE `activity` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `payment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `payment` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_subscription` int NOT NULL,
+  `method` varchar(45) NOT NULL,
+  `payment_day` date NOT NULL,
+  `expired_day` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `subscription_payment_fk_idx` (`id_subscription`),
+  CONSTRAINT `subscription_payment_fk` FOREIGN KEY (`id_subscription`) REFERENCES `subscription` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `class`
+-- Table structure for table `room`
+--
+
+DROP TABLE IF EXISTS `room`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `room` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `max_capacity` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `subscription`
+--
+
+DROP TABLE IF EXISTS `subscription`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `subscription` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_training_session` int NOT NULL,
+  `id_customer` int NOT NULL,
+  `state` enum('RESERVED','ACTIVE','INACTIVE','CANCELED') NOT NULL,
+  `create_date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_subscription_fk_idx` (`id_customer`),
+  KEY `training_session_subscription_fk_idx` (`id_training_session`),
+  CONSTRAINT `training_session_subscription_fk` FOREIGN KEY (`id_training_session`) REFERENCES `training_session` (`id`),
+  CONSTRAINT `user_subscription_fk` FOREIGN KEY (`id_customer`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `training_session`
 --
 
 DROP TABLE IF EXISTS `training_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `class` (
+CREATE TABLE `training_session` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_activity` int NOT NULL,
   `id_room` int NOT NULL,
@@ -73,118 +119,20 @@ CREATE TABLE `class` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `class`
+-- Table structure for table `update_password`
 --
 
-LOCK TABLES `training_session` WRITE;
-/*!40000 ALTER TABLE `class` DISABLE KEYS */;
-/*!40000 ALTER TABLE `class` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `payment`
---
-
-DROP TABLE IF EXISTS `payment`;
+DROP TABLE IF EXISTS `update_password`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `payment` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `id_subscription` int NOT NULL,
-  `method` varchar(45) NOT NULL,
-  `payment_day` date NOT NULL,
-  `expired_day` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `subscription_payment_fk_idx` (`id_subscription`),
-  CONSTRAINT `subscription_payment_fk` FOREIGN KEY (`id_subscription`) REFERENCES `subscription` (`id`)
+CREATE TABLE `update_password` (
+  `id_user` int NOT NULL,
+  `code` varchar(200) NOT NULL,
+  `expiration_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_user`),
+  CONSTRAINT `user_update_password_fk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `payment`
---
-
-LOCK TABLES `payment` WRITE;
-/*!40000 ALTER TABLE `payment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `role`
---
-
-DROP TABLE IF EXISTS `role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `role` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `type` enum('CLIENT','USER','ADMIN') NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `role`
---
-
-LOCK TABLES `role` WRITE;
-/*!40000 ALTER TABLE `role` DISABLE KEYS */;
-/*!40000 ALTER TABLE `role` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `room`
---
-
-DROP TABLE IF EXISTS `room`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `room` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `max_capacity` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `room`
---
-
-LOCK TABLES `room` WRITE;
-/*!40000 ALTER TABLE `room` DISABLE KEYS */;
-/*!40000 ALTER TABLE `room` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `subscription`
---
-
-DROP TABLE IF EXISTS `subscription`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `subscription` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `id_class` int NOT NULL,
-  `id_client` int NOT NULL,
-  `state` enum('RESERVED','ACTIVE','INACTIVE','CANCELED') NOT NULL,
-  `create_date` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_subscription_fk_idx` (`id_client`),
-  KEY `class_subscription_fk_idx` (`id_class`),
-  CONSTRAINT `class_subscription_fk` FOREIGN KEY (`id_class`) REFERENCES `class` (`id`),
-  CONSTRAINT `user_subscription_fk` FOREIGN KEY (`id_client`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `subscription`
---
-
-LOCK TABLES `subscription` WRITE;
-/*!40000 ALTER TABLE `subscription` DISABLE KEYS */;
-/*!40000 ALTER TABLE `subscription` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user`
@@ -195,24 +143,20 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `id_role` int NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `lastname` varchar(45) NOT NULL,
   `email` varchar(128) NOT NULL,
-  `password` varchar(30) NOT NULL,
-  `create_day` date NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `role` enum('CUSTOMER','EMPLOYEE','ADMIN') NOT NULL,
+  `create_day` date NOT NULL DEFAULT (curdate()),
   PRIMARY KEY (`id`),
-  KEY `role_user_fk_idx` (`id_role`),
-  CONSTRAINT `role_user_fk` FOREIGN KEY (`id_role`) REFERENCES `role` (`id`)
+  UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping events for database 'gym'
 --
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -223,4 +167,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-29 12:46:57
+-- Dump completed on 2023-07-04 23:41:50
