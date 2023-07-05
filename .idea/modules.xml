@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/c12-20-ft-java-react.iml" filepath="$PROJECT_DIR$/.idea/c12-20-ft-java-react.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/gym/gym.iml" filepath="$PROJECT_DIR$/backend/gym/gym.iml" />
+    </modules>
+  </component>
+</project>
