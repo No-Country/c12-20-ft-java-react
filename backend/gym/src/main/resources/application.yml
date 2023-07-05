@@ -20,7 +20,7 @@ spring:
   main:
     banner-mode: off
   datasource:
-    password: admin
+    password: root
     url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
     username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
