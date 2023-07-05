@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PaymentDTO {
 
-    private int idSubscription;
+    private SubscriptionDTO idSubscription;
     private LocalDateTime day;
     private LocalDateTime expired;
 
