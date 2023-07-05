@@ -1,5 +1,6 @@
 package c1220ftjavareact.gym.security.jwt;
 
+import c1220ftjavareact.gym.service.AssertionConcern;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,9 +19,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class JwtServiceAdapter implements JwtService<UserDetails> {
+public class JwtServiceAdapter extends AssertionConcern implements JwtService<UserDetails> {
 
     @Value("${spring.jwt.secret}")
     private String SECRET_KEY;
@@ -65,8 +66,14 @@ public class JwtServiceAdapter implements JwtService<UserDetails> {
     }
 
     @Override
-    public Boolean isTokenValid(String token, UserDetails userDetails) {
-        return null;
+    public Boolean isTokenValid(String token, UserDetails userDetails){
+        this.assertArgumentNotEmpty(token, "The token is empty, token is invalid");
+
+        final String userEmail = this.extractSubject(token);
+        this.assertArgumentNotNull(userDetails, "The user details is null, token is invalid");
+        this.assertArgumentNotEmpty(userEmail, "Email in token is empty, token is invalid");
+        this.assertArgumentEquals(userEmail, userDetails.getUsername(), "Email does match, token is invalid");
+        return !isTokenExpired(token);
     }
 
     @Override

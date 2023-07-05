@@ -78,14 +78,14 @@ DROP TABLE IF EXISTS `subscription`;
 CREATE TABLE `subscription` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_training_session` int NOT NULL,
-  `id_client` int NOT NULL,
+  `id_customer` int NOT NULL,
   `state` enum('RESERVED','ACTIVE','INACTIVE','CANCELED') NOT NULL,
   `create_date` date NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_subscription_fk_idx` (`id_client`),
+  KEY `user_subscription_fk_idx` (`id_customer`),
   KEY `training_session_subscription_fk_idx` (`id_training_session`),
   CONSTRAINT `training_session_subscription_fk` FOREIGN KEY (`id_training_session`) REFERENCES `training_session` (`id`),
-  CONSTRAINT `user_subscription_fk` FOREIGN KEY (`id_client`) REFERENCES `user` (`id`)
+  CONSTRAINT `user_subscription_fk` FOREIGN KEY (`id_customer`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -130,11 +130,12 @@ CREATE TABLE `user` (
   `name` varchar(45) NOT NULL,
   `lastname` varchar(45) NOT NULL,
   `email` varchar(128) NOT NULL,
-  `password` varchar(30) NOT NULL,
-  `role` enum('CLIENT','USER','ADMIN') NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `role` enum('CUSTOMER','EMPLOYEE','ADMIN') NOT NULL,
   `create_day` date NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -146,4 +147,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-04 17:52:05
+-- Dump completed on 2023-07-04 21:23:07

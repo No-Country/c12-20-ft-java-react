@@ -1,5 +1,7 @@
 package c1220ftjavareact.gym.domain.mapper;
 
+import c1220ftjavareact.gym.domain.dto.UserAuthDTO;
+import c1220ftjavareact.gym.domain.dto.UserKeysDTO;
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
 import c1220ftjavareact.gym.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +26,4 @@ public class UserMapperBeans {
                 .password(encoder.encode(dto.password()))
                 .build();
     }
-
 }

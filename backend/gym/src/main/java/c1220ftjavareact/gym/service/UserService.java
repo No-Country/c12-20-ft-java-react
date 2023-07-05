@@ -1,5 +1,7 @@
 package c1220ftjavareact.gym.service;
 
+import c1220ftjavareact.gym.domain.dto.UserAuthDTO;
+import c1220ftjavareact.gym.domain.dto.UserKeysDTO;
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
 
 public interface UserService {
@@ -8,5 +10,10 @@ public interface UserService {
 
     void registerEmployee(UserSaveDTO model);
 
-    void registerAdmin(String password);
+    void registerAdmin();
+
+    void authenticate(UserAuthDTO model);
+
+    UserKeysDTO generateUserKeys(String email);
+
 }

@@ -23,6 +23,6 @@ public class CustomerController {
     public HttpEntity<Void> registerCustomer(@Valid @RequestBody UserSaveDTO userDTO){
         service.registerCustomer(userDTO);
 
-        return ResponseEntity.created(URI.create("/api/v1/clients")).build();
+        return ResponseEntity.created(URI.create("/api/v1/customers")).build();
     }
 }

@@ -27,4 +27,11 @@ public class AdminController {
 
         return ResponseEntity.created(URI.create("/api/v1/admins")).build();
     }
+
+    @PostMapping(value = "/create")
+    public HttpEntity<Void> registerAdmin(){
+        service.registerAdmin();
+        return ResponseEntity.created(URI.create("/api/v1/admins")).build();
+    }
+
 }

@@ -12,8 +12,9 @@ import java.util.Collection;
 import java.util.List;
 
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Data
 @Setter(AccessLevel.PRIVATE)
 @Entity
 @Table(name = "user")
@@ -49,7 +50,7 @@ public class User implements UserDetails {
         this.lastname = lastname;
     }
 
-    public void changeRoleS(Role role){
+    public void changeRole(Role role){
         this.role = role;
     }
 
@@ -62,7 +63,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.getPassword();
+        return this.password;
     }
 
     @Override
@@ -89,4 +90,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

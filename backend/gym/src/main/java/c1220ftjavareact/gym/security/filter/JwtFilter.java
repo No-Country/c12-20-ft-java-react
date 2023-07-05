@@ -36,12 +36,9 @@ public class JwtFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
         if(this.isNotRequiredFilter(authorizationHeader)){
-            log.info("***************** NO NECESITO FILTRO *****************");
             filterChain.doFilter(request, response);
             return;
         }
-        log.info("***************** SI NECESITO FILTRO *****************");
-
         final String jwt = authorizationHeader.substring(7);
         final String userEmail = jwtService.extractSubject(jwt);
 
@@ -49,7 +46,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 (userEmail != null)
                         ? this.userService.loadUserByUsername(userEmail)
                         : User.builder().build();
-
         if(jwtService.isTokenValid(jwt, user) && SecurityContextHolder.getContext().getAuthentication() == null){
             var authUser = new UsernamePasswordAuthenticationToken(
                     user.getUsername(),

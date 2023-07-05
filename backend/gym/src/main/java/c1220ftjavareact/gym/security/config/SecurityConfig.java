@@ -35,16 +35,17 @@ public class SecurityConfig {
 
         http.cors()
                 .configurationSource( new CorsConfig().corsConfigurationSource() );
+        http.exceptionHandling().authenticationEntryPoint(entryPoint);
 
         http.authorizeRequests(configurer -> configurer
-                .antMatchers(HttpMethod.POST,"/api/v1/clients").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/v1/customers").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/authentication").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/v1/admins/create").permitAll()
                 .anyRequest().authenticated()
         );
 
         http.authenticationManager(manager);
 
-        http.exceptionHandling().authenticationEntryPoint(entryPoint);
         http.addFilterBefore(this.jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
