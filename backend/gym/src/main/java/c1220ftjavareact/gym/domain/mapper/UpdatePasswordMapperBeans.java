@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UpdatePasswordMapperBeans {
+
     @Bean
-    public UpdatePasswordMapper<User> saveDtoToUser() {
+    public UpdatePasswordMapper<User> userToUpdatePassword() {
         return (user) -> UpdatePassword.builder()
                 .user(user)
                 .enable(true)
