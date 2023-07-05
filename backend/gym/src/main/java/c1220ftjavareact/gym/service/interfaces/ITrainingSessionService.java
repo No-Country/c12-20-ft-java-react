@@ -1,7 +1,7 @@
-package c1220ftjavareact.gym.service;
+package c1220ftjavareact.gym.service.interfaces;
 
-import c1220ftjavareact.gym.dto.TrainingSessionDTO;
-import c1220ftjavareact.gym.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
+import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
 
 import java.util.List;
 
@@ -21,6 +21,9 @@ public interface ITrainingSessionService {
 
     /// obtener todas las sesiones disponibles
     List<TrainingSessionDTO> getAllTrainingSession();
+
+    /// obtener sesiones por activity
+    List<TrainingSessionDTO> getAllByActivityId();
 
     /// obtener una sesion en particular
     TrainingSessionDTO getTrainingSessionById(Long id);

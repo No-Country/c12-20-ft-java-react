@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.dto;
+package c1220ftjavareact.gym.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

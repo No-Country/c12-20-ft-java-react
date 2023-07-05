@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.entity;
+package c1220ftjavareact.gym.repository.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
