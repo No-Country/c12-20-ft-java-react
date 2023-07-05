@@ -44,44 +44,6 @@ LOCK TABLES `activity` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `class`
---
-
-DROP TABLE IF EXISTS `training_session`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `class` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `id_activity` int NOT NULL,
-  `id_room` int NOT NULL,
-  `capacity` int NOT NULL,
-  `time_start` time NOT NULL,
-  `time_end` time NOT NULL,
-  `monday` tinyint(1) NOT NULL,
-  `tuesday` tinyint(1) NOT NULL,
-  `wednesday` tinyint(1) NOT NULL,
-  `thursday` tinyint(1) NOT NULL,
-  `friday` tinyint(1) NOT NULL,
-  `saturday` tinyint(1) NOT NULL,
-  `sunday` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `activity_training_session_fk_idx` (`id_activity`),
-  KEY `room_training_session_fk_idx` (`id_room`),
-  CONSTRAINT `activity_training_session_fk` FOREIGN KEY (`id_activity`) REFERENCES `activity` (`id`),
-  CONSTRAINT `room_training_session_fk` FOREIGN KEY (`id_room`) REFERENCES `room` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `class`
---
-
-LOCK TABLES `training_session` WRITE;
-/*!40000 ALTER TABLE `class` DISABLE KEYS */;
-/*!40000 ALTER TABLE `class` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `payment`
 --
 
@@ -107,29 +69,6 @@ CREATE TABLE `payment` (
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `role`
---
-
-DROP TABLE IF EXISTS `role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `role` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `type` enum('CLIENT','USER','ADMIN') NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `role`
---
-
-LOCK TABLES `role` WRITE;
-/*!40000 ALTER TABLE `role` DISABLE KEYS */;
-/*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -165,14 +104,14 @@ DROP TABLE IF EXISTS `subscription`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscription` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `id_class` int NOT NULL,
+  `id_training_session` int NOT NULL,
   `id_client` int NOT NULL,
   `state` enum('RESERVED','ACTIVE','INACTIVE','CANCELED') NOT NULL,
   `create_date` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_subscription_fk_idx` (`id_client`),
-  KEY `class_subscription_fk_idx` (`id_class`),
-  CONSTRAINT `class_subscription_fk` FOREIGN KEY (`id_class`) REFERENCES `class` (`id`),
+  KEY `traing_session_subscription_fk_idx` (`id_training_session`),
+  CONSTRAINT `training_session_subscription_fk` FOREIGN KEY (`id_training_session`) REFERENCES `training_session` (`id`),
   CONSTRAINT `user_subscription_fk` FOREIGN KEY (`id_client`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -187,6 +126,44 @@ LOCK TABLES `subscription` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `training_session`
+--
+
+DROP TABLE IF EXISTS `training_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `training_session` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_activity` int NOT NULL,
+  `id_room` int NOT NULL,
+  `capacity` int NOT NULL,
+  `time_start` time NOT NULL,
+  `time_end` time NOT NULL,
+  `monday` tinyint(1) NOT NULL,
+  `tuesday` tinyint(1) NOT NULL,
+  `wednesday` tinyint(1) NOT NULL,
+  `thursday` tinyint(1) NOT NULL,
+  `friday` tinyint(1) NOT NULL,
+  `saturday` tinyint(1) NOT NULL,
+  `sunday` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `activity_class_fk_idx` (`id_activity`),
+  KEY `room_class_fk_idx` (`id_room`),
+  CONSTRAINT `activity_class_fk` FOREIGN KEY (`id_activity`) REFERENCES `activity` (`id`),
+  CONSTRAINT `room_class_fk` FOREIGN KEY (`id_room`) REFERENCES `room` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `training_session`
+--
+
+LOCK TABLES `training_session` WRITE;
+/*!40000 ALTER TABLE `training_session` DISABLE KEYS */;
+/*!40000 ALTER TABLE `training_session` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -195,13 +172,11 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `id_role` int NOT NULL,
+  `role` enum('CLIENT','USER','ADMIN') NOT NULL,
   `email` varchar(128) NOT NULL,
   `password` varchar(30) NOT NULL,
   `create_day` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `role_user_fk_idx` (`id_role`),
-  CONSTRAINT `role_user_fk` FOREIGN KEY (`id_role`) REFERENCES `role` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -223,4 +198,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-29 12:46:57
+-- Dump completed on 2023-07-04 12:53:35
