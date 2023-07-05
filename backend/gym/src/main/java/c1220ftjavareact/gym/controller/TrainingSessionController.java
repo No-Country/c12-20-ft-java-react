@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * correctamente los horarios disponibles en la vista
  */
 @RestController
-@RequestMapping(value = "/sessions")
+@RequestMapping(value = "api/v1/sessions")
 public class TrainingSessionController {
 
 }

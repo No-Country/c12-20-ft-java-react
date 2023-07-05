@@ -17,8 +17,8 @@ public class TrainingSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int capacity;
-    private LocalTime time_start;
-    private LocalTime time_finish;
+    private LocalTime timeStart;
+    private LocalTime timeFinish;
     private boolean monday;
     private boolean tuesday;
     private boolean wednesday;
@@ -32,10 +32,11 @@ public class TrainingSession {
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "room_id")
     private Room room;
 
+    /// relacion con subscription
 
 }

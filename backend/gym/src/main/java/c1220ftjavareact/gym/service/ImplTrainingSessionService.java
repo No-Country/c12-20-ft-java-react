@@ -31,8 +31,20 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     @Transactional
     public void saveTrainingSession(TrainingSessionSaveDTO trainingSession) {
+        /// VERIFICAR EXISTE ACTIVITY
+        iActivityService.finbyId(trainingSession.getActivityId()); /// tira una excepcion si no encuentra
+        /// VERIFICAR EXISTE ROOM
+        iRoomService.findById(trainingSession.getRoomId());
+        /// VERIFICAR DISPONIBILIDAD (POR HACER)
+
+        /// LOGICA (POR HACER)
+
+        /// PERSISTIR
+        TrainingSession savedTraining = mapper.map(trainingSession, TrainingSession.class);
+        trainingSessionRepository.save(savedTraining);
 
     }
+
 
     @Override
     public List<TrainingSessionDTO> getAllTrainingSession() {
