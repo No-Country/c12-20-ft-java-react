@@ -1,8 +1,11 @@
+#Desactivo los detalles de la request
 enableLoggingRequestDetails: false
 server:
   error:
+    #Al haber un error envia siempre message y los parametros
     include-message: always
     include-binding-errors: always
+#Se asigna los niveles de Logging para mensajes en consola
 logging:
   level:
     root: INFO
@@ -14,21 +17,26 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+  #Cambio el formato de la hora en consola
   pattern:
     dateformat: HH:mm:ss
 spring:
   main:
+    #Desactivo el Banner de Spring Booy de consola
     banner-mode: off
   datasource:
-    password: root
+    password: admin
     url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
     username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    #Activa el mostrar el SQL ejecutado
     show-sql: true
+    #Revoco el manejo de la Transaccion a JPA (Recomendable)
     open-in-view: false
     properties:
       hibernate:
+        #Muestra el SQL ejecutado en consola en Columna
         format_sql: true
   mail:
     username: marcoslopezdev18@gmail.com

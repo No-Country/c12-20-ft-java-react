@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -17,6 +18,7 @@ import javax.validation.constraints.NotNull;
 @Primary
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class CustomAuthenticationManager implements AuthenticationManager {
     private final UserDetailsService service;
     private final PasswordEncoder encoder;

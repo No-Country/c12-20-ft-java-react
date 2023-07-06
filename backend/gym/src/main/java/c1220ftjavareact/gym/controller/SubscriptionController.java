@@ -25,7 +25,7 @@ public class SubscriptionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SubscriptionDTO> updateSubscription(@PathVariable int id, @RequestBody SubscriptionDTO subscriptionDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.updateSubscription(id,subscriptionDTO));
+        return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.updateSubscription(id, subscriptionDTO));
     }
 
     @DeleteMapping("/{id}")

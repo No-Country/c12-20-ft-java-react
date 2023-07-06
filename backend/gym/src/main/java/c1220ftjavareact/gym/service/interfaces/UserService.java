@@ -1,22 +1,32 @@
 package c1220ftjavareact.gym.service.interfaces;
 
+import c1220ftjavareact.gym.domain.User;
+import c1220ftjavareact.gym.domain.dto.UserLoginDTO;
 import c1220ftjavareact.gym.domain.dto.UserAuthDTO;
-import c1220ftjavareact.gym.domain.dto.UserKeysDTO;
+import c1220ftjavareact.gym.domain.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
+import c1220ftjavareact.gym.service.email.TemplateStrategy;
 
 public interface UserService {
 
-    void registerCustomer(UserSaveDTO model);
+    User findUserByEmail(String email);
 
-    void registerEmployee(UserSaveDTO model);
+    void assertEmailIsNotRegistered(String email);
+
+    User saveUser(UserSaveDTO model, String role);
+
+    void updateForgottenPassword(UserPasswordDTO model);
+
+    Boolean sendCreateMessage(UserSaveDTO model, TemplateStrategy strategy);
 
     void registerAdmin();
 
     void authenticate(UserAuthDTO model);
 
-    UserKeysDTO generateUserKeys(String email);
+    String createToken(User user);
 
-    UserKeysDTO updateUserKeys(String token);
+    String getEmailWithToken(String token);
 
+    UserLoginDTO getUserLogin(String token, User user);
 
 }

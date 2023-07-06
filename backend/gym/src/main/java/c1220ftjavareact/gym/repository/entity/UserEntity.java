@@ -1,6 +1,5 @@
 package c1220ftjavareact.gym.repository.entity;
 
-import c1220ftjavareact.gym.domain.Role;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,10 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Setter(AccessLevel.PRIVATE)
 @Entity
 @Table(name = "user")
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,12 +41,18 @@ public class User implements UserDetails {
     @Column(name = "role", columnDefinition = "enum('CLIENT', 'USER', 'ADMIN')")
     private Role role;
 
-    public User(String email, String password, String name, String lastname) {
+    @ToString.Exclude
+    @OneToOne(mappedBy = "userEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ForgotPasswordEntity updatePassword;
+
+    public UserEntity(String email, String password, String name, String lastname) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.lastname = lastname;
     }
+
+
 
     public String fullname() {
         var fullname = new StringBuilder();
@@ -57,13 +61,8 @@ public class User implements UserDetails {
                 .append(this.getName().substring(1))
                 .append(" ")
                 .append(this.getLastname().substring(0, 1).toUpperCase())
-                .append(this.getName().substring(1));
+                .append(this.getLastname().substring(1));
         return fullname.toString();
-
-    }
-
-    public void changeRole(Role role) {
-        this.role = role;
     }
 
     @Override

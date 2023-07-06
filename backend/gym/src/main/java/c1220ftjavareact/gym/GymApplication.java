@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
 
+/*plan = ENUM('YEARLY', 'MONTHLY', 'WEEKLY') */
 @SpringBootApplication
 @Slf4j
 public class GymApplication {

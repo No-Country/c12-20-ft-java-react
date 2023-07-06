@@ -1,7 +1,6 @@
-package c1220ftjavareact.gym.service;
+package c1220ftjavareact.gym.service.email;
 
-import c1220ftjavareact.gym.service.interfaces.MailService;
-import lombok.Getter;
+import c1220ftjavareact.gym.domain.exception.CustomIllegalArgsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,18 +11,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
-@Getter
 public class SpringMailService implements MailService {
     private static final File[] NO_ATTACHMENTS = null;
     private final JavaMailSender sender;
+    private TemplateStrategy strategy;
 
     /**
      * Configuracion del sender
@@ -31,17 +30,40 @@ public class SpringMailService implements MailService {
     @Value("${spring.mail.username}")
     private String from;
 
+    /**
+     * Envia un Email
+     *
+     * @param to Email al que va dirigido
+     * @param subject Titulo/Asunto del Email
+     * @param textMessage Template del cuerpo del email
+     *
+     * @return Estado de envio del correo
+     */
     @Override
     public Boolean send(final String to, final String subject, final String textMessage) {
         return this.send(to, subject, textMessage, NO_ATTACHMENTS);
     }
 
+
+    /**
+     * Envia un Email
+     *
+     * @param to Email al que va dirigido
+     * @param subject Titulo/Asunto del Email
+     * @param textMessage Template del cuerpo del email
+     * @param attachments Archivos a enviar
+     *
+     * @return Estado de envio del correo
+     */
     @Override
     public Boolean send(final String to, final String subject, final String textMessage, File... attachments) {
         var send = false;
-        Assert.hasLength(to, "email 'to' needed");
-        Assert.hasLength(subject, "email 'subject' needed");
-        Assert.hasLength(textMessage, "email 'text' needed");
+        Assert.hasLength( to, ()-> {
+            throw new CustomIllegalArgsException("Error al enviar el email","Verifica que los valores no sean nulos","to: "+to);});
+        Assert.hasLength( subject, ()-> {
+            throw new CustomIllegalArgsException("Error al enviar el email","Verifica que los valores no sean nulos", "subject: "+subject);});
+        Assert.hasLength( textMessage, ()-> {
+            throw new CustomIllegalArgsException("Error al enviar el email","Verifica que los valores no sean nulos",to);});
 
         final MimeMessage message = sender.createMimeMessage();
         try {
@@ -49,8 +71,8 @@ public class SpringMailService implements MailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setFrom(getFrom());
-            helper.setText(textMessage);
+            helper.setFrom(new InternetAddress(this.from));
+            helper.setText(textMessage, true);
 
             if (attachments != null) preparingAttachment(Arrays.stream(attachments), helper);
 
@@ -60,6 +82,28 @@ public class SpringMailService implements MailService {
             e.printStackTrace();
         }
         return send;
+    }
+
+    /**
+     * Cambia el Template que se utilizara
+     *
+     * @param strategy Estrategia a utilizar para el template
+     */
+    @Override
+    public void setTemplateStrategy(TemplateStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    /**
+     * Ejecuta el template y se pasan los valores para remplazar en el template
+     *
+     * @param values Valores dentro del template
+     *
+     * @return Template del Email
+     */
+    @Override
+    public String executeTemplate(String... values) {
+        return this.strategy.replaceParameters(values);
     }
 
     private void preparingAttachment(Stream<File> attachments, MimeMessageHelper helper) {

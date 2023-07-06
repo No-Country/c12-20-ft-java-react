@@ -1,5 +1,6 @@
-package c1220ftjavareact.gym.security.config;
+package c1220ftjavareact.gym.security;
 
+import c1220ftjavareact.gym.config.CorsConfig;
 import c1220ftjavareact.gym.security.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +41,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/v1/customers").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/authentication").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/admins/create").permitAll()
+                .antMatchers("/api/v1/passwords/**").permitAll()
                 .anyRequest().authenticated()
         );
 

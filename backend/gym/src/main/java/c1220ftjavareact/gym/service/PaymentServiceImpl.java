@@ -1,10 +1,10 @@
 package c1220ftjavareact.gym.service;
 
 
+import c1220ftjavareact.gym.domain.dto.PaymentDTO;
 import c1220ftjavareact.gym.domain.mapper.PaymentMapper;
 import c1220ftjavareact.gym.domain.mapper.SubscriptionMapper;
 import c1220ftjavareact.gym.repository.PaymentRepository;
-import c1220ftjavareact.gym.domain.dto.PaymentDTO;
 import c1220ftjavareact.gym.repository.entity.PaymentEntity;
 import c1220ftjavareact.gym.service.interfaces.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDTO updatePayment(int id, PaymentDTO paymentDTO) {
         PaymentEntity payment = paymentRepository.findById(id).orElse(null);
         if (payment != null) {
-            payment.setIdSubscription( subscriptionMapper.convertToEntity(paymentDTO.getIdSubscription()) );
+            payment.setIdSubscription(subscriptionMapper.convertToEntity(paymentDTO.getIdSubscription()));
             payment.setDay(paymentDTO.getDay());
             payment.setExpired(paymentDTO.getExpired());
             PaymentEntity updatedPayment = paymentRepository.save(payment);
