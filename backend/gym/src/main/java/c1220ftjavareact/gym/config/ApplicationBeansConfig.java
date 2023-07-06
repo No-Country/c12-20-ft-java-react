@@ -1,5 +1,7 @@
-package c1220ftjavareact.gym.security.config;
+package c1220ftjavareact.gym.config;
 
+import c1220ftjavareact.gym.domain.exception.CredentialException;
+import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
 import c1220ftjavareact.gym.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +21,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationBeansConfig {
     private final UserRepository repository;
 
+    /**
+     * Crea un Bean con una implementacion Anonima de UserDetailsService
+     */
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() throws RuntimeException{
         return email -> repository
                 .findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User with: " + email + " mail not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "El email no se encuentra registrado",
+                        "Revisar bien el email enviado, o buscar si el registro esta eliminado",
+                        email
+                        )
+                );
     }
 
+    /**
+     * Creo un Bean de PasswordEncoder implmentando Argon2
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new Argon2PasswordEncoder(16, 32, 1, 2048, 2);
@@ -36,6 +49,9 @@ public class ApplicationBeansConfig {
         return authConfig.getAuthenticationManager();
     }
 
+    /**
+     *  Configura el Bean de JavaMailSender
+     */
     @Bean
     public JavaMailSenderImpl javaMailSender() {
         var sender = new JavaMailSenderImpl();

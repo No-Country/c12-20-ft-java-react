@@ -1,12 +1,28 @@
 package c1220ftjavareact.gym.service.interfaces;
 
-import c1220ftjavareact.gym.domain.UpdatePassword;
+import c1220ftjavareact.gym.domain.ForgotPassword;
+import c1220ftjavareact.gym.domain.User;
+import c1220ftjavareact.gym.domain.dto.UserForgotPasswordDTO;
+import c1220ftjavareact.gym.service.email.TemplateStrategy;
 
-public interface UpdatePasswordService {
+import java.time.LocalDateTime;
 
-    Boolean createUpdatePasswordEvent(String email);
+public interface ForgotPasswordService {
 
-    UpdatePassword verifyUpdatePasswordEvent(String code, String id);
+    ForgotPassword saveForgotPassword(ForgotPassword model);
+    ForgotPassword createForgotPassword(String id, String email);
 
-    void finishUpdatePasswordEvent(UpdatePassword updatePassword);
+    void disableForgotPassword(UserForgotPasswordDTO model);
+
+    Boolean isExpired(LocalDateTime dateTime);
+
+    Boolean sendRecoveryMessage(User user, ForgotPassword forgotPassword, TemplateStrategy strategy);
+
+    UserForgotPasswordDTO findByCode(String code);
+
+    void validate(ForgotPassword model, String id);
+
+    ForgotPassword findByEmail(String email);
+
+    Boolean existsByEmail(String email);
 }

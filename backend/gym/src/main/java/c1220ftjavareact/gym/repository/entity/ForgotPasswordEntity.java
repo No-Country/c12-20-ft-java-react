@@ -15,9 +15,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "update_password")
+@Table(name = "forgot_password")
 @Slf4j
-public class UpdatePasswordEntity {
+public class ForgotPasswordEntity {
 
     @Id
     @Column(name = "id_user")
@@ -49,8 +49,7 @@ public class UpdatePasswordEntity {
         this.setCode(UUID.randomUUID().toString());
     }
 
-    public Boolean isExpired() {
-        var dateTime = LocalDateTime.now(Clock.system(ZoneId.systemDefault()));
-        return this.getExpirationDate().isBefore(dateTime);
+    public Boolean isExpired(LocalDateTime dateTime) {
+        return dateTime.isBefore( LocalDateTime.now(Clock.system(ZoneId.systemDefault())) );
     }
 }

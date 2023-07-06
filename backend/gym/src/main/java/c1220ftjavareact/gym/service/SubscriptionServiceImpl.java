@@ -1,12 +1,11 @@
 package c1220ftjavareact.gym.service;
 
+import c1220ftjavareact.gym.domain.dto.SubscriptionDTO;
 import c1220ftjavareact.gym.domain.mapper.SubscriptionMapper;
 import c1220ftjavareact.gym.repository.SubscriptionRepository;
-import c1220ftjavareact.gym.domain.dto.SubscriptionDTO;
 import c1220ftjavareact.gym.repository.entity.SubscriptionEntity;
 import c1220ftjavareact.gym.service.interfaces.SubscriptionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

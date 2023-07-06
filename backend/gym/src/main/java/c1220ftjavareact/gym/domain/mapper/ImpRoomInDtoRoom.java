@@ -5,7 +5,7 @@ import c1220ftjavareact.gym.repository.entity.Room;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ImpRoomInDtoRoom implements IMapperRoom<RoomInDto, Room>{
+public class ImpRoomInDtoRoom implements IMapperRoom<RoomInDto, Room> {
     @Override
     public Room map(RoomInDto in) {
         var room = new Room();

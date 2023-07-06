@@ -2,8 +2,8 @@ package c1220ftjavareact.gym.service;
 
 import c1220ftjavareact.gym.domain.dto.ActivityInDto;
 import c1220ftjavareact.gym.domain.mapper.IMapperActivity;
-import c1220ftjavareact.gym.repository.entity.Activity;
 import c1220ftjavareact.gym.repository.ActivityRepository;
+import c1220ftjavareact.gym.repository.entity.Activity;
 import c1220ftjavareact.gym.service.interfaces.IActivityService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

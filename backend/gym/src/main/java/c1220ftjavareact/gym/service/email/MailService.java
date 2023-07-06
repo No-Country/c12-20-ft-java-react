@@ -1,9 +1,6 @@
-package c1220ftjavareact.gym.service.interfaces;
-
-import c1220ftjavareact.gym.service.email.TemplateStrategy;
+package c1220ftjavareact.gym.service.email;
 
 import java.io.File;
-import java.util.Map;
 
 public interface MailService {
     Boolean send(String to, String subject, String textMessage);

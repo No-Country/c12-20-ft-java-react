@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.domain.mapper;
 
-import c1220ftjavareact.gym.domain.UpdatePassword;
+import c1220ftjavareact.gym.domain.ForgotPassword;
 import c1220ftjavareact.gym.repository.entity.ForgotPasswordEntity;
 import c1220ftjavareact.gym.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +13,9 @@ import java.time.ZoneId;
 
 @Component
 @RequiredArgsConstructor
-public class UpdatePasswordMapperBeans {
+public class ForgotPasswordMapperBean {
     @Bean
-    public UpdatePasswordMapper<UserEntity, ForgotPasswordEntity> userToUpdatePassword() {
+    public ForgotPasswordMapper<UserEntity, ForgotPasswordEntity> userToUpdatePassword() {
         var time = LocalDateTime.now(Clock.system(ZoneId.systemDefault()));
         return (user) -> ForgotPasswordEntity.builder()
                 .id(user.getId())
@@ -24,8 +24,8 @@ public class UpdatePasswordMapperBeans {
                 .build();
     }
 
-    public UpdatePasswordMapper<ForgotPasswordEntity, UpdatePassword> entityToModel() {
-        return entity -> UpdatePassword.builder()
+    public ForgotPasswordMapper<ForgotPasswordEntity, ForgotPassword> entityToModel() {
+        return entity -> ForgotPassword.builder()
                 .id(entity.getUserEntity().getId().toString())
                 .code(entity.getCode())
                 .email(entity.getUserEntity().getEmail())
@@ -34,7 +34,7 @@ public class UpdatePasswordMapperBeans {
                 .build();
     }
 
-    public UpdatePasswordMapper<UpdatePassword, ForgotPasswordEntity> modelToEntity() {
+    public ForgotPasswordMapper<ForgotPassword, ForgotPasswordEntity> modelToEntity() {
         return model -> ForgotPasswordEntity.builder()
                 .id(Long.parseLong(model.id()))
                 .code(model.code())
@@ -42,5 +42,7 @@ public class UpdatePasswordMapperBeans {
                 .expirationDate(model.expirationDate())
                 .build();
     }
+
+
 
 }

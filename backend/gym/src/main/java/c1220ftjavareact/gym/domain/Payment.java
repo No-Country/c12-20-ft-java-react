@@ -1,6 +1,8 @@
 package c1220ftjavareact.gym.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -16,8 +18,6 @@ public class Payment {
     private LocalDateTime day;
 
     private LocalDateTime expired;
-
-
 
 
 }

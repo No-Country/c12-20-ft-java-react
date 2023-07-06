@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.security.filter;
 
-import c1220ftjavareact.gym.repository.entity.User;
+import c1220ftjavareact.gym.repository.entity.UserEntity;
 import c1220ftjavareact.gym.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,28 +27,39 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userService;
     private final JwtService<UserDetails> jwtService;
 
+    /**
+     * Fitro para el token JWT
+     *
+     * @param request
+     * @param response
+     * @param filterChain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(
             @NotNull HttpServletRequest request,
             @NotNull HttpServletResponse response,
             @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
+        //Se recupera el token JWT del Header
         final String authorizationHeader = request.getHeader("Authorization");
-        if (this.isNotRequiredFilter(authorizationHeader)) {
+        if (this.isEmpty(authorizationHeader)) {
+            //Entra a la API sin TOKEN
             filterChain.doFilter(request, response);
             return;
         }
+        //En caso que haya revisamos la validez del token
         final String jwt = authorizationHeader.substring(7);
         final String userEmail = jwtService.extractSubject(jwt);
-
         var user =
                 (userEmail != null)
-                        ? (User) this.userService.loadUserByUsername(userEmail)
-                        : User.builder().build();
+                        ? (UserEntity) this.userService.loadUserByUsername(userEmail)
+                        : UserEntity.builder().build();
 
         if (
                 jwtService.isTokenValid(jwt, user) &&
-                        SecurityContextHolder.getContext().getAuthentication() == null
+                SecurityContextHolder.getContext().getAuthentication() == null
         ) {
             var authUser = new UsernamePasswordAuthenticationToken(
                     user.getUsername(),
@@ -61,7 +72,7 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private Boolean isNotRequiredFilter(String authHeader) {
+    private Boolean isEmpty(String authHeader) {
         return authHeader == null || authHeader.equals("") || !authHeader.startsWith("Bearer ");
     }
 }
