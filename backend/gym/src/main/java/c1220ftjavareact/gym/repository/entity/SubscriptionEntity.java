@@ -23,4 +23,8 @@ public class SubscriptionEntity {
     @NotNull
     @Column(name = "subscription_day")
     LocalDateTime subscriptionDay;
+
+    @ManyToOne
+    @JoinColumn(name = "id_training_session")
+    TrainingSession training;
 }

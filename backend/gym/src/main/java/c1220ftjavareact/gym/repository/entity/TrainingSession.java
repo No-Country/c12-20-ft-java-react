@@ -1,9 +1,11 @@
 package c1220ftjavareact.gym.repository.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -39,6 +41,8 @@ public class TrainingSession {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @JsonBackReference
+    @ToString.Exclude
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<SubscriptionEntity> subscriptions = new ArrayList<>();
 
