@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "room")
@@ -19,6 +20,12 @@ public class Room implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     @Column(name = "max_capacity", nullable = false)
     private int max_capacity;
+
+    @JoinColumn(name = "id_training_session", referencedColumnName = "id")
+    @OneToMany
+    private List<TrainingSession> trainingSession;
 }
