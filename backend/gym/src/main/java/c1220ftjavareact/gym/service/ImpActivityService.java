@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ImpActivityService implements IActivityService {
@@ -34,18 +35,21 @@ public class ImpActivityService implements IActivityService {
         this.activityRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public Activity updateActivity(Long id, ActivityInDto activityInDto) {
         return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Activity getActivityById(Long id) {
-        return null;
+    public Optional<Activity> getActivityById(Long id) {
+        return activityRepository.findById(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Activity> getAllActivities() {
-        return null;
+       return activityRepository.findAll();
     }
 }

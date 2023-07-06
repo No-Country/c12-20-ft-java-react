@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,4 +30,7 @@ public class Activity implements Serializable {
     @Column(name = "create_date", nullable = false)
     private LocalDate createDate;
 
+    @JoinColumn(name = "id_training_session", referencedColumnName = "id")
+    @OneToMany
+    private List<TrainingSession> trainingSession;
 }
