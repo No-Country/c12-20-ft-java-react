@@ -14,11 +14,9 @@ import java.util.Optional;
 @RequestMapping("/api/v1/activities")
 public class ActivityController {
     private final IActivityService iactivityService;
-    private final ActivityInDto activityInDto;
 
-    public ActivityController(IActivityService iactivityService, ActivityInDto activityInDto) {
+    public ActivityController(IActivityService iactivityService) {
         this.iactivityService = iactivityService;
-        this.activityInDto = activityInDto;
     }
 
     @PostMapping()
@@ -33,8 +31,8 @@ public class ActivityController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Activity> updateActivity(@PathVariable Long id, Activity activity) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.updateActivity(id, activityInDto));
+    public ResponseEntity<Activity> updateActivity(@PathVariable Long id, ActivityInDto activity) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.updateActivity(id, activity));
     }
 
     @GetMapping
