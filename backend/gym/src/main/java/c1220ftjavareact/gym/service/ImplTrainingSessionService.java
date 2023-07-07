@@ -2,6 +2,8 @@ package c1220ftjavareact.gym.service;
 
 import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.repository.entity.Activity;
+import c1220ftjavareact.gym.repository.entity.Room;
 import c1220ftjavareact.gym.repository.entity.TrainingSession;
 import c1220ftjavareact.gym.repository.TrainingSessionRepository;
 import c1220ftjavareact.gym.service.interfaces.IActivityService;
@@ -32,40 +34,40 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
     @Override
     @Transactional
-    public void saveTrainingSession(TrainingSessionSaveDTO trainingSession) {
-        /// VERIFICAR EXISTE ACTIVITY
-        iActivityService.getActivityById(trainingSession.getActivityId()); /// tira una excepcion si no encuentra
-        /// VERIFICAR EXISTE ROOM
-        //iRoomService.findById(trainingSession.getRoomId());
+    public TrainingSessionDTO saveTrainingSession(TrainingSessionSaveDTO trainingSession) {
+        /// Verificar si existe Activity, verificar si existe Room, verificar disponibilidad (pendiente)
 
-        /// VERIFICAR DISPONIBILIDAD (POR HACER)
-
-        /// LOGICA (POR HACER)
-
-        /// PERSISTIR
         TrainingSession savedTraining = mapper.map(trainingSession, TrainingSession.class);
-        trainingSessionRepository.save(savedTraining);
 
+        /// Activity
+        Optional<Activity> activity = iActivityService.getActivityById(trainingSession.getActivityId());
+        savedTraining.setActivity(activity.get());
+
+        /// Room
+        Optional<Room> room = iRoomService.getRoomById(trainingSession.getRoomId());
+        savedTraining.setRoom(room.get());
+
+        /// Persistence
+        savedTraining = trainingSessionRepository.save(savedTraining);
+        TrainingSessionDTO dto = mapper.map(savedTraining, TrainingSessionDTO.class);
+
+        return dto;
     }
 
 
     @Override
     public List<TrainingSessionDTO> getAllTrainingSession() {
         List<TrainingSession> listSessions = trainingSessionRepository.findAll();
-        List<TrainingSessionDTO> listSessionsDto = new ArrayList<>();
-
-        for(TrainingSession item : listSessions) {
-            TrainingSessionDTO aux = mapper.map(item,TrainingSessionDTO.class);
-            aux.setRoomId(item.getRoom().getId());
-            //aux.setRoomName(item.getRoom().getName()); ACTIVAR
-            listSessionsDto.add(aux);
-        }
-
-        return listSessionsDto;
+        return this.convertEntityList(listSessions);
     }
 
     @Override
-    public List<TrainingSessionDTO> getAllByActivityId() {
+    public List<TrainingSessionDTO> getAllByActivityId(Long activityId) {
+        return null;
+    }
+
+    @Override
+    public List<TrainingSessionDTO> getAllByRoomId(Long roomId) {
         return null;
     }
 
@@ -78,8 +80,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         }
 
         TrainingSessionDTO dto = mapper.map(trainingSession,TrainingSessionDTO.class);
-        dto.setRoomId(trainingSession.get().getRoom().getId());
-        //dto.setRoomName(trainingSession.get().getRoom().getName()); ACTIVAR
 
         return dto;
     }
@@ -88,7 +88,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     public TrainingSession getTrainingEntity(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
-        
         if(trainingSession.isEmpty()) {
             /// throw exception
         }
@@ -99,8 +98,8 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
     @Override
     @Transactional
-    public void updateTrainingSessionById(TrainingSessionDTO trainingSession, Long id) {
-
+    public TrainingSessionDTO updateTrainingSessionById(TrainingSessionDTO updateSession, Long id) {
+        return null;
     }
 
     @Override
@@ -108,4 +107,16 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     public void removeTrainingSessionById(Long id) {
 
     }
+
+    private List<TrainingSessionDTO> convertEntityList(List<TrainingSession> entityList) {
+        List<TrainingSessionDTO> listDTO = new ArrayList<>();
+
+        for(TrainingSession item : entityList) {
+            TrainingSessionDTO aux = mapper.map(item,TrainingSessionDTO.class);
+            listDTO.add(aux);
+        }
+
+        return listDTO;
+    }
+
 }

@@ -28,7 +28,7 @@ public class Activity implements Serializable {
     @Column(name = "create_date", nullable = false)
     private LocalDate createDate;
 
-    @JoinColumn(name = "id_training_session", referencedColumnName = "id")
+    @JoinColumn(name = "activity_id", referencedColumnName = "id")
     @OneToMany
     private List<TrainingSession> trainingSession;
 }

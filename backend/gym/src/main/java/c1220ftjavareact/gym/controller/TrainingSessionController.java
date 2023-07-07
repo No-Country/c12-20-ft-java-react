@@ -1,7 +1,13 @@
 package c1220ftjavareact.gym.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
+import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.service.interfaces.ITrainingSessionService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Necesito un endpoint para consultar la disponibilidad de
@@ -13,5 +19,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "api/v1/sessions")
 public class TrainingSessionController {
+
+    private final ITrainingSessionService iTrainingSessionService;
+
+    public TrainingSessionController(ITrainingSessionService iTrainingSessionService) {
+        this.iTrainingSessionService = iTrainingSessionService;
+    }
+
+    @PostMapping(value="/create")
+    public ResponseEntity<TrainingSessionDTO> saveTrainingSession(TrainingSessionSaveDTO trainingSessionSaveDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.iTrainingSessionService.saveTrainingSession(trainingSessionSaveDTO));
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessions() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllTrainingSession());
+    }
+
+    @GetMapping(value = "/find/{sessionId}")
+    public ResponseEntity<TrainingSessionDTO> getTrainingSessionsById( @PathVariable Long sessionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getTrainingSessionById(sessionId));
+    }
+
+
 
 }

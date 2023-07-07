@@ -25,7 +25,7 @@ public class Room implements Serializable {
     @Column(name = "max_capacity", nullable = false)
     private int max_capacity;
 
-    @JoinColumn(name = "id_training_session", referencedColumnName = "id")
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
     @OneToMany
     private List<TrainingSession> trainingSession;
 }

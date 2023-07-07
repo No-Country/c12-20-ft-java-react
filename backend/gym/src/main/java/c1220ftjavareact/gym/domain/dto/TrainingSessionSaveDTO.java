@@ -1,13 +1,10 @@
 package c1220ftjavareact.gym.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-
-import java.time.LocalTime;
 
 /**
  *  Formato de horarios: "hh:mm" para transferencia de datos
- *  Los ids de las relaciones en este caso se necesitan para crear las relaciones
+ *  Los ids de activity y room en este caso se necesitan para crear las relaciones
  */
 @Data
 public class TrainingSessionSaveDTO {
@@ -15,10 +12,8 @@ public class TrainingSessionSaveDTO {
     private Long activityId;
     private Long roomId;
     private int capacity;
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime time_start;
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime time_finish;
+    private String timeStart;
+    private String timeEnd;
     private boolean monday;
     private boolean tuesday;
     private boolean wednesday;
@@ -27,3 +22,4 @@ public class TrainingSessionSaveDTO {
     private boolean saturday;
     private boolean sunday;
 }
+

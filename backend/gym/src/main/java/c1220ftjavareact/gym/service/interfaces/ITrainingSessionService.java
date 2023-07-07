@@ -18,13 +18,16 @@ import java.util.List;
 public interface ITrainingSessionService {
 
     /// crear una sesion nueva
-    void saveTrainingSession(TrainingSessionSaveDTO trainingSession);
+    TrainingSessionDTO saveTrainingSession(TrainingSessionSaveDTO trainingSession);
 
     /// obtener todas las sesiones disponibles
     List<TrainingSessionDTO> getAllTrainingSession();
 
     /// obtener sesiones por activity
-    List<TrainingSessionDTO> getAllByActivityId();
+    List<TrainingSessionDTO> getAllByActivityId(Long activityId);
+
+    /// obtener sesiones por room
+    List<TrainingSessionDTO> getAllByRoomId(Long roomId);
 
     /// obtener una sesion en particular
     TrainingSessionDTO getTrainingSessionById(Long id);
@@ -33,7 +36,7 @@ public interface ITrainingSessionService {
     TrainingSession getTrainingEntity(Long id);
 
     /// actualizar la informacion de una sesion
-    void updateTrainingSessionById(TrainingSessionDTO trainingSession, Long id);
+    TrainingSessionDTO updateTrainingSessionById(TrainingSessionDTO trainingSession, Long id);
 
     /// eliminar una sesion disponible
     void removeTrainingSessionById(Long id);
