@@ -9,15 +9,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class PaymentMapper {
     private final ModelMapper modelMapper;
+
     @Autowired
     public PaymentMapper(ModelMapper modelMapper) {
-       this.modelMapper = modelMapper;
+        this.modelMapper = modelMapper;
     }
+
     public PaymentDTO convertToDto(PaymentEntity paymentEntity) {
-            return modelMapper.map(paymentEntity, PaymentDTO.class);
+        return modelMapper.map(paymentEntity, PaymentDTO.class);
     }
+
     public PaymentEntity convertToEntity(PaymentDTO paymentDTO) {
-            return modelMapper.map(paymentDTO, PaymentEntity.class);
+        return modelMapper.map(paymentDTO, PaymentEntity.class);
     }
 
 }

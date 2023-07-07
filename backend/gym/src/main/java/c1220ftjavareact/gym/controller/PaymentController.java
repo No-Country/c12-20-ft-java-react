@@ -24,7 +24,7 @@ public class PaymentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PaymentDTO> updatePayment(@PathVariable int id, @RequestBody PaymentDTO paymentDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.updatePayment(id,paymentDTO));
+        return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.updatePayment(id, paymentDTO));
     }
 
     @DeleteMapping("/{id}")

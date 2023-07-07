@@ -1,6 +1,8 @@
 package c1220ftjavareact.gym.domain.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PaymentDTO {
 
-    private int idSubscription;
+    private SubscriptionDTO idSubscription;
     private LocalDateTime day;
     private LocalDateTime expired;
 

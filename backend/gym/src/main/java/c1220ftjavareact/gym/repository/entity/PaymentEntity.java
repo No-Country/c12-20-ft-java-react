@@ -23,6 +23,4 @@ public class PaymentEntity {
     LocalDateTime day;
     @NotNull
     LocalDateTime expired;
-
-
 }
