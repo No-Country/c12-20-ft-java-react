@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.controller;
 
 import c1220ftjavareact.gym.domain.ForgotPassword;
-import c1220ftjavareact.gym.domain.dto.UserLoginDTO;
 import c1220ftjavareact.gym.domain.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.domain.exception.UpdatePasswordException;
 import c1220ftjavareact.gym.service.email.RecoveryPassStrategy;
@@ -12,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Email;
@@ -61,7 +59,7 @@ public class ForgotPasswordController {
                     user.toString());
 
         this.passwordService.sendRecoveryMessage(user, forgotPassword, new RecoveryPassStrategy());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 
@@ -73,13 +71,13 @@ public class ForgotPasswordController {
      * @param id   Id del usuario que creo el code
      */
     @PostMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpEntity<Void> finishUpdatePasswordEvent(
+    public HttpEntity<Void> validateCode(
             @RequestParam("code") String code,
             @RequestParam("id") String id
     ) {
         var userForgot = this.passwordService.findByCode(code);
         this.passwordService.validate(userForgot.getForgotPassword(), id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -90,12 +88,12 @@ public class ForgotPasswordController {
      * @Authroization No necesita
      */
     @PutMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpEntity<Void> updatePassword(@RequestBody UserPasswordDTO dto) {
+    public HttpEntity<Void> updateForgotenPassword(@RequestBody UserPasswordDTO dto) {
         if(!dto.password().equals(dto.repeatedPassword()))
             throw new RuntimeException("Contraseñas distintas");
 
         this.service.updateForgottenPassword(dto);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

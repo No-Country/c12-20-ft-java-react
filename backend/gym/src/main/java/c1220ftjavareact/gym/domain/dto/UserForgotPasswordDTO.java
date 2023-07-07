@@ -12,6 +12,4 @@ import lombok.*;
 public class UserForgotPasswordDTO {
     private ForgotPassword forgotPassword;
     private User user;
-
-
 }

@@ -25,7 +25,7 @@ spring:
     #Desactivo el Banner de Spring Booy de consola
     banner-mode: off
   datasource:
-    password: root
+    password: admin
     url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
     username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -36,6 +36,8 @@ spring:
     open-in-view: false
     properties:
       hibernate:
+        #Dialecto que usa Hibernate para las querys
+        dialect: org.hibernate.dialect.MySQL8Dialect
         #Muestra el SQL ejecutado en consola en Columna
         format_sql: true
   mail:
