@@ -32,7 +32,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         String password = authentication.getCredentials().toString();
 
         try {
-            var user = this.service.loadUserByUsername(email);
+            var user =this.service.loadUserByUsername(email);
 
             if (!this.encoder.matches(password, user.getPassword()))
                 throw new BadCredentialsException("The password does not match the account password");

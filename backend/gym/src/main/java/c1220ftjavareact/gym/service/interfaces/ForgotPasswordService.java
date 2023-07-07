@@ -12,8 +12,6 @@ public interface ForgotPasswordService {
     ForgotPassword saveForgotPassword(ForgotPassword model);
     ForgotPassword createForgotPassword(String id, String email);
 
-    void disableForgotPassword(UserForgotPasswordDTO model);
-
     Boolean isExpired(LocalDateTime dateTime);
 
     Boolean sendRecoveryMessage(User user, ForgotPassword forgotPassword, TemplateStrategy strategy);

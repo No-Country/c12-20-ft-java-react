@@ -75,28 +75,6 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     }
 
     /**
-     * Desactiva el codigo de recuperacion de la base de datos
-     *
-     * @param model Modelo con los datos para actualizar el ForgotPassowrd
-     */
-    @Transactional
-    @Override
-    public void disableForgotPassword(UserForgotPasswordDTO model){
-        var entity = passwordMapper.modelToEntity().map(model.getForgotPassword());
-        var userEntity = userMapper.userToUserEntity().map(model.getUser());
-        entity.setUserEntity(userEntity);
-        entity.setEnable(false);
-        try{
-            passwordRepository.saveAndFlush(entity);
-        } catch (Exception ex){
-            throw new UpdatePasswordException(
-                    "Ocurrio un error inesperado al guardar",
-                    "Revisa los datos del usuario o la base de datos",
-                    model.getUser().toString());
-        }
-    }
-
-    /**
      * Verifica si es anterior al actual
      *
      * @param dateTime Tiempo a comprobar

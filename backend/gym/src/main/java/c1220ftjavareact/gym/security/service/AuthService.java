@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.service.interfaces;
+package c1220ftjavareact.gym.security.service;
 
 import c1220ftjavareact.gym.domain.User;
 

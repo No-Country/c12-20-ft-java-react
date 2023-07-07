@@ -3,7 +3,6 @@ package c1220ftjavareact.gym.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Value;
 
 import java.time.LocalDate;
 
@@ -16,8 +15,9 @@ public class User {
     private final String name;
     private final String lastname;
     private final String role;
-    private final LocalDate createDate;
+    private final LocalDate createAt;
     private final String password;
+    private final String avatar;
 
 
     public String fullname() {

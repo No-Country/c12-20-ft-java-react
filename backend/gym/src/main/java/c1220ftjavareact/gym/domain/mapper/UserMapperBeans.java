@@ -2,7 +2,7 @@ package c1220ftjavareact.gym.domain.mapper;
 
 import c1220ftjavareact.gym.domain.User;
 import c1220ftjavareact.gym.domain.dto.EmployeeSaveDTO;
-import c1220ftjavareact.gym.domain.dto.UserLoginDTO;
+import c1220ftjavareact.gym.domain.dto.UserProjection;
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
 import c1220ftjavareact.gym.repository.entity.Role;
 import c1220ftjavareact.gym.repository.entity.UserEntity;
@@ -12,8 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.Locale;
 import java.util.UUID;
 
 @Component
@@ -29,11 +27,19 @@ public class UserMapperBeans {
     @Bean
     public UserMapper<UserSaveDTO, UserEntity> saveDtoToUser() {
         return (dto) -> UserEntity.builder()
-                .name(dto.name().toLowerCase(Locale.ROOT))
-                .lastname(dto.lastname().toLowerCase(Locale.ROOT))
+                .name( dto.name().substring(0, 1).toUpperCase()+dto.name().substring(1) )
+                .lastname( dto.lastname().substring(0, 1).toUpperCase()+dto.lastname().substring(1) )
                 .email(dto.email())
-                .createDate(LocalDate.now())
                 .password(encoder.encode(dto.password()))
+                .build();
+    }
+
+    @Bean
+    public UserMapper<UserProjection, User> userProjectionToUser() {
+        return (dto) -> User.builder()
+                .id(dto.getId())
+                .email(dto.getEmail())
+                .role(dto.getRole().toString())
                 .build();
     }
 
@@ -43,7 +49,6 @@ public class UserMapperBeans {
                 .name("Owner-name")
                 .lastname("Owner-lastname")
                 .email(email)
-                .createDate(LocalDate.now())
                 .password(encoder.encode("owner123"))
                 .build();
     }
@@ -56,9 +61,10 @@ public class UserMapperBeans {
                 .name(entity.getName())
                 .lastname(entity.getLastname())
                 .email(entity.getEmail())
-                .createDate(entity.getCreateDate())
+                .createAt(entity.getCreateAt())
                 .password(entity.getPassword())
                 .role(entity.getRole().name())
+                .avatar(entity.getAvatar())
                 .build();
     }
 
@@ -69,7 +75,7 @@ public class UserMapperBeans {
                 .name(user.getName())
                 .lastname(user.getLastname())
                 .email(user.getEmail())
-                .createDate(user.getCreateDate())
+                .createAt(user.getCreateAt())
                 .password(user.getPassword())
                 .role(Role.valueOf(user.getRole()))
                 .build();
@@ -85,11 +91,11 @@ public class UserMapperBeans {
     }
 
     @Bean
-    public UserMapper<User, UserLoginDTO> userToLoginUserDto() {
-        return (user) -> UserLoginDTO.builder()
+    public UserMapper<User, UserProjection> userToLoginUserDto() {
+        return (user) -> UserProjection.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .role(user.getRole())
+                .role(Role.valueOf(user.getRole()))
                 .fullname(user.fullname())
                 .build();
     }

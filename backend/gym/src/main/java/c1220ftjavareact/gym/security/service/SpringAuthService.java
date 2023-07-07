@@ -1,10 +1,9 @@
-package c1220ftjavareact.gym.service;
+package c1220ftjavareact.gym.security.service;
 
 import c1220ftjavareact.gym.domain.User;
 import c1220ftjavareact.gym.domain.exception.CredentialException;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.security.jwt.JwtService;
-import c1220ftjavareact.gym.service.interfaces.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
