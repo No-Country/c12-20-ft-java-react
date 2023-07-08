@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.controller;
 
 import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
+import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     private final UserService service;
-
+    private final UserMapperBeans userMapper;
     /**
      * Cambiar el estado de deleted del Usuario
      *
@@ -29,11 +30,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(value = "/employees/{id}")
     public HttpEntity<Void> changeStateUser(@PathVariable("id") String id, @RequestParam(value = "deleted") Boolean deleted){
-        log.info("HOLA ???");
         this.service.changeDeletedStateUser(id, "EMPLOYEE", deleted);
-
-        log.info("ADIOS ???");
-
         return ResponseEntity.noContent().build();
     }
 
@@ -49,7 +46,9 @@ public class UserController {
             @PathVariable("id") String id,
             @RequestBody UserUpdateDTO updateUser
     ) {
+
         this.service.updateUser(updateUser, id);
+
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,65 +1,30 @@
 package c1220ftjavareact.gym.security.service;
 
-import c1220ftjavareact.gym.domain.User;
-import c1220ftjavareact.gym.domain.exception.CredentialException;
-import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
-import c1220ftjavareact.gym.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Qualifier("spring")
+@Component
 @RequiredArgsConstructor
 public class SpringAuthService implements AuthService {
     private final AuthenticationManager manager;
-    private final JwtService<UserDetails> jwtService;
-    private final UserMapperBeans mapper;
 
     /**
      * Autentica las credenciales para validar el usuario
      *
-     * @param email    Email de la cuenta del usuario
-     * @param password Contraseña de la cuenta del usuario
+     * @param principal    Email de la cuenta del usuario
+     * @param credential Contraseña de la cuenta del usuario
      * @return True en caso de valdio, False en caso de invalido
      */
     @Override
-    public void authenticateCredential(String email, String password) {
+    public void authenticate(String principal, String credential) {
         manager.authenticate(new UsernamePasswordAuthenticationToken(
-                email,
-                password
+                principal,
+                credential
         ));
     }
 
-    /**
-     * Recupera el email que esta guardado en el token
-     *
-     * @param token Token JWT
-     * @return Email del token
-     */
-    @Override
-    public String getCredentialEmail(String token) {
-        return jwtService.extractSubject(token);
-    }
-
-    /**
-     * Comprueba si el token ha caducado
-     *
-     * @param token Token JWT
-     */
-    @Override
-    public Boolean isExpired(String token) {
-        return jwtService.isTokenExpired(token);
-    }
-
-    /**
-     * Genera un nuevo token
-     *
-     * @param user Usuario que generara el token
-     */
-    @Override
-    public String generateToken(User user) {
-        return jwtService.generateToken(mapper.userToUserDetails().map(user));
-    }
 }

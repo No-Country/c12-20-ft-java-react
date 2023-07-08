@@ -4,6 +4,7 @@ import c1220ftjavareact.gym.domain.User;
 import c1220ftjavareact.gym.domain.dto.EmployeeSaveDTO;
 import c1220ftjavareact.gym.domain.dto.UserProjection;
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
+import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
 import c1220ftjavareact.gym.repository.entity.Role;
 import c1220ftjavareact.gym.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,12 @@ public class UserMapperBeans {
     public UserMapper<String, String> password() {
         return encoder::encode;
     }
-
     @Bean
-    public UserMapper<UserProjection, User> userProjectionToUser() {
-        return (dto) -> User.builder()
-                .id(dto.getId())
+    public UserMapper<UserProjection, UserEntity> userProjectionToUserEntity() {
+        return (dto) -> UserEntity.builder()
+                .id(Long.parseLong(dto.getId()))
                 .email(dto.getEmail())
-                .role(dto.getRole().toString())
+                .role(dto.getRole())
                 .build();
     }
 

@@ -5,11 +5,14 @@ import c1220ftjavareact.gym.domain.dto.UserAuthDTO;
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.events.event.UserCreatedEvent;
+import c1220ftjavareact.gym.repository.entity.UserEntity;
+import c1220ftjavareact.gym.security.jwt.JwtService;
 import c1220ftjavareact.gym.security.service.AuthService;
 import c1220ftjavareact.gym.service.email.EmployeeCreatedStrategy;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
@@ -27,7 +30,11 @@ import java.util.Map;
 @Slf4j
 public class AuthController {
     private final UserService service;
-    private final AuthService authService;
+    @Qualifier("spring")
+    private final AuthService springAuth;
+    @Qualifier("google")
+    private final AuthService googleAuth;
+    private final JwtService<UserEntity> jwtService;
     private final UserMapperBeans userMapper;
     private final ApplicationEventPublisher publisher;
 
@@ -40,7 +47,7 @@ public class AuthController {
     public HttpEntity<Void> registerAdmin() {
         var entity = userMapper.adminUser().map("owner1234");
 
-        service.saveAdmin(userMapper.userEntityToUserSave().map(entity), "ADMIN");
+        service.saveAdmin(userMapper.userEntityToUserSave().map(entity));
 
         return ResponseEntity.created(URI.create("/api/v1/admins")).build();
     }
@@ -53,6 +60,7 @@ public class AuthController {
      */
     @PostMapping("/customers")
     public HttpEntity<Void> registerCustomer(@Valid @RequestBody UserSaveDTO userDTO) {
+
         this.service.assertEmailIsNotRegistered(userDTO.email());
         this.service.saveUser(userDTO, "CUSTOMER");
 
@@ -94,9 +102,9 @@ public class AuthController {
      */
     @PostMapping(value = "/authentication", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, Object>> authentication(@RequestBody @Valid UserAuthDTO model) {
-        this.authService.authenticateCredential(model.email(), model.password());
+        this.springAuth.authenticate(model.email(), model.password());
         var user = this.service.findLoginInfo(model.email());
-        var token = this.authService.generateToken(userMapper.userProjectionToUser().map(user));
+        var token = this.jwtService.generateToken(userMapper.userProjectionToUserEntity().map(user));
 
         return ResponseEntity.ok(Map.of(
                 "user", user,
@@ -112,9 +120,9 @@ public class AuthController {
      */
     @PostMapping(value = "/update-session", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, Object>> active(@RequestHeader("Authorization") String oldToken) {
-        var email = this.authService.getCredentialEmail(oldToken.substring(7));
+        var email = this.jwtService.extractSubject(oldToken.substring(7));
         var user = this.service.findUserByEmail(email);
-        var token = this.authService.generateToken(user);
+        var token = this.jwtService.generateToken(userMapper.userToUserEntity().map(user));
 
         return ResponseEntity.ok(Map.of(
                 "user", user,
