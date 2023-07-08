@@ -4,12 +4,9 @@ import c1220ftjavareact.gym.domain.User;
 import c1220ftjavareact.gym.domain.dto.*;
 import c1220ftjavareact.gym.domain.exception.ResourceAlreadyExistsException;
 import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
-import c1220ftjavareact.gym.domain.exception.UpdatePasswordException;
 import c1220ftjavareact.gym.domain.exception.UserSaveException;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.repository.UserRepository;
-import c1220ftjavareact.gym.service.email.MailService;
-import c1220ftjavareact.gym.service.email.TemplateStrategy;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +21,6 @@ import org.springframework.util.StringUtils;
 public class UserServiceImp implements UserService {
     private final UserRepository repository;
     private final UserMapperBeans userMapper;
-    private final MailService mailService;
     private final PasswordEncoder encoder;
 
 
@@ -33,6 +29,7 @@ public class UserServiceImp implements UserService {
      *
      * @param email Correo a verificar
      */
+    @Transactional(readOnly = true)
     @Override
     public void assertEmailIsNotRegistered(String email) {
         if (repository.existsByEmail(email)) {
@@ -51,6 +48,7 @@ public class UserServiceImp implements UserService {
      *
      * @return {@link User}
      */
+    @Transactional(readOnly = true)
     @Override
     public User findUserById(String id){
         var user = repository.findById(Long.parseLong(id))
@@ -71,6 +69,7 @@ public class UserServiceImp implements UserService {
      *
      * @return {@link UserProjection}
      */
+    @Transactional(readOnly = true)
     @Override
     public UserProjection findLoginInfo(String email){
         return this.repository.findUserForLogin(email);
@@ -83,6 +82,7 @@ public class UserServiceImp implements UserService {
      *
      * @return {@link User}
      */
+    @Transactional(readOnly = true)
     @Override
     public User findUserByEmail(String email) {
         var user = repository.findByEmail(email)
@@ -92,7 +92,6 @@ public class UserServiceImp implements UserService {
                                  email
                         )
                 );
-
         return userMapper.userEntityToUser().map(user);
     }
 
@@ -135,26 +134,21 @@ public class UserServiceImp implements UserService {
     }
 
     /**
-     * Envia un correo para avisar de la creacion de una cuenta
+     * Cambia el estado de eliminacion del Usuario
      *
-     * @param model    Datos de usuario para enviar la cuenta
-     * @param strategy Implementacion del template que se usara
-     *
+     * @param id ID del usuario que se desea actualizar
+     * @param role Rol del usuario
+     * @param state Estado al que se desea llevar
      */
-    public Boolean sendCreateMessage(UserSaveDTO model, TemplateStrategy strategy) {
-        var user = User.builder().name(model.name()).lastname(model.lastname()).build();
-        mailService.setTemplateStrategy(strategy);
-        return mailService.send(
-                model.email(),
-                "Se ha creado su cuenta en PrimeFit",
-                mailService.executeTemplate(user.fullname(), model.email(), model.password()));
-    }
-
-
+    @Transactional
     @Override
-    public void userLogicalDeleteById(String id, String role) {
+    public void changeDeletedStateUser(String id, String role, Boolean state) {
+        //Verifica que el ID y el rol del usuario coincidan
+        if(this.repository.countUsersBy(id, role) < 1){
+            throw new ResourceNotFoundException("El usuario no se encuentra registra", "Revisa que el ID pertenezca a un usuario con rol de empleado/EMPLOYEE", "ID: "+id);
+        }
 
-        this.repository.deleteUsersBy(id, role);
+        this.repository.changeStateUser(id, role, state.equals(true) ? "1" : "0");
     }
 
     @Override
@@ -171,8 +165,7 @@ public class UserServiceImp implements UserService {
         user.setLastname(StringUtils.hasText(dto.lastName()) ? dto.lastName() : user.getLastname());
         user.setEmail(StringUtils.hasText(dto.email()) ? dto.email() : user.getEmail());
         user.setAvatar(StringUtils.hasText(dto.avatar()) ? dto.avatar() : user.getAvatar());
-        if(     StringUtils.hasText(dto.updatedPassword())
-        ){
+        if( StringUtils.hasText(dto.updatedPassword()) ){
             if(!encoder.matches(dto.oldPassword(), user.getPassword())){
                 throw new UserSaveException("La contraseña antigua es incorrecta", "Poner la contraseña registrada, o no poner los datos de cambio de contraseña");
             }

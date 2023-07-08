@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.controller;
 
 import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
-import c1220ftjavareact.gym.security.service.AuthService;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -20,19 +18,22 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     private final UserService service;
-    private final AuthService authService;
 
     /**
+     * Cambiar el estado de deleted del Usuario
      *
      * @param id ID del usuario
      * @Authorization Si necesita
      *
-     * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping(value = "/admins/{id}")
-    public HttpEntity<Void> deletEmployee(@PathVariable("id") String id){
-        this.service.userLogicalDeleteById(id, "EMPLOYEE");
+    @PutMapping(value = "/employees/{id}")
+    public HttpEntity<Void> changeStateUser(@PathVariable("id") String id, @RequestParam(value = "deleted") Boolean deleted){
+        log.info("HOLA ???");
+        this.service.changeDeletedStateUser(id, "EMPLOYEE", deleted);
+
+        log.info("ADIOS ???");
+
         return ResponseEntity.noContent().build();
     }
 

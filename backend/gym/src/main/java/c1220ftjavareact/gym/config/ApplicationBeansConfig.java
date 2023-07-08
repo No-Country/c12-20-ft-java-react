@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.event.ApplicationEventMulticaster;
+import org.springframework.context.event.SimpleApplicationEventMulticaster;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -71,5 +74,12 @@ public class ApplicationBeansConfig {
         props.put("mail.debug", "true");
         props.put("mail.smtp.ssl.trust", "*");
         return sender;
+    }
+
+    @Bean
+    public ApplicationEventMulticaster applicationEventMulticaster() {
+        var simpleEventMulticaster = new SimpleApplicationEventMulticaster();
+        simpleEventMulticaster.setTaskExecutor(new SimpleAsyncTaskExecutor());
+        return simpleEventMulticaster;
     }
 }

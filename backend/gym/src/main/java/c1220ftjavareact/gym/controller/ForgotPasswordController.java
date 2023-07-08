@@ -2,11 +2,12 @@ package c1220ftjavareact.gym.controller;
 
 import c1220ftjavareact.gym.domain.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.domain.exception.UpdatePasswordException;
+import c1220ftjavareact.gym.events.event.RecoveryPasswordEvent;
 import c1220ftjavareact.gym.service.email.RecoveryPassStrategy;
 import c1220ftjavareact.gym.service.interfaces.ForgotPasswordService;
-import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ import javax.validation.constraints.Email;
 @Slf4j
 public class ForgotPasswordController {
     private final ForgotPasswordService passwordService;
-    private final UserService service;
+    private final ApplicationEventPublisher publisher;
 
     /**
      * Endpoint para iniciar el evento de actualizar contraseña si la olvidar
@@ -29,19 +30,25 @@ public class ForgotPasswordController {
      * @param email Email del usuario registrado que olvido su contraseña
      * @Authroization No necesita
      */
-    @PostMapping(value = "/passwords/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> createForgotPassword(
-            @PathVariable("email") @Email String email
+            @RequestParam("email") @Email String email
     ) {
         if(this.passwordService.existsByEmail(email)){
             var forgotPassword = this.passwordService.findByEmail(email);
             this.passwordService.AssertIsEnable(forgotPassword.enable());
-            this.passwordService.AssertExpiredIsFalse(forgotPassword.expirationDate());
+            this.passwordService.AssertIsNotExpired(forgotPassword.expirationDate());
         }
 
-        var userForgotten = this.passwordService.saveForgotPassword(email);
-
-        this.passwordService.sendRecoveryMessage(userForgotten, new RecoveryPassStrategy());
+        var values = this.passwordService.saveForgotPassword(email);
+        this.publisher.publishEvent(new RecoveryPasswordEvent(
+                this,
+                values.get("id"),
+                email,
+                values.get("fullName"),
+                values.get("code"),
+                new RecoveryPassStrategy()
+        ));
         return ResponseEntity.noContent().build();
     }
 
@@ -53,16 +60,15 @@ public class ForgotPasswordController {
      * @param code Codigo generado en el primer endpoint
      * @param id   Id del usuario que creo el code
      */
-    @PostMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/passwords/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> validateCode(
             @RequestParam("code") String code,
-            @RequestParam("id") String id
+            @PathVariable("id") String id
     ) {
-        var userForgot = this.passwordService.findByCode(code);
-        this.passwordService.AssertKeysEquals(code, userForgot.getForgotPassword().code());
-        this.passwordService.AssertKeysEquals(id, userForgot.getForgotPassword().id());
-        this.passwordService.AssertIsEnable(userForgot.getForgotPassword().enable());
-        this.passwordService.AssertExpiredIsFalse(userForgot.getForgotPassword().expirationDate());
+        var forgotPassword = this.passwordService.findByCode(code);
+        this.passwordService.AssertKeysEquals(id, forgotPassword.id());
+        this.passwordService.AssertIsEnable(forgotPassword.enable());
+        this.passwordService.AssertIsNotExpired(forgotPassword.expirationDate());
 
         return ResponseEntity.noContent().build();
     }

@@ -25,16 +25,6 @@ public class UserMapperBeans {
     }
 
     @Bean
-    public UserMapper<UserSaveDTO, UserEntity> saveDtoToUser() {
-        return (dto) -> UserEntity.builder()
-                .name( dto.name().substring(0, 1).toUpperCase()+dto.name().substring(1) )
-                .lastname( dto.lastname().substring(0, 1).toUpperCase()+dto.lastname().substring(1) )
-                .email( dto.email() )
-                .password( encoder.encode(dto.password()) )
-                .build();
-    }
-
-    @Bean
     public UserMapper<UserProjection, User> userProjectionToUser() {
         return (dto) -> User.builder()
                 .id(dto.getId())

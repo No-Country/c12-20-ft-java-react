@@ -30,14 +30,6 @@ public class SpringAuthService implements AuthService {
                 email,
                 password
         ));
-        /*
-        try {
-        } catch (Exception ex) {
-            throw new CredentialException(
-                    "Las credenciales no son autenticas",
-                    ex.getLocalizedMessage(),
-                    "Credenciales: "+email+" y "+password);
-        }*/
     }
 
     /**

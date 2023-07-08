@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.service;
 
 import c1220ftjavareact.gym.domain.ForgotPassword;
-import c1220ftjavareact.gym.domain.dto.UserForgotPasswordDTO;
 import c1220ftjavareact.gym.domain.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
 import c1220ftjavareact.gym.domain.exception.UpdatePasswordException;
@@ -11,7 +10,6 @@ import c1220ftjavareact.gym.repository.ForgotPasswordRepository;
 import c1220ftjavareact.gym.repository.UserRepository;
 import c1220ftjavareact.gym.repository.entity.UserEntity;
 import c1220ftjavareact.gym.service.email.MailService;
-import c1220ftjavareact.gym.service.email.TemplateStrategy;
 import c1220ftjavareact.gym.service.interfaces.ForgotPasswordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -58,11 +57,10 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
      *
      * @param email Email del usuario que solicita el codigo
      *
-     * @return {@link UserForgotPasswordDTO}
      */
     @Transactional
     @Override
-    public UserForgotPasswordDTO saveForgotPassword(String email) {
+    public Map<String, String> saveForgotPassword(String email) {
         UserEntity userEntity = UserEntity.builder().build();
         var forgottenModel =  ForgotPassword.builder().build();
         try {
@@ -75,7 +73,11 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
                     "Puedes revisar: " + email + " y " + forgottenModel,
                     ex.toString());
         }
-        return new UserForgotPasswordDTO(forgottenModel, userMapper.userEntityToUser().map(userEntity));
+        return Map.of(
+                "id", userEntity.getId().toString(),
+                "fullName", userEntity.fullname(),
+                "code", forgottenModel.code()
+        );
     }
 
     /**
@@ -89,36 +91,15 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     }
 
     /**
-     * Envia un email con un template para recuperar la contraseña del usuario
-     *
-     * @param userForgotPassword Modelo con los datos para enviar el correo
-     * @param strategy Template que se utilizara en el correo
-     *
-     * @return Si se ha envido correctamente el correo
-     */
-    @Override
-    public Boolean sendRecoveryMessage(UserForgotPasswordDTO userForgotPassword, TemplateStrategy strategy){
-        this.mailService.setTemplateStrategy(strategy);
-        return mailService.send(
-                userForgotPassword.getUser().getEmail(),
-                "CAMBIO DE CONTRASEÑA",
-                this.mailService.executeTemplate(
-                        userForgotPassword.getUser().fullname(),
-                "http://localhost:3300/password?code="+userForgotPassword.getForgotPassword().code()+"&id="+userForgotPassword.getUser().getId()
-                )
-        );
-    }
-
-    /**
      * Busca si un codigo esta relacionado con algun ForgotPassword registrado
      *
      * @param code Codigo
      *
-     * @return {@link UserForgotPasswordDTO} Datos del Usuario y ForgotPassword
+     * @return {@link ForgotPassword}
      */
     @Transactional(readOnly = true)
     @Override
-    public UserForgotPasswordDTO findByCode(String code){
+    public ForgotPassword findByCode(String code){
         var forgotPassword = passwordRepository.findByCode(code)
                 .orElseThrow(() -> new UpdatePasswordException(
                                 "El codigo no fue encontrado",
@@ -130,7 +111,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
        var userModel = this.userMapper.userEntityToUser().map(userEntity);
        var forgotModel = this.passwordMapper.entityToModel().map(forgotPassword);
 
-       return new UserForgotPasswordDTO(forgotModel, userModel);
+       return forgotModel;
     }
 
     /**
@@ -151,11 +132,12 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     }
 
     /**
-     * Debe de dar falso o arroja una excepcion
+     * Si la fecha ha pasado arroja una excepcion
+     *
      * @param dateTime Fecha y hora de caducidad
      */
     @Override
-    public void AssertExpiredIsFalse(LocalDateTime dateTime){
+    public void AssertIsNotExpired(LocalDateTime dateTime){
         if(this.isExpired(dateTime)){
             throw new UpdatePasswordException(
                     "EL codigo ya ha caducado",
@@ -166,7 +148,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     }
 
     /**
-     * Debe de de ser enable true o arroja una excepcion
+     * Si enable es false arroja una excepcion
      *
      * @param enable Estado del codigo
      */
@@ -195,7 +177,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
 
         this.AssertKeysEquals(model.code(),entity.getCode());
         this.AssertIsEnable(entity.isEnable());
-        this.AssertExpiredIsFalse(entity.getExpirationDate());
+        this.AssertIsNotExpired(entity.getExpirationDate());
 
         entity.getUserEntity().setPassword(userMapper.password().map(model.password()));
         entity.disable();

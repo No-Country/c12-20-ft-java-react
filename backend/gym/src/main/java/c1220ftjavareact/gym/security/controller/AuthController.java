@@ -3,18 +3,18 @@ package c1220ftjavareact.gym.security.controller;
 import c1220ftjavareact.gym.domain.dto.EmployeeSaveDTO;
 import c1220ftjavareact.gym.domain.dto.UserAuthDTO;
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
-import c1220ftjavareact.gym.domain.exception.UserSaveException;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
+import c1220ftjavareact.gym.events.event.UserCreatedEvent;
 import c1220ftjavareact.gym.security.service.AuthService;
-import c1220ftjavareact.gym.service.email.CustomerCreate;
+import c1220ftjavareact.gym.service.email.EmployeeCreatedStrategy;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,6 +29,7 @@ public class AuthController {
     private final UserService service;
     private final AuthService authService;
     private final UserMapperBeans userMapper;
+    private final ApplicationEventPublisher publisher;
 
     /**
      * Endpoint para realizar el registro deL ADMIN (solo se crea una vez, datos por default)
@@ -37,9 +38,9 @@ public class AuthController {
      */
     @PostMapping(value = "/admins/create")
     public HttpEntity<Void> registerAdmin() {
-        var entiy = userMapper.adminUser().map("owner1234");
+        var entity = userMapper.adminUser().map("owner1234");
 
-        service.saveAdmin(userMapper.userEntityToUserSave().map(entiy), "ADMIN");
+        service.saveAdmin(userMapper.userEntityToUserSave().map(entity), "ADMIN");
 
         return ResponseEntity.created(URI.create("/api/v1/admins")).build();
     }
@@ -70,10 +71,17 @@ public class AuthController {
     public HttpEntity<Void> registerEmployee(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
         this.service.assertEmailIsNotRegistered(employeeDTO.email());
         var userDTO = this.userMapper.employeeSaveToUserSave().map(employeeDTO);
-        if (!this.service.sendCreateMessage(userDTO, new CustomerCreate()))
-            throw new UserSaveException("Error al enviar el email", "Espera y vuelve a intentarlo o revisa el formato del email");
 
         service.saveUser(userDTO, "EMPLOYEE");
+
+        publisher.publishEvent(new UserCreatedEvent(
+                this,
+                userDTO.email(),
+                userDTO.name(),
+                userDTO.lastname(),
+                userDTO.password(),
+                new EmployeeCreatedStrategy())
+        );
 
         return ResponseEntity.created(URI.create("/api/v1/admins")).build();
     }
@@ -89,6 +97,7 @@ public class AuthController {
         this.authService.authenticateCredential(model.email(), model.password());
         var user = this.service.findLoginInfo(model.email());
         var token = this.authService.generateToken(userMapper.userProjectionToUser().map(user));
+
         return ResponseEntity.ok(Map.of(
                 "user", user,
                 "token", token
@@ -97,7 +106,7 @@ public class AuthController {
 
     /**
      * Endpoint para actualizar el token del usuario si no ha expirado
-     *<<<
+     *
      * @param oldToken Token JWT del usuario
      * @Authroization No necesita
      */

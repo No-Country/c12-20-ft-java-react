@@ -31,7 +31,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public HttpEntity<ErrorDTO> handleResourceNotFoundException(Exception ex) {
         var errorDetails = ErrorDTO.builder()
                 .message(ex.getMessage())
-                .resolve("Excepcion no manejada")
+                .resolve(ex.toString())
                 .target(ex.getClass().getTypeName())
                 .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                 .build();

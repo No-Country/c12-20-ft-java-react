@@ -46,7 +46,6 @@ public class UserEntity implements UserDetails {
 
     @Column(name = "avatar")
     private String avatar;
-    //
 
     public UserEntity(String email, String password, String name, String lastname) {
         this.email = email;
@@ -97,7 +96,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !this.getDeleted();
     }
 
 

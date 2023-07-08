@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CustomerCreate implements TemplateStrategy {
+public class EmployeeCreatedStrategy implements TemplateStrategy {
     @Override
     public String buildTemplate() {
         return """

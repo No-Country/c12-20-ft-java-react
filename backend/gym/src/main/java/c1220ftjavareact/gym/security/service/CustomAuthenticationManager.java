@@ -32,9 +32,8 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         String password = authentication.getCredentials().toString();
         try {
             var user = this.service.loadUserByUsername(email);
-
-            if (!this.encoder.matches(password, user.getPassword()))
-                throw new BadCredentialsException("The password does not match the account password");
+            this.verifyDelted(user.isEnabled());
+            this.verifyPasswords(password, user.getPassword());
 
             var auth = UsernamePasswordAuthenticationToken.authenticated(
                     email,
@@ -44,9 +43,19 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
             auth.setDetails(authentication.getDetails());
             return auth;
-        } catch (AuthenticationServiceException ex){
+        } catch (Exception ex){
             ex.printStackTrace();
-            throw new AuthenticationServiceException(ex.getLocalizedMessage());
+            throw new RuntimeException(ex.getLocalizedMessage());
         }
+    }
+
+    private void verifyDelted(Boolean enable){
+        if (!enable)
+            throw new BadCredentialsException("User account is disabled");
+    }
+
+    private void verifyPasswords(String rawPassword, String encodedPassword){
+        if (!this.encoder.matches(rawPassword, encodedPassword))
+            throw new BadCredentialsException("The password does not match the account password");
     }
 }
