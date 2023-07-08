@@ -29,8 +29,8 @@ public class UserMapperBeans {
         return (dto) -> UserEntity.builder()
                 .name( dto.name().substring(0, 1).toUpperCase()+dto.name().substring(1) )
                 .lastname( dto.lastname().substring(0, 1).toUpperCase()+dto.lastname().substring(1) )
-                .email(dto.email())
-                .password(encoder.encode(dto.password()))
+                .email( dto.email() )
+                .password( encoder.encode(dto.password()) )
                 .build();
     }
 
@@ -45,11 +45,11 @@ public class UserMapperBeans {
 
     @Bean
     public UserMapper<String, UserEntity> adminUser() {
-        return (email) -> UserEntity.builder()
+        return (pass) -> UserEntity.builder()
                 .name("Owner-name")
                 .lastname("Owner-lastname")
-                .email(email)
-                .password(encoder.encode("owner123"))
+                .email("owner@gmail.com")
+                .password(pass)
                 .build();
     }
 
@@ -69,6 +69,16 @@ public class UserMapperBeans {
     }
 
     @Bean
+    public UserMapper<UserEntity, UserSaveDTO> userEntityToUserSave() {
+        return (entity) -> UserSaveDTO.builder()
+                .name(entity.getName() )
+                .email(entity.getEmail() )
+                .lastname(entity.getLastname())
+                .password(entity.getPassword())
+                .build();
+    }
+
+    @Bean
     public UserMapper<User, UserEntity> userToUserEntity() {
         return (user) -> UserEntity.builder()
                 .id(Long.parseLong(user.getId()))
@@ -78,6 +88,7 @@ public class UserMapperBeans {
                 .createAt(user.getCreateAt())
                 .password(user.getPassword())
                 .role(Role.valueOf(user.getRole()))
+                .avatar(user.getAvatar())
                 .build();
     }
 
@@ -87,16 +98,6 @@ public class UserMapperBeans {
                 .id(Long.parseLong(user.getId()))
                 .email(user.getEmail())
                 .role(Role.valueOf(user.getRole()))
-                .build();
-    }
-
-    @Bean
-    public UserMapper<User, UserProjection> userToLoginUserDto() {
-        return (user) -> UserProjection.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .role(Role.valueOf(user.getRole()))
-                .fullname(user.fullname())
                 .build();
     }
 

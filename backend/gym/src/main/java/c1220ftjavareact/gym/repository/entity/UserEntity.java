@@ -1,5 +1,6 @@
 package c1220ftjavareact.gym.repository.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,22 +34,19 @@ public class UserEntity implements UserDetails {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @Column(name = "create_at", nullable = false)
+    @Column(name = "create_at")
     private LocalDate createAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", columnDefinition = "enum('CUSTOMER', 'EMPLOYEE', 'ADMIN')")
     private Role role;
 
-    @Column(name = "deleted", nullable = false)
+    @Column(name = "deleted")
     private Boolean deleted;
 
-    @Column(name = "avatar", nullable = false)
+    @Column(name = "avatar")
     private String avatar;
-
-    @ToString.Exclude
-    @OneToOne(mappedBy = "userEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ForgotPasswordEntity updatePassword;
+    //
 
     public UserEntity(String email, String password, String name, String lastname) {
         this.email = email;
@@ -56,8 +54,6 @@ public class UserEntity implements UserDetails {
         this.name = name;
         this.lastname = lastname;
     }
-
-
 
     public String fullname() {
         return new StringBuilder()

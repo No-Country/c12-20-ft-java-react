@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.security;
+package c1220ftjavareact.gym.security.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,23 +30,23 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         }
         String email = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
-
         try {
-            var user =this.service.loadUserByUsername(email);
+            var user = this.service.loadUserByUsername(email);
 
             if (!this.encoder.matches(password, user.getPassword()))
                 throw new BadCredentialsException("The password does not match the account password");
 
             var auth = UsernamePasswordAuthenticationToken.authenticated(
-                    authentication.getPrincipal(),
-                    authentication.getCredentials().toString(),
+                    email,
+                    user.getPassword(),
                     user.getAuthorities()
             );
 
             auth.setDetails(authentication.getDetails());
             return auth;
-        } catch (Exception e) {
-            throw new AuthenticationServiceException("Error authenticating user, error: ", e);
+        } catch (AuthenticationServiceException ex){
+            ex.printStackTrace();
+            throw new AuthenticationServiceException(ex.getLocalizedMessage());
         }
     }
 }

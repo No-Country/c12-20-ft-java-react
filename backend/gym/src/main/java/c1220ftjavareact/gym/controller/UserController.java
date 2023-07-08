@@ -48,14 +48,7 @@ public class UserController {
             @PathVariable("id") String id,
             @RequestBody UserUpdateDTO updateUser
     ) {
-        var user =this.service.updateUser(updateUser, id);
-
-        var response = ResponseEntity.noContent();
-        if(StringUtils.hasText(updateUser.email())){
-            var token = this.authService.generateToken(user);
-
-            return ResponseEntity.ok(Map.of("Authorize-update", "Bearer "+token));
-        }
+        this.service.updateUser(updateUser, id);
         return ResponseEntity.noContent().build();
     }
 }

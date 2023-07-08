@@ -25,19 +25,19 @@ public class SpringAuthService implements AuthService {
      * @return True en caso de valdio, False en caso de invalido
      */
     @Override
-    public Boolean authenticateCredential(String email, String password) {
+    public void authenticateCredential(String email, String password) {
+        manager.authenticate(new UsernamePasswordAuthenticationToken(
+                email,
+                password
+        ));
+        /*
         try {
-            manager.authenticate(new UsernamePasswordAuthenticationToken(
-                    email,
-                    password
-            ));
-            return true;
         } catch (Exception ex) {
             throw new CredentialException(
                     "Las credenciales no son autenticas",
                     ex.getLocalizedMessage(),
                     "Credenciales: "+email+" y "+password);
-        }
+        }*/
     }
 
     /**

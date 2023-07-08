@@ -8,15 +8,14 @@ import c1220ftjavareact.gym.domain.exception.UpdatePasswordException;
 import c1220ftjavareact.gym.domain.exception.UserSaveException;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.repository.UserRepository;
-import c1220ftjavareact.gym.repository.entity.Role;
 import c1220ftjavareact.gym.service.email.MailService;
 import c1220ftjavareact.gym.service.email.TemplateStrategy;
-import c1220ftjavareact.gym.security.service.AuthService;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -25,9 +24,6 @@ import org.springframework.util.StringUtils;
 public class UserServiceImp implements UserService {
     private final UserRepository repository;
     private final UserMapperBeans userMapper;
-
-    private final AuthService authService;
-
     private final MailService mailService;
     private final PasswordEncoder encoder;
 
@@ -51,7 +47,7 @@ public class UserServiceImp implements UserService {
     /**
      * Busca un Usuario por ID
      *
-     * @param id
+     * @param id Id del usuario que se desea recuperar
      *
      * @return {@link User}
      */
@@ -60,7 +56,7 @@ public class UserServiceImp implements UserService {
         var user = repository.findById(Long.parseLong(id))
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "El ID no se encuentra registrado",
-                                "El ID no esta en la base de datos o haz puesto mal el numero",
+                                "El ID no esta en la base de datos o has puesto mal el ID",
                                 id
                         )
                 );
@@ -108,53 +104,34 @@ public class UserServiceImp implements UserService {
      *
      * @return {@link User}
      */
-    public User saveUser(UserSaveDTO model, String role) {
-        var user = userMapper.saveDtoToUser().map(model);
-        user.setRole(Role.valueOf(role));
+    @Transactional
+    @Override
+    public void saveUser(UserSaveDTO model, String role) {
         try {
-            var entity = repository.saveAndFlush(user);
-            entity.setPassword(model.password());
-            return userMapper.userEntityToUser().map(entity);
+            repository.saveUser(model.name(), model.email(), model.lastname(), userMapper.password().map(model.password()), role);
         } catch (Exception ex) {
-            return null;
+            throw new UserSaveException("Ocurrio un error al registar el empleado", "Revisa los datos el formato y que no haya datos nulos");
         }
     }
 
     /**
-     * Cambia la cantraseña olvidada del usuario
+     * Guardo un Admin en la base de datos
      *
-     * @param model Modelo con datos para actualizar contraseña
+     * @param model Model de usuario para guardar
+     * @param role  Role del usuario que se desea guardar
      *
+     * @return {@link User}
      */
+    @Transactional
     @Override
-    public void updateForgottenPassword(UserPasswordDTO model) {
-        var user = this.repository.findById(Long.parseLong(model.id()))
-                .orElseThrow(()->new ResourceNotFoundException(
-                        "Usuario no encontrado",
-                        "Revisa que el ID sea correcto",
-                        model.id()
-                        )
-                );
-        if(!user.getUpdatePassword().getCode().equals(model.code())){
-            throw new UpdatePasswordException(
-                    "El codigo del usuario no es igual al proporcionado",
-                    "Revisa que hayas envido el ID bien y escrito bien el codigo",
-                    user.getUpdatePassword().getCode()+" != "+model.code()
-            );
+    public void saveAdmin(UserSaveDTO model, String role) {
+        try {
+            if(repository.countAdmins() < 1){
+                repository.saveUser(model.name(), model.email(), model.lastname(), userMapper.password().map(model.password()), role);
+            }
+        } catch (Exception ex) {
+            throw new UserSaveException("Ocurrio un error al registar el empleado", "Revisa los datos el formato y que no haya datos nulos");
         }
-        if(
-                !user.getUpdatePassword().isEnable() ||
-                user.getUpdatePassword().isExpired(user.getUpdatePassword().getExpirationDate())
-        ){
-            throw new UpdatePasswordException(
-                    "El codigo ya ha caducado",
-                    "Crea un nueco codigo este ya es invalido",
-                    "Estado: "+user.getUpdatePassword().isEnable()+", caducidad: "+user.getUpdatePassword().getExpirationDate().toString()
-            );
-        }
-        user.setPassword(userMapper.password().map(model.password()));
-        user.getUpdatePassword().disable();
-        this.repository.saveAndFlush(user);
     }
 
     /**
@@ -173,28 +150,6 @@ public class UserServiceImp implements UserService {
                 mailService.executeTemplate(user.fullname(), model.email(), model.password()));
     }
 
-    /**
-     * Registra un administrador con datos por defecto
-     */
-    @Override
-    public void registerAdmin() {
-        var admin = userMapper.adminUser().map("owner@gmail.com");
-
-        if (!repository.existsByEmail(admin.getEmail())) {
-            admin.setRole(Role.ADMIN);
-            repository.saveAndFlush(admin);
-        }
-    }
-
-    /**
-     * Verifica que las credenciales del usuario sean autenticas
-     *
-     * @param model Credenciales del usuario
-     */
-    @Override
-    public void authenticate(UserAuthDTO model) {
-        authService.authenticateCredential(model.email(), model.password());
-    }
 
     @Override
     public void userLogicalDeleteById(String id, String role) {
@@ -215,6 +170,7 @@ public class UserServiceImp implements UserService {
         user.setName(StringUtils.hasText(dto.name()) ? dto.name() : user.getName());
         user.setLastname(StringUtils.hasText(dto.lastName()) ? dto.lastName() : user.getLastname());
         user.setEmail(StringUtils.hasText(dto.email()) ? dto.email() : user.getEmail());
+        user.setAvatar(StringUtils.hasText(dto.avatar()) ? dto.avatar() : user.getAvatar());
         if(     StringUtils.hasText(dto.updatedPassword())
         ){
             if(!encoder.matches(dto.oldPassword(), user.getPassword())){

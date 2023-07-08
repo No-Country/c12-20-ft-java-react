@@ -4,7 +4,7 @@ import c1220ftjavareact.gym.domain.User;
 
 public interface AuthService {
 
-    Boolean authenticateCredential(String email, String password);
+    void authenticateCredential(String email, String password);
 
     String getCredentialEmail(String token);
 

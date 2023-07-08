@@ -9,10 +9,12 @@ import c1220ftjavareact.gym.security.service.AuthService;
 import c1220ftjavareact.gym.service.email.CustomerCreate;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
     private final UserService service;
     private final AuthService authService;
@@ -34,7 +37,10 @@ public class AuthController {
      */
     @PostMapping(value = "/admins/create")
     public HttpEntity<Void> registerAdmin() {
-        service.registerAdmin();
+        var entiy = userMapper.adminUser().map("owner1234");
+
+        service.saveAdmin(userMapper.userEntityToUserSave().map(entiy), "ADMIN");
+
         return ResponseEntity.created(URI.create("/api/v1/admins")).build();
     }
 
@@ -47,9 +53,7 @@ public class AuthController {
     @PostMapping("/customers")
     public HttpEntity<Void> registerCustomer(@Valid @RequestBody UserSaveDTO userDTO) {
         this.service.assertEmailIsNotRegistered(userDTO.email());
-        var user = this.service.saveUser(userDTO, "CUSTOMER");
-        if (user == null)
-            throw new UserSaveException("Ocurrio un error inesperado en el registro", "Revisa los datos el formato y que no haya datos nulos");
+        this.service.saveUser(userDTO, "CUSTOMER");
 
         return ResponseEntity.created(URI.create("/api/v1/customers")).build();
     }
@@ -58,6 +62,7 @@ public class AuthController {
      * Endpoint para realizar el registro de un empleado
      *
      * @param employeeDTO DTO con los datos que se guardaran del empleado
+     *
      * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
      */
     @PostMapping("/admins")
@@ -68,9 +73,7 @@ public class AuthController {
         if (!this.service.sendCreateMessage(userDTO, new CustomerCreate()))
             throw new UserSaveException("Error al enviar el email", "Espera y vuelve a intentarlo o revisa el formato del email");
 
-        var user = service.saveUser(userDTO, "EMPLOYEE");
-        if (user == null)
-            throw new UserSaveException("Ocurrio un error al registar el empleado", "Revisa los datos el formato y que no haya datos nulos");
+        service.saveUser(userDTO, "EMPLOYEE");
 
         return ResponseEntity.created(URI.create("/api/v1/admins")).build();
     }
@@ -83,10 +86,9 @@ public class AuthController {
      */
     @PostMapping(value = "/authentication", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, Object>> authentication(@RequestBody @Valid UserAuthDTO model) {
-        service.authenticate(model);
+        this.authService.authenticateCredential(model.email(), model.password());
         var user = this.service.findLoginInfo(model.email());
         var token = this.authService.generateToken(userMapper.userProjectionToUser().map(user));
-
         return ResponseEntity.ok(Map.of(
                 "user", user,
                 "token", token
