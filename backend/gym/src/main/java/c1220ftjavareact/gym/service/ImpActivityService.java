@@ -43,8 +43,8 @@ public class ImpActivityService implements IActivityService {
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Activity> getActivityById(Long id) {
-        return activityRepository.findById(id);
+    public Activity getActivityById(Long id) {
+        return activityRepository.findById(id).orElseThrow(()-> new RuntimeException("Activities null"));
     }
 
     @Transactional(readOnly = true)

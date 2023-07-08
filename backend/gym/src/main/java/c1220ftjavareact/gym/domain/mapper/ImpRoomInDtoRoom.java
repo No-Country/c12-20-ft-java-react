@@ -9,6 +9,7 @@ public class ImpRoomInDtoRoom implements IMapperRoom<RoomInDto, Room> {
     @Override
     public Room map(RoomInDto in) {
         var room = new Room();
+        room.setName(in.getName());
         room.setMax_capacity(in.getMax_capacity());
         return room;
     }

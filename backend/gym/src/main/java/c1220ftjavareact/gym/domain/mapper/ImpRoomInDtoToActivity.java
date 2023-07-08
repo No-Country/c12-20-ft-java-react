@@ -13,6 +13,8 @@ public class ImpRoomInDtoToActivity implements IMapperActivity<ActivityInDto, Ac
         var activity = new Activity();
         activity.setName(in.getName());
         activity.setCreateDate(LocalDate.now());
+        activity.setDescription(in.getDescription());
+        activity.setImg("Imagen");
         return activity;
     }
 }

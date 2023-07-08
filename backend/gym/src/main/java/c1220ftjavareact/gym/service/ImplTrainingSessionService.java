@@ -40,12 +40,12 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         TrainingSession savedTraining = mapper.map(trainingSession, TrainingSession.class);
 
         /// Activity
-        Optional<Activity> activity = iActivityService.getActivityById(trainingSession.getActivityId());
-        savedTraining.setActivity(activity.get());
+        Activity activity = iActivityService.getActivityById(trainingSession.getActivityId());
+        savedTraining.setActivity(activity);
 
         /// Room
-        Optional<Room> room = iRoomService.getRoomById(trainingSession.getRoomId());
-        savedTraining.setRoom(room.get());
+        Room room = iRoomService.getRoomById(trainingSession.getRoomId());
+        savedTraining.setRoom(room);
 
         /// Persistence
         savedTraining = trainingSessionRepository.save(savedTraining);

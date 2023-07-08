@@ -15,6 +15,6 @@ public interface IRoomService {
 
     public List<Room> getAllRooms();
 
-    public Optional<Room> getRoomById(Long id);
+    public Room getRoomById(Long id);
 
 }
