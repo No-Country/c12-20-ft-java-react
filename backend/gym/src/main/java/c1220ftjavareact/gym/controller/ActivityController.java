@@ -41,7 +41,7 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Activity>> getActivityById(@PathVariable("id") Long id) {
+    public ResponseEntity<Activity> getActivityById(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.getActivityById(id));
     }
 

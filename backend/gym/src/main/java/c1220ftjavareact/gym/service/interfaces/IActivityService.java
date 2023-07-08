@@ -14,7 +14,7 @@ public interface IActivityService {
 
     public Activity updateActivity(Long id, ActivityInDto activityInDto);
 
-    public Optional<Activity> getActivityById(Long id);
+    public Activity getActivityById(Long id);
 
     public List<Activity> getAllActivities();
 }

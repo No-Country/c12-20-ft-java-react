@@ -47,7 +47,7 @@ public class ImpRoomService implements IRoomService {
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Room> getRoomById(Long id) {
-        return roomRepository.findById(id);
+    public Room getRoomById(Long id) {
+        return roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Rooms null"));
     }
 }

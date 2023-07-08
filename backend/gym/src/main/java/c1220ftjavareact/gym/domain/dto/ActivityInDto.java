@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ActivityInDto {
     private String name;
+    private String description;
+    private String img;
 }
