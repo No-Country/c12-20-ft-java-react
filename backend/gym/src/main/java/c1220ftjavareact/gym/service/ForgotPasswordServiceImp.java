@@ -16,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,7 +28,6 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     private final ForgotPasswordMapperBean passwordMapper;
     private final UserMapperBeans userMapper;
     private final UserRepository userRepository;
-    private final TimeUtils timeUtils;
 
     @Override
     public ForgotPassword generateForgotPassword(String id, String email){
@@ -40,7 +37,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
                 .email(email)
                 .enable(true)
                 .code(UUID.randomUUID().toString())
-                .expirationDate(timeUtils.getLocalDateTimeSpecified().plusHours(1L))
+                .expirationDate(TimeUtils.getLocalDateTimeSpecified().plusHours(1L))
                 .build();
     }
 
@@ -98,7 +95,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
 
     @Override
     public void AssertIsNotExpired(LocalDateTime dateTime){
-        if(dateTime.isBefore( timeUtils.getLocalDateTime() )){
+        if(dateTime.isBefore( TimeUtils.getLocalDateTime() )){
             throw new UpdatePasswordException(
                     "EL codigo ya ha caducado",
                     "Crea un nuevo codigo",

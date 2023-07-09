@@ -4,34 +4,34 @@ import java.time.*;
 
 public class TimeUtils {
 
-    public Long getDateMillis(){
+    public static Long getDateMillis(){
         return System.currentTimeMillis();
     }
-    public ZoneId getZoneId(){
+    public static ZoneId getZoneId(){
         return ZoneId.systemDefault();
     }
-    public Clock getCLock(){
-        return Clock.system(this.getZoneId());
+    public static Clock getCLock(){
+        return Clock.system(TimeUtils.getZoneId());
     }
 
-    public Instant getInstant(){
-        return Instant.now(this.getCLock());
+    public static Instant getInstant(){
+        return Instant.now(TimeUtils.getCLock());
     }
 
-    public LocalTime getLocalTime(){
-        return LocalTime.now( this.getCLock() );
+    public static LocalTime getLocalTime(){
+        return LocalTime.now( TimeUtils.getCLock() );
     }
 
-    public LocalDate getLocalDate(){
+    public static LocalDate getLocalDate(){
         return LocalDate.now();
     }
 
-    public LocalDateTime getLocalDateTime(){
-        return LocalDateTime.now( this.getCLock() );
+    public static LocalDateTime getLocalDateTime(){
+        return LocalDateTime.now( TimeUtils.getCLock() );
     }
 
-    public LocalDateTime getLocalDateTimeSpecified(){
-        var dateTime = this.getLocalDateTime();
+    public static LocalDateTime getLocalDateTimeSpecified(){
+        var dateTime = TimeUtils.getLocalDateTime();
         return LocalDateTime.of(dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth(), dateTime.getHour(), dateTime.getMinute());
     }
 }

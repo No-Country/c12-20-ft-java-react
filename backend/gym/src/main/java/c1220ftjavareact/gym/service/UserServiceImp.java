@@ -22,7 +22,7 @@ public class UserServiceImp implements UserService {
     private final UserRepository repository;
     private final UserMapperBeans userMapper;
     private final PasswordEncoder encoder;
-    private final TimeUtils timeUtils;
+
     @Transactional(readOnly = true)
     @Override
     public void assertEmailIsNotRegistered(String email) {
@@ -90,7 +90,7 @@ public class UserServiceImp implements UserService {
         try {
             model.setRole("CUSTOMER");
             model.setDeleted(false);
-            model.setCreateAt(timeUtils.getLocalDate());
+            model.setCreateAt(TimeUtils.getLocalDate());
             var entity = userMapper.userToUserEntity().map(model);
             entity.setPassword(userMapper.password().map(model.getPassword()));
             this.repository.save(entity);
