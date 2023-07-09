@@ -101,7 +101,38 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     @Transactional
     public TrainingSessionDTO updateTrainingSessionById(TrainingSessionDTO updateSession, Long id) {
-        return null;
+
+        Optional<TrainingSession> optionalEntity = trainingSessionRepository.findById(id);
+        if(optionalEntity.isEmpty()) {
+            /// throw exception
+        }
+
+        /// actualizar atributos
+        TrainingSession aux = mapper.map(updateSession, TrainingSession.class);
+        TrainingSession trainingEntity = optionalEntity.get();
+        trainingEntity.setCapacity(aux.getCapacity());
+        trainingEntity.setTimeEnd(aux.getTimeEnd());
+        trainingEntity.setTimeStart(aux.getTimeStart());
+        trainingEntity.setMonday(aux.isMonday());
+        trainingEntity.setFriday(aux.isFriday());
+        trainingEntity.setSunday(aux.isSunday());
+        trainingEntity.setSaturday(aux.isSaturday());
+        trainingEntity.setThursday(aux.isThursday());
+        trainingEntity.setTuesday(aux.isTuesday());
+        trainingEntity.setWednesday(aux.isWednesday());
+
+        /// Activity
+        Activity activity = iActivityService.getActivityById(updateSession.getActivityId());
+        trainingEntity.setActivity(activity);
+
+        /// Room
+        Room room = iRoomService.getRoomById(updateSession.getRoomId());
+        trainingEntity.setRoom(room);
+
+        trainingEntity = trainingSessionRepository.save(trainingEntity);
+        TrainingSessionDTO dto = mapper.map(trainingEntity, TrainingSessionDTO.class);
+
+        return dto;
     }
 
     @Override

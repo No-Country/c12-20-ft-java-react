@@ -51,7 +51,10 @@ public class TrainingSessionController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByRoomId(roomId));
     }
 
-
+    @PutMapping(value = "/update/{sessionId}")
+    public ResponseEntity<TrainingSessionDTO> updateTrainingSessionById(@RequestBody TrainingSessionDTO updatedTraining, @PathVariable Long sessionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.updateTrainingSessionById(updatedTraining, sessionId));
+    }
 
 
 }
