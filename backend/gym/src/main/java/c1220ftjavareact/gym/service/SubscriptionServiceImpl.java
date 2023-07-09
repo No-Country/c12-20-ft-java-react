@@ -2,9 +2,14 @@ package c1220ftjavareact.gym.service;
 
 import c1220ftjavareact.gym.domain.dto.SubscriptionDTO;
 import c1220ftjavareact.gym.domain.mapper.SubscriptionMapper;
+import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.repository.SubscriptionRepository;
 import c1220ftjavareact.gym.repository.entity.SubscriptionEntity;
+import c1220ftjavareact.gym.repository.entity.TrainingSession;
+import c1220ftjavareact.gym.repository.entity.UserEntity;
+import c1220ftjavareact.gym.service.interfaces.ITrainingSessionService;
 import c1220ftjavareact.gym.service.interfaces.SubscriptionService;
+import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +18,9 @@ import org.springframework.stereotype.Service;
 public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final SubscriptionMapper subscriptionMapper;
+    private final UserMapperBeans userMapper;
+    private final UserService userService;
+    private final ITrainingSessionService trainingSessionService;
 
     @Override
     public SubscriptionDTO createSubscription(SubscriptionDTO subscriptionDTO) {
@@ -24,9 +32,13 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public SubscriptionDTO updateSubscription(int id, SubscriptionDTO subscriptionDTO) {
         SubscriptionEntity subscription = subscriptionRepository.findById(id).orElse(null);
+        UserEntity user = userMapper.userToUserEntity().map(userService.findUserById(subscriptionDTO.getIdClient().toString()));
+        TrainingSession trainingSession = trainingSessionService.getTrainingEntity(subscriptionDTO.getIdClass());
+
+
         if (subscription != null) {
-            subscription.setIdClient(subscriptionDTO.getIdClient());
-            subscription.setIdClass(subscriptionDTO.getIdClass());
+            subscription.setIdCustomer(user);
+            subscription.setTraining(trainingSession);
             subscription.setState(subscriptionDTO.getState());
             subscription.setSubscriptionDay(subscriptionDTO.getSubscriptionDay());
             SubscriptionEntity updatedSubscription = subscriptionRepository.save(subscription);

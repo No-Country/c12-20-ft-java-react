@@ -25,10 +25,16 @@ public class Activity implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "create_date", nullable = false)
+    @Column(name = "create_day", nullable = false)
     private LocalDate createDate;
 
-    @JoinColumn(name = "id_training_session", referencedColumnName = "id")
+    @JoinColumn(name = "activity_id", referencedColumnName = "id")
     @OneToMany
     private List<TrainingSession> trainingSession;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "img", nullable = false)
+    private String img;
 }

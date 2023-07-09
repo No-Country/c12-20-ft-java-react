@@ -25,12 +25,12 @@ DROP TABLE IF EXISTS `activity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `activity` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `create_day` date NOT NULL DEFAULT (now()),
-  `description` varchar(255) NOT NULL DEFAULT 'default',
-  `img` varchar(255) NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`id`)
+                            `id` int NOT NULL AUTO_INCREMENT,
+                            `name` varchar(45) NOT NULL,
+                            `create_day` date NOT NULL DEFAULT (now()),
+                            `description` varchar(255) NOT NULL DEFAULT 'default',
+                            `img` varchar(255) NOT NULL DEFAULT 'default',
+                            PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,13 +51,13 @@ DROP TABLE IF EXISTS `forgot_password`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `forgot_password` (
-  `id_user` int NOT NULL,
-  `code` varchar(200) NOT NULL,
-  `expiration_date` datetime NOT NULL,
-  `enable` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id_user`),
-  UNIQUE KEY `code_UNIQUE` (`code`),
-  CONSTRAINT `user_forgot_password_fk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE
+                                   `id_user` int NOT NULL,
+                                   `code` varchar(200) NOT NULL,
+                                   `expiration_date` datetime NOT NULL,
+                                   `enable` tinyint(1) NOT NULL,
+                                   PRIMARY KEY (`id_user`),
+                                   UNIQUE KEY `code_UNIQUE` (`code`),
+                                   CONSTRAINT `user_forgot_password_fk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -78,14 +78,14 @@ DROP TABLE IF EXISTS `payment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `payment` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `subscription_id` int NOT NULL,
-  `method` varchar(45) NOT NULL,
-  `payment_at` date NOT NULL,
-  `expired_at` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `subscription_payment_fk_idx` (`subscription_id`),
-  CONSTRAINT `subscription_payment_fk` FOREIGN KEY (`subscription_id`) REFERENCES `subscription` (`id`)
+                           `id` int NOT NULL AUTO_INCREMENT,
+                           `subscription_id` int NOT NULL,
+                           `method` varchar(45) NOT NULL,
+                           `payment_at` date NOT NULL,
+                           `expired_at` date NOT NULL,
+                           PRIMARY KEY (`id`),
+                           KEY `subscription_payment_fk_idx` (`subscription_id`),
+                           CONSTRAINT `subscription_payment_fk` FOREIGN KEY (`subscription_id`) REFERENCES `subscription` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -106,10 +106,10 @@ DROP TABLE IF EXISTS `room`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `room` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `max_capacity` int NOT NULL,
-  PRIMARY KEY (`id`)
+                        `id` int NOT NULL AUTO_INCREMENT,
+                        `name` varchar(45) NOT NULL,
+                        `max_capacity` int NOT NULL,
+                        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -130,16 +130,16 @@ DROP TABLE IF EXISTS `subscription`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscription` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `training_session_id` int NOT NULL,
-  `customer_id` int NOT NULL,
-  `state` enum('RESERVED','ACTIVE','INACTIVE','CANCELED') NOT NULL,
-  `create_date` date NOT NULL DEFAULT (now()),
-  PRIMARY KEY (`id`),
-  KEY `user_subscription_fk_idx` (`customer_id`),
-  KEY `training_session_subscription_fk_idx` (`training_session_id`),
-  CONSTRAINT `training_session_subscription_fk` FOREIGN KEY (`training_session_id`) REFERENCES `training_session` (`id`),
-  CONSTRAINT `user_subscription_fk` FOREIGN KEY (`customer_id`) REFERENCES `user` (`id`)
+                                `id` int NOT NULL AUTO_INCREMENT,
+                                `training_session_id` int NOT NULL,
+                                `customer_id` int NOT NULL,
+                                `state` enum('RESERVED','ACTIVE','INACTIVE','CANCELED') NOT NULL,
+                                `create_date` date NOT NULL DEFAULT (now()),
+                                PRIMARY KEY (`id`),
+                                KEY `user_subscription_fk_idx` (`customer_id`),
+                                KEY `training_session_subscription_fk_idx` (`training_session_id`),
+                                CONSTRAINT `training_session_subscription_fk` FOREIGN KEY (`training_session_id`) REFERENCES `training_session` (`id`),
+                                CONSTRAINT `user_subscription_fk` FOREIGN KEY (`customer_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -160,25 +160,25 @@ DROP TABLE IF EXISTS `training_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `training_session` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `activity_id` int NOT NULL,
-  `room_id` int NOT NULL,
-  `capacity` int NOT NULL,
-  `time_start` time NOT NULL,
-  `time_end` time NOT NULL,
-  `monday` tinyint(1) NOT NULL DEFAULT '0',
-  `tuesday` tinyint(1) NOT NULL DEFAULT '0',
-  `wednesday` tinyint(1) NOT NULL DEFAULT '0',
-  `thursday` tinyint(1) NOT NULL DEFAULT '0',
-  `friday` tinyint(1) NOT NULL DEFAULT '0',
-  `saturday` tinyint(1) NOT NULL DEFAULT '0',
-  `sunday` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `activity_training_session_fk_idx` (`activity_id`),
-  KEY `room_training_session_fk_idx` (`room_id`),
-  CONSTRAINT `activity_training_session_fk` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`id`),
-  CONSTRAINT `room_training_session_fk` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
-  CONSTRAINT `check_time_range` CHECK ((`time_start` <= `time_end`))
+                                    `id` int NOT NULL AUTO_INCREMENT,
+                                    `activity_id` int NOT NULL,
+                                    `room_id` int NOT NULL,
+                                    `capacity` int NOT NULL,
+                                    `time_start` time NOT NULL,
+                                    `time_end` time NOT NULL,
+                                    `monday` tinyint(1) NOT NULL DEFAULT '0',
+                                    `tuesday` tinyint(1) NOT NULL DEFAULT '0',
+                                    `wednesday` tinyint(1) NOT NULL DEFAULT '0',
+                                    `thursday` tinyint(1) NOT NULL DEFAULT '0',
+                                    `friday` tinyint(1) NOT NULL DEFAULT '0',
+                                    `saturday` tinyint(1) NOT NULL DEFAULT '0',
+                                    `sunday` tinyint(1) NOT NULL DEFAULT '0',
+                                    PRIMARY KEY (`id`),
+                                    KEY `activity_training_session_fk_idx` (`activity_id`),
+                                    KEY `room_training_session_fk_idx` (`room_id`),
+                                    CONSTRAINT `activity_training_session_fk` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`id`),
+                                    CONSTRAINT `room_training_session_fk` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
+                                    CONSTRAINT `check_time_range` CHECK ((`time_start` <= `time_end`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -201,7 +201,7 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_insert_check_capacity` BEFORE INSERT ON `training_session` FOR EACH ROW BEGIN
   DECLARE room_max_capacity INT;
-  SELECT max_capacity INTO room_max_capacity FROM room WHERE id = NEW.id_room;
+  SELECT max_capacity INTO room_max_capacity FROM room WHERE id = NEW.room_id;
   IF NEW.capacity > room_max_capacity THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Capacity exceeds max capacity for the room.';
   END IF;
@@ -222,10 +222,10 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `check_capacity_overflow` BEFORE INSERT ON `training_session` FOR EACH ROW BEGIN
   DECLARE total_capacity INT;
-  
+
   SELECT SUM(capacity) INTO total_capacity
   FROM training_session
-  WHERE id_room = NEW.id_room
+  WHERE room_id = NEW.room_id
     AND time_start = NEW.time_start
     AND time_end = NEW.time_end
     AND (
@@ -235,11 +235,11 @@ DELIMITER ;;
     (thursday = 1 AND  thursday = NEW.thursday) OR
     (friday = 1 AND  friday = NEW.friday) OR
     (saturday = 1 AND  monday = NEW.saturday) OR
-    (sunday = 1 AND  sunday = NEW.sunday) 
+    (sunday = 1 AND  sunday = NEW.sunday)
     );
-  
+
   IF total_capacity + NEW.capacity > (
-    SELECT max_capacity FROM room WHERE id = NEW.id_room
+    SELECT max_capacity FROM room WHERE id = NEW.room_id
   ) THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Total capacity exceeds max capacity for the room.';
   END IF;
@@ -260,10 +260,10 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `check_consistency` BEFORE INSERT ON `training_session` FOR EACH ROW BEGIN
   DECLARE conflicting_rows INT;
-  
+
   SELECT COUNT(*) INTO conflicting_rows
   FROM training_session
-  WHERE id_room = NEW.id_room
+  WHERE room_id = NEW.room_id
     AND (
         (time_start >= NEW.time_end AND time_end >= NEW.time_end) OR
         (time_start <= NEW.time_start AND time_end <= NEW.time_start)
@@ -275,9 +275,9 @@ DELIMITER ;;
     (thursday = 1 AND  thursday = NEW.thursday) OR
     (friday = 1 AND  friday = NEW.friday) OR
     (saturday = 1 AND  monday = NEW.saturday) OR
-    (sunday = 1 AND  sunday = NEW.sunday) 
+    (sunday = 1 AND  sunday = NEW.sunday)
     );
-  
+
   IF conflicting_rows > 0 THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'The record you are trying to add is not consistent.';
    END IF;
@@ -298,7 +298,7 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_update_training_session` BEFORE UPDATE ON `training_session` FOR EACH ROW BEGIN
   DECLARE room_max_capacity INT;
-  SELECT max_capacity INTO room_max_capacity FROM room WHERE id = NEW.id_room;
+  SELECT max_capacity INTO room_max_capacity FROM room WHERE id = NEW.room_id;
   IF NEW.capacity > room_max_capacity THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Capacity exceeds max capacity for the room.';
   END IF;
@@ -317,17 +317,17 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `lastname` varchar(45) NOT NULL,
-  `email` varchar(128) NOT NULL,
-  `password` varchar(128) NOT NULL,
-  `role` enum('CUSTOMER','EMPLOYEE','ADMIN') NOT NULL,
-  `create_at` date NOT NULL DEFAULT (now()),
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `avatar` varchar(200) NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
+                        `id` int NOT NULL AUTO_INCREMENT,
+                        `name` varchar(45) NOT NULL,
+                        `lastname` varchar(45) NOT NULL,
+                        `email` varchar(128) NOT NULL,
+                        `password` varchar(128) NOT NULL,
+                        `role` enum('CUSTOMER','EMPLOYEE','ADMIN') NOT NULL,
+                        `create_at` date NOT NULL DEFAULT (now()),
+                        `deleted` tinyint(1) NOT NULL DEFAULT '0',
+                        `avatar` varchar(200) NOT NULL DEFAULT 'default',
+                        PRIMARY KEY (`id`),
+                        UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
