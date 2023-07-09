@@ -2,6 +2,8 @@ import React from "react";
 import { Fragment } from "react";
 import { useState } from "react";
 import logo from "../assets/Logo.png";
+import Modaladduser from "./shared/Modaladduser";
+import Modalcarduser from "./shared/Modalcarduser";
 import {
   RiAdminFill,
   RiWalkFill,
@@ -9,43 +11,55 @@ import {
   RiMoneyDollarCircleFill,
   RiBarChart2Line,
   RiSearch2Line,
+  RiDeleteBin5Fill,
+  RiSettings4Fill,
 } from "react-icons/ri";
 const DasboardAdmin = () => {
+  {/*open and close modals*/}
   const [activeRow, setActiveRow] = useState(null);
-
+  const [Alertdel, setAlertdel] = useState(true);
+  const [Usercardopen, setusercardopen] = useState(false);
+  {/*open and close events*/}
   const handleRowClick = (rowId) => {
     setActiveRow(rowId);
   };
 
+  const ConfirmDeleteuser = () => {
+    setAlertdel(false);
+  };
+
+  const DenyDeleteuser = () => {
+    setAlertdel(true);
+  };
+
+  const Openusercard = () => {
+    setusercardopen(true);
+  };
+  {/*delete user*/}
+  const Deleteuser = (id) => {
+    setClient(clients.filter((client) => client.id !== id));
+    setAlertdel(true);
+  };
+
+
+
+  {/*Data states*/}
   const [clients, setClient] = useState([
     {
       id: 1,
       name: "Luca Victorino",
+      photo: "",
+      email: "vegajailer@gmail.com",
       plan: "mensual",
-      date: "12/12/12",
-      status: "false",
-    },
-    {
-      id: 2,
-      name: "Luca Victorino",
-      plan: "Developer",
-      date: "123/12/12",
       status: "true",
     },
-    {
-      id: 3,
-      name: "Luca Victorino",
-      plan: "Developer",
-      date: "123/12/12",
-      status: "near",
-    },
-
   ]);
+
   return (
     <Fragment>
       <div className="flex min-h-screen">
         {/*Sider*/}
-        <sidebar className="hidden flex-col items-center static gap-8 min-h-full w-80 p-4 bg-[#2F2F2F] md:flex">
+        <aside className="hidden flex-col items-center static gap-8 min-h-full w-80 p-4 bg-[#2F2F2F] md:flex">
           <section>
             {/*Logo*/}
             <div className="flex items-center gap-4 mb-12">
@@ -56,7 +70,6 @@ const DasboardAdmin = () => {
             </div>
 
             {/*user*/}
-            {/*<p className="text-xs">Admin logged{/*{status}</p>*/}
             <div className="flex  items-center gap-4 mb-8">
               <div>
                 <h1 className="text-xl font-bold text-white">Luca victorino</h1>
@@ -114,7 +127,7 @@ const DasboardAdmin = () => {
               </ul>
             </div>
           </section>
-        </sidebar>
+        </aside>
         {/*Main*/}
         <div className="p-10 w-full flex flex-col h-full items-center">
           {/*Cards*/}
@@ -164,23 +177,32 @@ const DasboardAdmin = () => {
               </div>
             </div>
           </div>
-          
+
           {/*Table*/}
+          
           <div className="w-4/5 h-64 overflow-y-auto mt-10">
-            <table className="table table-xs table-pin-rows table-pin-cols">
+            <table className="table table-xs ">
               {/* head */}
               <thead>
                 <tr className="text-white text-center border-bottom border-gray-600">
-                  <th></th>
-                  <th> Full Name</th>
+                  <th>Id</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
                   <th>Training plan</th>
-                  <th>Last payment</th>
                   <th>Payment status</th>
+                  <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {clients.map((client) => (
                   <>
+                    
+                    <Modalcarduser
+                      cliente={client}
+                      usercard={Usercardopen}
+                      setusercardopen={setusercardopen}
+                    />
                     <tr
                       key={client.id}
                       className={`text-center border-top border-gray-600 ${
@@ -189,23 +211,59 @@ const DasboardAdmin = () => {
                           : ""
                       }`}
                       onClick={() => handleRowClick(client.id)}
+                      onDoubleClick={Openusercard}
                     >
                       <td>{client.id}</td>
                       <td>{client.name}</td>
+                      <td>{client.email}</td>
                       <td>{client.plan}</td>
-                      <td>{client.date}</td>
                       <td>
                         <span
                           className={`badge ${
-                            client.status=="true" ? "badge-success" : client.status=="false" ? "badge-error" : "badge-warning"
+                            client.status == "true"
+                              ? "badge-success"
+                              : client.status == "false"
+                              ? "badge-error"
+                              : "badge-warning"
                           } `}
                         ></span>
                       </td>
+                    {Alertdel ? (
+                    <>
+                      <td>
+                        <button onClick={() => ConfirmDeleteuser(client.id)}>
+                          <RiDeleteBin5Fill className="text-lg hover:text-red-600" />
+                        </button>
+                      </td>
+                      <td>
+                        <button>
+                          <RiSettings4Fill className="text-lg hover:text-blue-600" />
+                        </button>
+                      </td>
+                    </>) : (
+                    
+                    <>
+                    <td>
+                        <button className="btn btn-primary btn-sm" onClick={() => Deleteuser(client.id)}>
+                          Confirm
+                        </button>
+                      </td>
+                      <td>
+                        <button className="btn btn-sm text-blue-600" onClick={DenyDeleteuser}>
+                          Deny
+                        </button>
+                      </td>
+
+                    </>) }
+                      
                     </tr>
                   </>
                 ))}
               </tbody>
             </table>
+            <div className=" flex justify-end mt-5">
+              <Modaladduser clientes={clients} addclientes={setClient} />
+            </div>
           </div>
         </div>
       </div>
