@@ -5,9 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.UUID;
 
 @Builder
@@ -33,8 +31,8 @@ public class ForgotPasswordEntity {
     @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm")
     private LocalDateTime expirationDate;
 
-    @OneToOne
-    @JoinColumn(name = "id_user", insertable = false, updatable = false)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_user")
     private UserEntity userEntity;
 
     public void enable() {
@@ -47,9 +45,5 @@ public class ForgotPasswordEntity {
 
     public void changeRamdomCode() {
         this.setCode(UUID.randomUUID().toString());
-    }
-
-    public Boolean isExpired(LocalDateTime dateTime) {
-        return dateTime.isBefore( LocalDateTime.now(Clock.system(ZoneId.systemDefault())) );
     }
 }

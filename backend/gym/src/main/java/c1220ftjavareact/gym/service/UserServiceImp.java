@@ -4,20 +4,16 @@ import c1220ftjavareact.gym.domain.User;
 import c1220ftjavareact.gym.domain.dto.*;
 import c1220ftjavareact.gym.domain.exception.ResourceAlreadyExistsException;
 import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
-import c1220ftjavareact.gym.domain.exception.UpdatePasswordException;
 import c1220ftjavareact.gym.domain.exception.UserSaveException;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.repository.UserRepository;
-import c1220ftjavareact.gym.repository.entity.Role;
-import c1220ftjavareact.gym.service.email.MailService;
-import c1220ftjavareact.gym.service.email.TemplateStrategy;
-import c1220ftjavareact.gym.security.service.AuthService;
 import c1220ftjavareact.gym.service.interfaces.UserService;
+import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,20 +21,12 @@ import org.springframework.util.StringUtils;
 public class UserServiceImp implements UserService {
     private final UserRepository repository;
     private final UserMapperBeans userMapper;
-
-    private final AuthService authService;
-
-    private final MailService mailService;
     private final PasswordEncoder encoder;
 
-
-    /**
-     * Arroja un error si el email esta registrado
-     *
-     * @param email Correo a verificar
-     */
+    @Transactional(readOnly = true)
     @Override
     public void assertEmailIsNotRegistered(String email) {
+        //Si el email esta registrado arroja la excepcion "ResourceAlreadyExistsException"
         if (repository.existsByEmail(email)) {
             throw new ResourceAlreadyExistsException(
                     "El email ya se encuentra registrado",
@@ -48,45 +36,28 @@ public class UserServiceImp implements UserService {
         }
     }
 
-    /**
-     * Busca un Usuario por ID
-     *
-     * @param id
-     *
-     * @return {@link User}
-     */
+    @Transactional(readOnly = true)
     @Override
     public User findUserById(String id){
         var user = repository.findById(Long.parseLong(id))
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "El ID no se encuentra registrado",
-                                "El ID no esta en la base de datos o haz puesto mal el numero",
+                                "El ID no esta en la base de datos o has puesto mal el ID",
                                 id
                         )
                 );
-
+        //Mapeo el User de Jpa a un User normal
         return userMapper.userEntityToUser().map(user);
     }
 
-    /**
-     * Recupera una proyeccion del Usuario con los datos para el login
-     *
-     * @param email
-     *
-     * @return {@link UserProjection}
-     */
+    @Transactional(readOnly = true)
     @Override
     public UserProjection findLoginInfo(String email){
+        //Devuelve una Proyeccion solo con los datos necesarios
         return this.repository.findUserForLogin(email);
     }
 
-    /**
-     * Busca un usuario por el correo
-     *
-     * @param email Correo del usuario que desea buscar
-     *
-     * @return {@link User}
-     */
+    @Transactional(readOnly = true)
     @Override
     public User findUserByEmail(String email) {
         var user = repository.findByEmail(email)
@@ -96,114 +67,52 @@ public class UserServiceImp implements UserService {
                                  email
                         )
                 );
-
+        //Mapeo el User de Jpa a un User normal
         return userMapper.userEntityToUser().map(user);
     }
 
-    /**
-     * Guardo un usuario en la base de datos
-     *
-     * @param model Model de usuario para guardar
-     * @param role  Role del usuario que se desea guardar
-     *
-     * @return {@link User}
-     */
-    public User saveUser(UserSaveDTO model, String role) {
-        var user = userMapper.saveDtoToUser().map(model);
-        user.setRole(Role.valueOf(role));
+    @Transactional
+    @Override
+    public void saveUser(UserSaveDTO model, String role) {
         try {
-            var entity = repository.saveAndFlush(user);
-            entity.setPassword(model.password());
-            return userMapper.userEntityToUser().map(entity);
+            //Si el Usuario es ADMIN y ya hay una instancia guardada arroja un error
+            if(role.equals("ADMIN") && repository.countAdmins() == 1){
+                throw new RuntimeException("Ya hay un admin registrado al sistema");
+            }
+            repository.saveUser(model.name(), model.email(), model.lastname(), userMapper.password().map(model.password()), role);
         } catch (Exception ex) {
-            return null;
+            throw new UserSaveException("Ocurrio un error al registar el usuario", model.toString());
         }
     }
 
-    /**
-     * Cambia la cantraseña olvidada del usuario
-     *
-     * @param model Modelo con datos para actualizar contraseña
-     *
-     */
     @Override
-    public void updateForgottenPassword(UserPasswordDTO model) {
-        var user = this.repository.findById(Long.parseLong(model.id()))
-                .orElseThrow(()->new ResourceNotFoundException(
-                        "Usuario no encontrado",
-                        "Revisa que el ID sea correcto",
-                        model.id()
-                        )
-                );
-        if(!user.getUpdatePassword().getCode().equals(model.code())){
-            throw new UpdatePasswordException(
-                    "El codigo del usuario no es igual al proporcionado",
-                    "Revisa que hayas envido el ID bien y escrito bien el codigo",
-                    user.getUpdatePassword().getCode()+" != "+model.code()
-            );
-        }
-        if(
-                !user.getUpdatePassword().isEnable() ||
-                user.getUpdatePassword().isExpired(user.getUpdatePassword().getExpirationDate())
-        ){
-            throw new UpdatePasswordException(
-                    "El codigo ya ha caducado",
-                    "Crea un nueco codigo este ya es invalido",
-                    "Estado: "+user.getUpdatePassword().isEnable()+", caducidad: "+user.getUpdatePassword().getExpirationDate().toString()
-            );
-        }
-        user.setPassword(userMapper.password().map(model.password()));
-        user.getUpdatePassword().disable();
-        this.repository.saveAndFlush(user);
-    }
-
-    /**
-     * Envia un correo para avisar de la creacion de una cuenta
-     *
-     * @param model    Datos de usuario para enviar la cuenta
-     * @param strategy Implementacion del template que se usara
-     *
-     */
-    public Boolean sendCreateMessage(UserSaveDTO model, TemplateStrategy strategy) {
-        var user = User.builder().name(model.name()).lastname(model.lastname()).build();
-        mailService.setTemplateStrategy(strategy);
-        return mailService.send(
-                model.email(),
-                "Se ha creado su cuenta en PrimeFit",
-                mailService.executeTemplate(user.fullname(), model.email(), model.password()));
-    }
-
-    /**
-     * Registra un administrador con datos por defecto
-     */
-    @Override
-    public void registerAdmin() {
-        var admin = userMapper.adminUser().map("owner@gmail.com");
-
-        if (!repository.existsByEmail(admin.getEmail())) {
-            admin.setRole(Role.ADMIN);
-            repository.saveAndFlush(admin);
+    public void saveGoogleUser(User model) {
+        try {
+            model.setRole("CUSTOMER");
+            model.setDeleted(false);
+            model.setCreateAt(TimeUtils.getLocalDate());
+            var entity = userMapper.userToUserEntity().map(model);
+            entity.setPassword(userMapper.password().map(model.getPassword()));
+            this.repository.save(entity);
+        } catch (Exception ex) {
+            throw new UserSaveException(ex.getMessage(), ex.toString());
         }
     }
 
-    /**
-     * Verifica que las credenciales del usuario sean autenticas
-     *
-     * @param model Credenciales del usuario
-     */
+    @Transactional
     @Override
-    public void authenticate(UserAuthDTO model) {
-        authService.authenticateCredential(model.email(), model.password());
-    }
+    public void changeDeletedStateUser(String id, String role, Boolean state) {
+        //Verifica que el ID del Usuario coincida con el Rol
+        if(this.repository.countUsersBy(id, role) < 1){
+            throw new ResourceNotFoundException("El usuario no se encuentra registra", "Revisa que el ID pertenezca a un usuario con rol de empleado/EMPLOYEE", "ID: "+id);
+        }
 
-    @Override
-    public void userLogicalDeleteById(String id, String role) {
-
-        this.repository.deleteUsersBy(id, role);
+        this.repository.changeStateUser(id, role, state.equals(true) ? "1" : "0");
     }
 
     @Override
     public User updateUser(UserUpdateDTO dto, String id){
+        //Busca el Usuario
         var user = this.repository.findById(Long.parseLong(id))
                 .orElseThrow(()->new ResourceNotFoundException(
                                 "Usuario no encontrado",
@@ -211,18 +120,10 @@ public class UserServiceImp implements UserService {
                                 id
                         )
                 );
+        //Actualizo las propiedades solicitadas
+        user.update(dto, encoder);
 
-        user.setName(StringUtils.hasText(dto.name()) ? dto.name() : user.getName());
-        user.setLastname(StringUtils.hasText(dto.lastName()) ? dto.lastName() : user.getLastname());
-        user.setEmail(StringUtils.hasText(dto.email()) ? dto.email() : user.getEmail());
-        if(     StringUtils.hasText(dto.updatedPassword())
-        ){
-            if(!encoder.matches(dto.oldPassword(), user.getPassword())){
-                throw new UserSaveException("La contraseña antigua es incorrecta", "Poner la contraseña registrada, o no poner los datos de cambio de contraseña");
-            }
-            user.setPassword(userMapper.password().map(dto.updatedPassword()));
-        }
-        var entity =this.repository.saveAndFlush(user);
-        return this.userMapper.userEntityToUser().map(entity);
+        //Guardo la Entidad y mapeo a un User normal
+        return this.userMapper.userEntityToUser().map( this.repository.saveAndFlush(user) );
     }
 }

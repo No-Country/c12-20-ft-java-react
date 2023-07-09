@@ -1,13 +1,13 @@
 package c1220ftjavareact.gym.controller;
 
-import c1220ftjavareact.gym.domain.ForgotPassword;
 import c1220ftjavareact.gym.domain.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.domain.exception.UpdatePasswordException;
+import c1220ftjavareact.gym.events.event.RecoveryPasswordEvent;
 import c1220ftjavareact.gym.service.email.RecoveryPassStrategy;
 import c1220ftjavareact.gym.service.interfaces.ForgotPasswordService;
-import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,82 +17,76 @@ import javax.validation.constraints.Email;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/passwords")
 @RequiredArgsConstructor
 @Slf4j
 public class ForgotPasswordController {
     private final ForgotPasswordService passwordService;
-    private final UserService service;
+    private final ApplicationEventPublisher publisher;
 
     /**
-     * Endpoint para iniciar el evento de actualizar contraseña si la olvidar
+     * Endpoint para iniciar el evento de actualizar contraseña si la olvidaste
      *
-     * @param email Email del usuario registrado que olvido su contraseña
+     * @param email Email del usuario que solicita el cambio de contraseña
      * @Authroization No necesita
      */
-    @PostMapping(value = "/passwords/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> createForgotPassword(
-            @PathVariable("email") @Email String email
+            @RequestParam("email") @Email String email
     ) {
-        var user = this.service.findUserByEmail(email);
-        ForgotPassword forgotPassword;
         if(this.passwordService.existsByEmail(email)){
-            forgotPassword = this.passwordService.findByEmail(email);
-            if(
-                    forgotPassword.enable() &&
-                   !this.passwordService.isExpired(forgotPassword.expirationDate())
-            ){
-                throw new UpdatePasswordException(
-                        "Ya tines un token activo para cambiar tu contraseña",
-                        "Busca el codigo en el email o elimina el registro",
-                        forgotPassword.toString());
-            }
+            var forgotPassword = this.passwordService.findByEmail(email);
+            this.passwordService.AssertIsEnable(forgotPassword.enable());
+            this.passwordService.AssertIsNotExpired(forgotPassword.expirationDate());
         }
-        forgotPassword = this.passwordService.saveForgotPassword(
-                this.passwordService.createForgotPassword(user.getId(), user.getEmail())
-        );
 
-        if(forgotPassword == null)
-            throw new UpdatePasswordException(
-                    "Ocurrio un error inesperado al guardar",
-                    "Revisa los datos del usuario o la base de datos",
-                    user.toString());
-
-        this.passwordService.sendRecoveryMessage(user, forgotPassword, new RecoveryPassStrategy());
+        var values = this.passwordService.saveForgotPassword(email);
+        this.publisher.publishEvent(new RecoveryPasswordEvent(
+                this,
+                values.get("id"),
+                email,
+                values.get("fullName"),
+                values.get("code"),
+                new RecoveryPassStrategy()
+        ));
         return ResponseEntity.noContent().build();
     }
 
 
     /**
-     * Endpoint para finalizar el Evento de actualizar contraseña si la olvido
-     * En este endpoint validaria si el usuario que quiera cambiar la contraseña tenga un codigo valido
+     * Endpoint para validar el codigo
+     * Al ser valido se daria accesso a la URL para poder cambiar la contraseña
      *
      * @param code Codigo generado en el primer endpoint
      * @param id   Id del usuario que creo el code
+     * @Authorization No necesita
      */
-    @PostMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> validateCode(
             @RequestParam("code") String code,
-            @RequestParam("id") String id
+            @PathVariable("id") String id
     ) {
-        var userForgot = this.passwordService.findByCode(code);
-        this.passwordService.validate(userForgot.getForgotPassword(), id);
+        var forgotPassword = this.passwordService.findByCode(code);
+        this.passwordService.AssertKeysEquals(id, forgotPassword.id());
+        this.passwordService.AssertIsEnable(forgotPassword.enable());
+        this.passwordService.AssertIsNotExpired(forgotPassword.expirationDate());
+
         return ResponseEntity.noContent().build();
     }
 
     /**
-     * Endpoint para actualizar el token del usuario si no ha expirado
-     *
-     * @param dto Token JWT del usuario
-     * @return
+     * Endpoint para actualizar la contraseña del Usuario
+     * En este punto ya se enviaria la nueva contraseña
+     *<<
+     * @param dto Modelo con los datos para actualizar la contraseña
      * @Authroization No necesita
      */
-    @PutMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> updateForgotenPassword(@RequestBody UserPasswordDTO dto) {
         if(!dto.password().equals(dto.repeatedPassword()))
-            throw new RuntimeException("Contraseñas distintas");
+            throw new UpdatePasswordException("Contraseñas distintas", "Ambas contraseñas que estas pasando debe de ser iguales", dto.password()+" != "+dto.repeatedPassword());
 
-        this.service.updateForgottenPassword(dto);
+        this.passwordService.updateForgottenPassword(dto);
 
         return ResponseEntity.noContent().build();
     }

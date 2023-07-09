@@ -4,6 +4,7 @@ import c1220ftjavareact.gym.repository.entity.UserEntity;
 import c1220ftjavareact.gym.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +26,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userService;
-    private final JwtService<UserDetails> jwtService;
+    private final JwtService jwtService;
 
     /**
      * Fitro para el token JWT
@@ -57,6 +58,8 @@ public class JwtFilter extends OncePerRequestFilter {
                         ? (UserEntity) this.userService.loadUserByUsername(userEmail)
                         : UserEntity.builder().build();
 
+
+        if(user.getDeleted()) throw new BadCredentialsException("User account is disabled");
         if (
                 jwtService.isTokenValid(jwt, user) &&
                 SecurityContextHolder.getContext().getAuthentication() == null

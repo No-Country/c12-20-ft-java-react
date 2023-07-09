@@ -1,14 +1,9 @@
 package c1220ftjavareact.gym.security.service;
 
-import c1220ftjavareact.gym.domain.User;
+import java.io.IOException;
 
 public interface AuthService {
 
-    Boolean authenticateCredential(String email, String password);
+    void authenticate(String principal, String credential);
 
-    String getCredentialEmail(String token);
-
-    Boolean isExpired(String token);
-
-    String generateToken(User user);
 }

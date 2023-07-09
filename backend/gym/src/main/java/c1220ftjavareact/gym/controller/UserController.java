@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.controller;
 
 import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
-import c1220ftjavareact.gym.security.service.AuthService;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,30 +8,28 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
     private final UserService service;
-    private final AuthService authService;
 
     /**
+     * Cambiar el estado de deleted de un Empleado
      *
      * @param id ID del usuario
      * @Authorization Si necesita
      *
-     * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping(value = "/admins/{id}")
-    public HttpEntity<Void> deletEmployee(@PathVariable("id") String id){
-        this.service.userLogicalDeleteById(id, "EMPLOYEE");
+    @PutMapping(value = "/employees/{id}")
+    public HttpEntity<Void> changeStateUser(@PathVariable("id") String id, @RequestParam(value = "deleted") Boolean deleted){
+        this.service.changeDeletedStateUser(id, "EMPLOYEE", deleted);
         return ResponseEntity.noContent().build();
     }
 
@@ -43,19 +40,14 @@ public class UserController {
      * @Authroization No necesita
      */
     @PreAuthorize("hasAnyAuthority('ADMIN','CUSTOMER','EMPLOYEE')")
-    @PutMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, String>> updateUser(
             @PathVariable("id") String id,
             @RequestBody UserUpdateDTO updateUser
     ) {
-        var user =this.service.updateUser(updateUser, id);
 
-        var response = ResponseEntity.noContent();
-        if(StringUtils.hasText(updateUser.email())){
-            var token = this.authService.generateToken(user);
+        this.service.updateUser(updateUser, id);
 
-            return ResponseEntity.ok(Map.of("Authorize-update", "Bearer "+token));
-        }
         return ResponseEntity.noContent().build();
     }
 }
