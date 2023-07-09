@@ -41,6 +41,20 @@ public class TrainingSessionController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getTrainingSessionById(sessionId));
     }
 
+    @GetMapping(value = "/activity/{activityId}")
+    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsByActivityId( @PathVariable Long activityId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByActivityId(activityId));
+    }
+
+    @GetMapping(value = "/room/{roomId}")
+    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsByRoomId( @PathVariable Long roomId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByRoomId(roomId));
+    }
+
+    @PutMapping(value = "/update/{sessionId}")
+    public ResponseEntity<TrainingSessionDTO> updateTrainingSessionById(@RequestBody TrainingSessionDTO updatedTraining, @PathVariable Long sessionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.updateTrainingSessionById(updatedTraining, sessionId));
+    }
 
 
 }
