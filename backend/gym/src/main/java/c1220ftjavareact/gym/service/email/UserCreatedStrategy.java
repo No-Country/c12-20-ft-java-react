@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EmployeeCreatedStrategy implements TemplateStrategy {
+public class UserCreatedStrategy implements TemplateStrategy {
     @Override
     public String buildTemplate() {
         return """
@@ -30,11 +30,11 @@ public class EmployeeCreatedStrategy implements TemplateStrategy {
                     <div class="container">
                         <h1>%s espero se encuentre bien</h1>
                         </hr>
-                        <p>Se ha creado su cuenta de empleado en PrimeFit</p>
+                        <p>Se ha creado su cuenta en PrimeFit</p>
                         <h3>Sus credenciales</h3>
                         <h4>Email: <strong>%s</strong></h4>
                         <h4>Password: <strong>%s</strong></h4>
-                        <p>Al iniciar sesion puedes cambiar esta contraseña</p>
+                        <p>Al iniciar sesion con nuestro sistema puedes cambiar este contraseña</p>
                         </hr>
                         <p>Atentamente, El equipo de PrimeFit</p>
                     </div>

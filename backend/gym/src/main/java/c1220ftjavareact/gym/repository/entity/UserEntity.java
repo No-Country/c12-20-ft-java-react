@@ -2,7 +2,6 @@ package c1220ftjavareact.gym.repository.entity;
 
 import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
 import c1220ftjavareact.gym.domain.exception.UserSaveException;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -48,8 +47,8 @@ public class UserEntity implements UserDetails {
     @Column(name = "deleted")
     private Boolean deleted;
 
-    @Column(name = "avatar")
-    private String avatar;
+    @Column(name = "picture")
+    private String picture;
 
     public UserEntity(String email, String password, String name, String lastname) {
         this.email = email;
@@ -70,7 +69,7 @@ public class UserEntity implements UserDetails {
         this.setName(StringUtils.hasText(dto.name()) ? dto.name() : this.getName());
         this.setLastname(StringUtils.hasText(dto.lastName()) ? dto.lastName() : this.getLastname());
         this.setEmail(StringUtils.hasText(dto.email()) ? dto.email() : this.getEmail());
-        this.setAvatar(StringUtils.hasText(dto.avatar()) ? dto.avatar() : this.getAvatar());
+        this.setPicture(StringUtils.hasText(dto.picture()) ? dto.picture() : this.getPicture());
 
         if( StringUtils.hasText(dto.updatedPassword()) ){
             if(!encoder.matches(dto.oldPassword(), this.getPassword())){

@@ -26,7 +26,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userService;
-    private final JwtService<UserDetails> jwtService;
+    private final JwtService jwtService;
 
     /**
      * Fitro para el token JWT

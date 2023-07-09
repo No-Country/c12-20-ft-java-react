@@ -2,14 +2,13 @@ package c1220ftjavareact.gym.domain.mapper;
 
 import c1220ftjavareact.gym.domain.User;
 import c1220ftjavareact.gym.domain.dto.EmployeeSaveDTO;
+import c1220ftjavareact.gym.domain.dto.UserGoogleDTO;
 import c1220ftjavareact.gym.domain.dto.UserProjection;
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
-import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
 import c1220ftjavareact.gym.repository.entity.Role;
 import c1220ftjavareact.gym.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,10 @@ public class UserMapperBeans {
         return (dto) -> UserEntity.builder()
                 .id(Long.parseLong(dto.getId()))
                 .email(dto.getEmail())
+                .name(dto.getFullName().split(" ")[0])
+                .lastname(dto.getFullName().split(" ")[1])
                 .role(dto.getRole())
+                .picture(dto.getPicture())
                 .build();
     }
 
@@ -54,7 +56,7 @@ public class UserMapperBeans {
                 .createAt(entity.getCreateAt())
                 .password(entity.getPassword())
                 .role(entity.getRole().name())
-                .avatar(entity.getAvatar())
+                .picture(entity.getPicture())
                 .build();
     }
 
@@ -71,23 +73,15 @@ public class UserMapperBeans {
     @Bean
     public UserMapper<User, UserEntity> userToUserEntity() {
         return (user) -> UserEntity.builder()
-                .id(Long.parseLong(user.getId()))
+                .id(user.getId() != null ? Long.parseLong(user.getId()) : null)
                 .name(user.getName())
                 .lastname(user.getLastname())
                 .email(user.getEmail())
                 .createAt(user.getCreateAt())
                 .password(user.getPassword())
                 .role(Role.valueOf(user.getRole()))
-                .avatar(user.getAvatar())
-                .build();
-    }
-
-    @Bean
-    public UserMapper<User, UserDetails> userToUserDetails() {
-        return (user) -> UserEntity.builder()
-                .id(Long.parseLong(user.getId()))
-                .email(user.getEmail())
-                .role(Role.valueOf(user.getRole()))
+                .picture(user.getPicture())
+                .deleted(user.getDeleted())
                 .build();
     }
 
@@ -97,6 +91,16 @@ public class UserMapperBeans {
                 .lastname(dto.lastname())
                 .email(dto.email())
                 .password(UUID.randomUUID().toString().substring(0, 6))
+                .build();
+    }
+
+    public UserMapper<UserGoogleDTO, User> userGoogleToUser(){
+        return (dto)-> User.builder()
+                .name(dto.name())
+                .lastname(dto.lastName())
+                .email(dto.email())
+                .password(UUID.randomUUID().toString().substring(0, 6))
+                .picture(dto.picture())
                 .build();
     }
 }

@@ -20,16 +20,16 @@ public interface UserService {
 
     /**
      * Guarda un Usuario en la base de datos
-     * @param model Modelo del usuario para guardar
+     * @param model Modelo del usuario con sus datos
      * @param role Rol del usuario que se desea guardar
      */
     void saveUser(UserSaveDTO model, String role);
 
     /**
-     * Guarda un Admin en la base de datos
-     * @param model Modelo del usuario para guardar
+     * Guarda un Usuario registrado con google en la base de datos
+     * @param model Modelo del usuario con sus datos
      */
-    void saveAdmin(UserSaveDTO model);
+    void saveGoogleUser(User model);
 
     /**
      * Cambia el estado de eliminacion de un Usuario
@@ -39,5 +39,10 @@ public interface UserService {
      */
     void changeDeletedStateUser(String id, String role, Boolean state);
 
+    /**
+     * Actualiza el Usuario con nuevos datos
+     * @param dto Modelo con los nuevos datos
+     * @param id ID del usuario que se desea actualizar
+     */
     User updateUser(UserUpdateDTO dto, String id);
 }

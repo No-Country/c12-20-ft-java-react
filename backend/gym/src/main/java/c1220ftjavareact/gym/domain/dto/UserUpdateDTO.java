@@ -11,7 +11,7 @@ public record UserUpdateDTO(
         @Size(min = 3, max = 45)String lastName,
         @Size(min = 6, max = 128) String oldPassword,
         @Size(min = 6, max = 128) String updatedPassword,
-        String avatar
+        String picture
 ) {
     public UserUpdateDTO{
         if(

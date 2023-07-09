@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             @Param("role") String role
     );
 
-    @Query(value = "SELECT u.id, u.email, concat(u.name,' ',u.lastname) AS fullName, u.role, u.avatar FROM user AS u WHERE u.email = :email", nativeQuery = true)
+    @Query(value = "SELECT u.id, u.email, concat(u.name,' ',u.lastname) AS fullName, u.role, u.picture FROM user AS u WHERE u.email = :email", nativeQuery = true)
     UserProjection findUserForLogin(@Param("email") String email);
 
     @Modifying

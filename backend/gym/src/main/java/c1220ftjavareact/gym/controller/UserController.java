@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.controller;
 
 import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
-import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
     private final UserService service;
-    private final UserMapperBeans userMapper;
+
     /**
-     * Cambiar el estado de deleted del Usuario
+     * Cambiar el estado de deleted de un Empleado
      *
      * @param id ID del usuario
      * @Authorization Si necesita
@@ -41,7 +40,7 @@ public class UserController {
      * @Authroization No necesita
      */
     @PreAuthorize("hasAnyAuthority('ADMIN','CUSTOMER','EMPLOYEE')")
-    @PutMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, String>> updateUser(
             @PathVariable("id") String id,
             @RequestBody UserUpdateDTO updateUser

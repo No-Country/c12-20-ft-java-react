@@ -7,12 +7,16 @@ import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
 import c1220ftjavareact.gym.domain.exception.UserSaveException;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.repository.UserRepository;
+import c1220ftjavareact.gym.repository.entity.Role;
+import c1220ftjavareact.gym.repository.entity.UserEntity;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -74,22 +78,27 @@ public class UserServiceImp implements UserService {
     @Override
     public void saveUser(UserSaveDTO model, String role) {
         try {
+            //Si el Usuario es ADMIN y ya hay una instancia guardada arroja un error
+            if(role.equals("ADMIN") && repository.countAdmins() == 1){
+                throw new RuntimeException("Ya hay un admin registrado al sistema");
+            }
             repository.saveUser(model.name(), model.email(), model.lastname(), userMapper.password().map(model.password()), role);
         } catch (Exception ex) {
-            throw new UserSaveException("Ocurrio un error al registar el empleado", "Revisa los datos el formato y que no haya datos nulos");
+            throw new UserSaveException("Ocurrio un error al registar el usuario", model.toString());
         }
     }
 
-    @Transactional
     @Override
-    public void saveAdmin(UserSaveDTO model) {
+    public void saveGoogleUser(User model) {
         try {
-            //Si la cuenta es menor a 1 Guarda el Admin (Controla que solo hay 1 ADMIn guardado)
-            if(repository.countAdmins() < 1){
-                repository.saveUser(model.name(), model.email(), model.lastname(), userMapper.password().map(model.password()), "ADMIN");
-            }
+            model.setRole("CUSTOMER");
+            model.setDeleted(false);
+            model.setCreateAt(LocalDate.now());
+            var entity = userMapper.userToUserEntity().map(model);
+            entity.setPassword(userMapper.password().map(model.getPassword()));
+            this.repository.save(entity);
         } catch (Exception ex) {
-            throw new UserSaveException("Ocurrio un error al registar el empleado", "Revisa los datos el formato y que no haya datos nulos");
+            throw new UserSaveException(ex.getMessage(), ex.toString());
         }
     }
 

@@ -33,8 +33,8 @@ public class ForgotPasswordEntity {
     @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm")
     private LocalDateTime expirationDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", insertable = false, updatable = false)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_user")
     private UserEntity userEntity;
 
     public void enable() {

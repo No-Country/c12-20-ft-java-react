@@ -127,13 +127,14 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         var entity = this.passwordRepository
                 .findById(Long.parseLong(model.id()))
                 .orElseThrow(()->new ResourceNotFoundException("Usuario no encontrado", "Revisa que el ID sea correcto", model.id()));
-        //Comprueba que los datos sean validos antes de actualizar
+        //Comprueba que los datos sean validos antes de actualizar<
         this.AssertKeysEquals(model.code(),entity.getCode());
         this.AssertIsEnable(entity.isEnable());
         this.AssertIsNotExpired(entity.getExpirationDate());
 
         entity.getUserEntity().setPassword(userMapper.password().map(model.password()));
         entity.disable();
+
         this.passwordRepository.saveAndFlush(entity);
     }
 

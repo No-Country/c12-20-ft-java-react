@@ -1,18 +1,15 @@
 package c1220ftjavareact.gym.security.controller;
 
-import c1220ftjavareact.gym.domain.dto.EmployeeSaveDTO;
-import c1220ftjavareact.gym.domain.dto.UserAuthDTO;
-import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
+import c1220ftjavareact.gym.domain.dto.*;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.events.event.UserCreatedEvent;
-import c1220ftjavareact.gym.repository.entity.UserEntity;
+import c1220ftjavareact.gym.security.jwt.GoogleJwtService;
 import c1220ftjavareact.gym.security.jwt.JwtService;
 import c1220ftjavareact.gym.security.service.AuthService;
-import c1220ftjavareact.gym.service.email.EmployeeCreatedStrategy;
+import c1220ftjavareact.gym.security.service.SpringAuthService;
+import c1220ftjavareact.gym.service.email.UserCreatedStrategy;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
@@ -25,17 +22,15 @@ import java.net.URI;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-@Slf4j
+@SuppressWarnings(value = "all")
 public class AuthController {
     private final UserService service;
-    @Qualifier("spring")
     private final AuthService springAuth;
-    @Qualifier("google")
-    private final AuthService googleAuth;
-    private final JwtService<UserEntity> jwtService;
+    private final JwtService jwtService;
     private final UserMapperBeans userMapper;
+    private final GoogleJwtService googleJwtService;
     private final ApplicationEventPublisher publisher;
 
     /**
@@ -43,13 +38,13 @@ public class AuthController {
      *
      * @Authorization No necesita
      */
-    @PostMapping(value = "/admins/create")
-    public HttpEntity<Void> registerAdmin() {
+    @PostMapping(value = "/admins")
+    public HttpEntity<Void> adminSignUp() {
         var entity = userMapper.adminUser().map("owner1234");
 
-        service.saveAdmin(userMapper.userEntityToUserSave().map(entity));
+        service.saveUser(userMapper.userEntityToUserSave().map(entity), "ADMIN");
 
-        return ResponseEntity.created(URI.create("/api/v1/admins")).build();
+        return ResponseEntity.created(URI.create("/api/v1/users/admins")).build();
     }
 
     /**
@@ -59,12 +54,12 @@ public class AuthController {
      * @Authorization No necesita
      */
     @PostMapping("/customers")
-    public HttpEntity<Void> registerCustomer(@Valid @RequestBody UserSaveDTO userDTO) {
-
+    public HttpEntity<Void> customerSignUp(@Valid @RequestBody UserSaveDTO userDTO) {
         this.service.assertEmailIsNotRegistered(userDTO.email());
+
         this.service.saveUser(userDTO, "CUSTOMER");
 
-        return ResponseEntity.created(URI.create("/api/v1/customers")).build();
+        return ResponseEntity.created(URI.create("/api/v1/users/customers")).build();
     }
 
     /**
@@ -74,9 +69,9 @@ public class AuthController {
      *
      * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
      */
-    @PostMapping("/admins")
+    @PostMapping("/employees")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public HttpEntity<Void> registerEmployee(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
+    public HttpEntity<Void> employeeSignUp(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
         this.service.assertEmailIsNotRegistered(employeeDTO.email());
         var userDTO = this.userMapper.employeeSaveToUserSave().map(employeeDTO);
 
@@ -88,10 +83,43 @@ public class AuthController {
                 userDTO.name(),
                 userDTO.lastname(),
                 userDTO.password(),
-                new EmployeeCreatedStrategy())
+                new UserCreatedStrategy())
         );
 
-        return ResponseEntity.created(URI.create("/api/v1/admins")).build();
+        return ResponseEntity.created(URI.create("/api/v1/users/employees")).build();
+    }
+
+    /**
+     * Endpoint para realizar el registro de un cliente por Google
+     *
+     * @param employeeDTO DTO con los datos que se guardaran del empleado
+     *
+     * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
+     */
+    @PostMapping("/customers/google")
+    public HttpEntity<Void> googleRegister(@Valid @RequestBody UserGoogleTokenDTO model) {
+        //Compruebo la validez del token
+        this.googleJwtService.isValidToken(model.token());
+        //Recupero el email
+        var email = this.googleJwtService.extractEmail(model.token());
+        //Verifico que no este registrado
+        this.service.assertEmailIsNotRegistered(email);
+        //Recupero los datos del usuario
+        var googleUser = this.googleJwtService.extractUser(model.token());
+        //Hago el mapeo del GoogleUse a User
+        var user = this.userMapper.userGoogleToUser().map(googleUser);
+        //Guardo al usuario
+        this.service.saveGoogleUser(user);
+        //Publlico el evento UserCreated
+        publisher.publishEvent(new UserCreatedEvent(
+                this,
+                user.getEmail(),
+                user.getName(),
+                user.getLastname(),
+                user.getPassword(),
+                new UserCreatedStrategy())
+        );
+        return ResponseEntity.created(URI.create("/api/v1/users/customers/google")).build();
     }
 
     /**
@@ -102,14 +130,39 @@ public class AuthController {
      */
     @PostMapping(value = "/authentication", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, Object>> authentication(@RequestBody @Valid UserAuthDTO model) {
+        //Se autentica las credenciales del usuario
         this.springAuth.authenticate(model.email(), model.password());
+
+        //Se recupera la informacion para pasar el front
         var user = this.service.findLoginInfo(model.email());
+
+        //Se crea el token con la Info
         var token = this.jwtService.generateToken(userMapper.userProjectionToUserEntity().map(user));
 
+        //Se envia el token
         return ResponseEntity.ok(Map.of(
-                "user", user,
-                "token", token
-        ));
+                "token", token,
+                "user", user));
+    }
+
+    /**
+     * Endpoint para realizar el Login del usuario
+     *
+     * @param model Modelo con las credenciales del usuario
+     * @Authroization No necesita
+     */
+    @PostMapping(value = "/authentication/google", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<Map<String, Object>> authenticationGoogle(@RequestBody @Valid UserGoogleTokenDTO model) {
+        //Compruebo la validez del token
+        this.googleJwtService.isValidToken(model.token());
+        //Recupero el email
+        var email = this.googleJwtService.extractEmail(model.token());
+        this.springAuth.authenticate(email, "google");
+        var user = this.service.findLoginInfo(email);
+        var token = this.jwtService.generateToken(userMapper.userProjectionToUserEntity().map(user));
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "user", user));
     }
 
     /**
@@ -120,13 +173,15 @@ public class AuthController {
      */
     @PostMapping(value = "/update-session", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, Object>> active(@RequestHeader("Authorization") String oldToken) {
+        //Se recupera el email en base al token
         var email = this.jwtService.extractSubject(oldToken.substring(7));
-        var user = this.service.findUserByEmail(email);
-        var token = this.jwtService.generateToken(userMapper.userToUserEntity().map(user));
+        //Se busca si existe un usuario con ese email
+        var user = this.service.findLoginInfo(email);
+        //Se actualiza el token
+        var token = this.jwtService.generateToken(userMapper.userProjectionToUserEntity().map(user));
 
         return ResponseEntity.ok(Map.of(
-                "user", user,
-                "token", token
-        ));
+                "token", token,
+                "user", user));
     }
 }

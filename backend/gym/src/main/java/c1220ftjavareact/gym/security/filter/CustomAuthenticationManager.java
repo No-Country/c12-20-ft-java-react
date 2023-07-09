@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.security.service;
+package c1220ftjavareact.gym.security.filter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +28,18 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         if (authentication.isAuthenticated()) {
             return authentication;
         }
-        //Credenciales
-        String email = authentication.getPrincipal().toString();
-        String password = authentication.getCredentials().toString();
         try {
+            //Recupero el Email
+            String email = authentication.getPrincipal().toString();
             //Recupero el usuario
             var user = this.service.loadUserByUsername(email);
             //Validaciones
             this.verifyEnable(user.isEnabled());
-            this.verifyPasswords(password, user.getPassword());
+
+            String password = authentication.getCredentials().toString();
+            if(!password.equals("google")){
+                this.verifyPasswords(password, user.getPassword());
+            }
             //Si recupero el usuario y es valido lo autentica
             var auth = UsernamePasswordAuthenticationToken.authenticated(
                     email,

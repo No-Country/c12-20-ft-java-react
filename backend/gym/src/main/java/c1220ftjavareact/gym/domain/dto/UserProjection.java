@@ -5,7 +5,7 @@ import c1220ftjavareact.gym.repository.entity.Role;
 public interface UserProjection {
     String getId();
     String getEmail();
-    String getFullname();
+    String getFullName();
     Role getRole();
-    String getAvatar();
+    String getPicture();
 }
