@@ -77,7 +77,7 @@ public class ForgotPasswordController {
     /**
      * Endpoint para actualizar la contraseña del Usuario
      * En este punto ya se enviaria la nueva contraseña
-     *<<
+     *
      * @param dto Modelo con los datos para actualizar la contraseña
      * @Authroization No necesita
      */

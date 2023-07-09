@@ -102,11 +102,12 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void changeDeletedStateUser(String id, String role, Boolean state) {
-        //Verifica que el ID del Usuario coincida con el Rol
+        //Cuanta la cantidad de usuarios que existe con ese ID y Rol
         if(this.repository.countUsersBy(id, role) < 1){
+            //Arroja la excepcion si no encuentra ni un registro
             throw new ResourceNotFoundException("El usuario no se encuentra registra", "Revisa que el ID pertenezca a un usuario con rol de empleado/EMPLOYEE", "ID: "+id);
         }
-
+        //Cambia el estado del usuario
         this.repository.changeStateUser(id, role, state.equals(true) ? "1" : "0");
     }
 
