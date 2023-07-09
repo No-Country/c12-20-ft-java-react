@@ -46,6 +46,11 @@ public class TrainingSessionController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByActivityId(activityId));
     }
 
+    @GetMapping(value = "/room/{roomId}")
+    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsByRoomId( @PathVariable Long roomId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByRoomId(roomId));
+    }
+
 
 
 

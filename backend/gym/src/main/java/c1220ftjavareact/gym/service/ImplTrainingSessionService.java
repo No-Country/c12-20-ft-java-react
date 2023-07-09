@@ -69,7 +69,8 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
     @Override
     public List<TrainingSessionDTO> getAllByRoomId(Long roomId) {
-        return null;
+        List<TrainingSession> listSessions = iRoomService.getRoomById(roomId).getTrainingSession();
+        return this.convertEntityList(listSessions);
     }
 
 
