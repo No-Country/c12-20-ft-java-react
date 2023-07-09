@@ -4,10 +4,18 @@ import c1220ftjavareact.gym.domain.User;
 import c1220ftjavareact.gym.domain.dto.*;
 
 public interface UserService {
+    /**
+     * Busca el usuario por el ID
+     * @param id ID del usuario buscado
+     */
     User findUserById(String id);
+    /**
+     * Busca el usuario por el Email
+     * @param email Email del usuario buscado
+     */
     User findUserByEmail(String email);
     /**
-     * Recupera el objeto con los datos necesarios para el Login
+     * Recupera el Usuario con los datos necesarios para el Login
      * @param email Email del usuario
      */
     UserProjection findLoginInfo(String email);

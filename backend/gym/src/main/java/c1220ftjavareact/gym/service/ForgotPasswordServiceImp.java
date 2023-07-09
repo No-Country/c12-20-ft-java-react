@@ -10,6 +10,7 @@ import c1220ftjavareact.gym.repository.ForgotPasswordRepository;
 import c1220ftjavareact.gym.repository.UserRepository;
 import c1220ftjavareact.gym.repository.entity.UserEntity;
 import c1220ftjavareact.gym.service.interfaces.ForgotPasswordService;
+import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,17 +30,17 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     private final ForgotPasswordMapperBean passwordMapper;
     private final UserMapperBeans userMapper;
     private final UserRepository userRepository;
+    private final TimeUtils timeUtils;
 
     @Override
     public ForgotPassword generateForgotPassword(String id, String email){
         //Se crea la instancia de Forgot password
-        var time = LocalDateTime.now(Clock.system(ZoneId.systemDefault()));
         return ForgotPassword.builder()
                 .id(id)
                 .email(email)
                 .enable(true)
                 .code(UUID.randomUUID().toString())
-                .expirationDate(LocalDateTime.of(time.getYear(), time.getMonth(), time.getDayOfMonth(), time.getHour()+1, time.getMinute()))
+                .expirationDate(timeUtils.getLocalDateTimeSpecified().plusHours(1L))
                 .build();
     }
 
@@ -67,11 +68,6 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
                 "fullName", userEntity.fullname(),
                 "code", forgottenModel.code()
         );
-    }
-
-    @Override
-    public Boolean isExpired(LocalDateTime dateTime) {
-        return dateTime.isBefore( LocalDateTime.now(Clock.system(ZoneId.systemDefault())) );
     }
 
     @Transactional(readOnly = true)
@@ -102,7 +98,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
 
     @Override
     public void AssertIsNotExpired(LocalDateTime dateTime){
-        if(dateTime.isBefore( LocalDateTime.now(Clock.system(ZoneId.systemDefault())) )){
+        if(dateTime.isBefore( timeUtils.getLocalDateTime() )){
             throw new UpdatePasswordException(
                     "EL codigo ya ha caducado",
                     "Crea un nuevo codigo",

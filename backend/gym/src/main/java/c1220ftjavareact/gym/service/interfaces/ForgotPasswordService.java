@@ -24,12 +24,6 @@ public interface ForgotPasswordService {
     ForgotPassword generateForgotPassword(String id, String email);
 
     /**
-     * Verifica que la fecha no este expirada
-     * @param dateTime Fecha ha comprobar
-     */
-    Boolean isExpired(LocalDateTime dateTime);
-
-    /**
      * Busca una instancia del ForgotPassword por el codigo
      * @param code Codigo del ForgotPassword
      */

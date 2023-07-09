@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.security.jwt;
 
 import c1220ftjavareact.gym.repository.entity.UserEntity;
+import c1220ftjavareact.gym.util.TimeUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -27,7 +28,7 @@ public class JwtServiceAdapter implements JwtService<UserEntity> {
     //Rcupera la clave del archivo Yml
     @Value("${spring.security.jwt.secret}")
     private String SECRET_KEY;
-
+    private final TimeUtils timeUnit;
 
     @Override
     public String generateToken(UserEntity userDetails) {
@@ -43,8 +44,8 @@ public class JwtServiceAdapter implements JwtService<UserEntity> {
                 .claim("id", userDetails.getId().toString())
                 .claim("authority", userDetails.getAuthorities().stream().findFirst().get().getAuthority())
                 .setIssuer("http://localhost:8080/api/v1")
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
+                .setIssuedAt(new Date(timeUnit.getDateMillis()))
+                .setExpiration(new Date(timeUnit.getDateMillis() + TimeUnit.HOURS.toMillis(24)))
                 .signWith(this.getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

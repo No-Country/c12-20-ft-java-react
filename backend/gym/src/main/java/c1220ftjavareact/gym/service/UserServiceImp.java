@@ -7,16 +7,13 @@ import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
 import c1220ftjavareact.gym.domain.exception.UserSaveException;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.repository.UserRepository;
-import c1220ftjavareact.gym.repository.entity.Role;
-import c1220ftjavareact.gym.repository.entity.UserEntity;
 import c1220ftjavareact.gym.service.interfaces.UserService;
+import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +22,7 @@ public class UserServiceImp implements UserService {
     private final UserRepository repository;
     private final UserMapperBeans userMapper;
     private final PasswordEncoder encoder;
-
+    private final TimeUtils timeUtils;
     @Transactional(readOnly = true)
     @Override
     public void assertEmailIsNotRegistered(String email) {
@@ -93,7 +90,7 @@ public class UserServiceImp implements UserService {
         try {
             model.setRole("CUSTOMER");
             model.setDeleted(false);
-            model.setCreateAt(LocalDate.now());
+            model.setCreateAt(timeUtils.getLocalDate());
             var entity = userMapper.userToUserEntity().map(model);
             entity.setPassword(userMapper.password().map(model.getPassword()));
             this.repository.save(entity);
