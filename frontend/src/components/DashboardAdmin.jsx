@@ -18,8 +18,17 @@ const DasboardAdmin = () => {
   {/*open and close modals*/}
   const [activeRow, setActiveRow] = useState(null);
   const [Alertdel, setAlertdel] = useState(true);
-  const [Usercardopen, setusercardopen] = useState(false);
+  const [Usercardopen, setusercardopen] = useState(null);
   {/*open and close events*/}
+
+  const handlecardopen = (rowId) => {
+    if (activeRow === rowId) {
+      setusercardopen(rowId);
+    } else {
+      setusercardopen(null);
+    }
+  };
+
   const handleRowClick = (rowId) => {
     setActiveRow(rowId);
   };
@@ -37,9 +46,11 @@ const DasboardAdmin = () => {
   };
   {/*delete user*/}
   const Deleteuser = (id) => {
-    setClient(clients.filter((client) => client.id !== id));
+    const updatedClients = clients.filter((client) => client.id !== id);
+    setClient(updatedClients);
     setAlertdel(true);
   };
+
 
 
 
@@ -196,22 +207,16 @@ const DasboardAdmin = () => {
               </thead>
               <tbody>
                 {clients.map((client) => (
-                  <>
-                    
-                    <Modalcarduser
-                      cliente={client}
-                      usercard={Usercardopen}
-                      setusercardopen={setusercardopen}
-                    />
+                   <React.Fragment key={client.id}>
+                     
                     <tr
-                      key={client.id}
                       className={`text-center border-top border-gray-600 ${
                         activeRow === client.id
                           ? "bg-gray-900 transition-colors duration-250 ease-linear"
                           : ""
                       }`}
                       onClick={() => handleRowClick(client.id)}
-                      onDoubleClick={Openusercard}
+                      onDoubleClick={() => handlecardopen(client.id)}
                     >
                       <td>{client.id}</td>
                       <td>{client.name}</td>
@@ -253,11 +258,19 @@ const DasboardAdmin = () => {
                           Deny
                         </button>
                       </td>
-
+                      
                     </>) }
                       
                     </tr>
-                  </>
+                  
+                    <Modalcarduser
+                      key={client.id}
+                      cliente={client}
+                      usercard={Usercardopen}
+                      setusercardopen={setusercardopen}
+                    />
+                     
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
