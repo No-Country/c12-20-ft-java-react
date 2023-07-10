@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="gym:war">
+    <output-path>$PROJECT_DIR$/backend/gym/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>gym</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="gym-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="gym:war exploded" />
+    </root>
+  </artifact>
+</component>

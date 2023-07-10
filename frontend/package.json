@@ -1,6 +1,7 @@
 {
   "name": "frontend",
   "private": true,
+  "homepage": "https://joshuajadaniel.github.io/c12-20-ft-java-react/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -18,6 +19,7 @@
     "postcss": "^8.4.24",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.10.1",
     "react-router-dom": "^6.14.1",
     "tailwindcss": "^3.3.2"
   },

@@ -47,7 +47,7 @@ UNLOCK TABLES;
 -- Table structure for table `class`
 --
 
-DROP TABLE IF EXISTS `class`;
+DROP TABLE IF EXISTS `training_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `class` (
@@ -65,10 +65,10 @@ CREATE TABLE `class` (
   `saturday` tinyint(1) NOT NULL,
   `sunday` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `activity_class_fk_idx` (`id_activity`),
-  KEY `room_class_fk_idx` (`id_room`),
-  CONSTRAINT `activity_class_fk` FOREIGN KEY (`id_activity`) REFERENCES `activity` (`id`),
-  CONSTRAINT `room_class_fk` FOREIGN KEY (`id_room`) REFERENCES `room` (`id`)
+  KEY `activity_training_session_fk_idx` (`id_activity`),
+  KEY `room_training_session_fk_idx` (`id_room`),
+  CONSTRAINT `activity_training_session_fk` FOREIGN KEY (`id_activity`) REFERENCES `activity` (`id`),
+  CONSTRAINT `room_training_session_fk` FOREIGN KEY (`id_room`) REFERENCES `room` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -76,7 +76,7 @@ CREATE TABLE `class` (
 -- Dumping data for table `class`
 --
 
-LOCK TABLES `class` WRITE;
+LOCK TABLES `training_session` WRITE;
 /*!40000 ALTER TABLE `class` DISABLE KEYS */;
 /*!40000 ALTER TABLE `class` ENABLE KEYS */;
 UNLOCK TABLES;
