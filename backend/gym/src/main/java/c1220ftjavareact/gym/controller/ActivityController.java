@@ -30,17 +30,17 @@ public class ActivityController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ActivityDto> updateActivity(@PathVariable Long id, @RequestBody ActivityDto activity) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.updateActivity(id, activity));
+        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.updateActivityDto(id, activity));
     }
 
     @GetMapping
     public ResponseEntity<List<ActivityDto>> getAllActivities() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.getAllActivities());
+        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.getAllActivitiesDto());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ActivityDto> getActivityById(@PathVariable("id") Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.getActivitDtoyById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.getActivityDtoById(id));
     }
 
 

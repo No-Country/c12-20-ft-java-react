@@ -11,11 +11,13 @@ public interface IActivityService {
 
     public void deleteActivity(Long id);
 
-    public ActivityDto updateActivity(Long id, ActivityDto activityDto);
+    public ActivityDto updateActivityDto(Long id, ActivityDto activityDto);
 
-    public ActivityDto getActivitDtoyById(Long id);
+    public ActivityDto getActivityDtoById(Long id);
 
-    public List<ActivityDto> getAllActivities();
+    public List<ActivityDto> getAllActivitiesDto();
 
     public Activity getActivityById(Long id);
+
+    public List<Activity> getAllActivities();
 }
