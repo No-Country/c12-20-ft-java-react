@@ -58,11 +58,15 @@ public class ImpActivityService implements IActivityService {
         Activity activity = activityRepository.findById(id).orElseThrow(()-> new RuntimeException("Activities null"));
         ActivityDto activityDto = new ActivityDto();
         return this.modelMapper.map(activity, ActivityDto.class);
+
+    public Activity getActivityById(Long id) {
+        return activityRepository.findById(id).orElseThrow(() -> new RuntimeException("Activities null"));
+
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ActivityDto> getAllActivities() {
+    public List<ActivityDto> getAllActivitiesDto() {
         List<Activity> activities = this.activityRepository.findAll();
         List<ActivityDto> activityDtos = new ArrayList();
 
@@ -76,6 +80,12 @@ public class ImpActivityService implements IActivityService {
     @Transactional(readOnly = true)
     @Override
     public Activity getActivityById(Long id) {
-        return activityRepository.findById(id).orElseThrow(null);
+        return this.activityRepository.findById(id).orElseThrow(null);
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Activity> getAllActivities() {
+        return activityRepository.findAll();
+
     }
 }

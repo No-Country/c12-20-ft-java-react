@@ -1,22 +1,68 @@
 package c1220ftjavareact.gym.service.interfaces;
 
 import c1220ftjavareact.gym.domain.User;
-import c1220ftjavareact.gym.domain.dto.*;
-import c1220ftjavareact.gym.service.email.TemplateStrategy;
+import c1220ftjavareact.gym.domain.dto.UserProjection;
+import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
+import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
 
 public interface UserService {
+    /**
+     * Busca el usuario por el ID
+     *
+     * @param id ID del usuario buscado
+     */
     User findUserById(String id);
 
+    /**
+     * Busca el usuario por el Email
+     *
+     * @param email Email del usuario buscado
+     */
+    User findUserByEmail(String email);
+
+    /**
+     * Recupera el Usuario con los datos necesarios para el Login
+     *
+     * @param email Email del usuario
+     */
     UserProjection findLoginInfo(String email);
 
-    User findUserByEmail(String email);
+    /**
+     * Verifica que el correo no este registrado
+     *
+     * @param email Email a verificar
+     */
     void assertEmailIsNotRegistered(String email);
-    User saveUser(UserSaveDTO model, String role);
-    void updateForgottenPassword(UserPasswordDTO model);
-    Boolean sendCreateMessage(UserSaveDTO model, TemplateStrategy strategy);
-    void registerAdmin();
-    void authenticate(UserAuthDTO model);
-    void userLogicalDeleteById(String id, String role);
 
+    /**
+     * Guarda un Usuario en la base de datos
+     *
+     * @param model Modelo del usuario con sus datos
+     * @param role  Rol del usuario que se desea guardar
+     */
+    void saveUser(UserSaveDTO model, String role);
+
+    /**
+     * Guarda un Usuario registrado con google en la base de datos
+     *
+     * @param model Modelo del usuario con sus datos
+     */
+    void saveGoogleUser(User model);
+
+    /**
+     * Cambia el estado de eliminacion de un Usuario
+     *
+     * @param id    ID del usuario que se desea guardar
+     * @param role  Rol del usuario
+     * @param state Estado al que se desea cambiar
+     */
+    void changeDeletedStateUser(String id, String role, Boolean state);
+
+    /**
+     * Actualiza el Usuario con nuevos datos
+     *
+     * @param dto Modelo con los nuevos datos
+     * @param id  ID del usuario que se desea actualizar
+     */
     User updateUser(UserUpdateDTO dto, String id);
 }

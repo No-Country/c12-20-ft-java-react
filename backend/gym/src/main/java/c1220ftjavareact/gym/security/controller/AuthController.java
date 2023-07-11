@@ -2,13 +2,17 @@ package c1220ftjavareact.gym.security.controller;
 
 import c1220ftjavareact.gym.domain.dto.EmployeeSaveDTO;
 import c1220ftjavareact.gym.domain.dto.UserAuthDTO;
+import c1220ftjavareact.gym.domain.dto.UserGoogleTokenDTO;
 import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
-import c1220ftjavareact.gym.domain.exception.UserSaveException;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
+import c1220ftjavareact.gym.events.event.UserCreatedEvent;
+import c1220ftjavareact.gym.security.jwt.GoogleOauth2Service;
+import c1220ftjavareact.gym.security.jwt.JwtService;
 import c1220ftjavareact.gym.security.service.AuthService;
-import c1220ftjavareact.gym.service.email.CustomerCreate;
+import c1220ftjavareact.gym.service.email.UserCreatedStrategy;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,22 +24,29 @@ import java.net.URI;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@SuppressWarnings(value = "all")
 public class AuthController {
     private final UserService service;
-    private final AuthService authService;
+    private final AuthService springAuth;
+    private final JwtService jwtService;
     private final UserMapperBeans userMapper;
+    private final GoogleOauth2Service googleOauth2Service;
+    private final ApplicationEventPublisher publisher;
 
     /**
      * Endpoint para realizar el registro deL ADMIN (solo se crea una vez, datos por default)
      *
      * @Authorization No necesita
      */
-    @PostMapping(value = "/admins/create")
-    public HttpEntity<Void> registerAdmin() {
-        service.registerAdmin();
-        return ResponseEntity.created(URI.create("/api/v1/admins")).build();
+    @PostMapping(value = "/admins")
+    public HttpEntity<Void> adminSignUp() {
+        var entity = userMapper.adminUser().map("owner1234");
+
+        service.saveUser(userMapper.userEntityToUserSave().map(entity), "ADMIN");
+
+        return ResponseEntity.created(URI.create("/api/v1/users/admins")).build();
     }
 
     /**
@@ -45,13 +56,12 @@ public class AuthController {
      * @Authorization No necesita
      */
     @PostMapping("/customers")
-    public HttpEntity<Void> registerCustomer(@Valid @RequestBody UserSaveDTO userDTO) {
+    public HttpEntity<Void> customerSignUp(@Valid @RequestBody UserSaveDTO userDTO) {
         this.service.assertEmailIsNotRegistered(userDTO.email());
-        var user = this.service.saveUser(userDTO, "CUSTOMER");
-        if (user == null)
-            throw new UserSaveException("Ocurrio un error inesperado en el registro", "Revisa los datos el formato y que no haya datos nulos");
 
-        return ResponseEntity.created(URI.create("/api/v1/customers")).build();
+        this.service.saveUser(userDTO, "CUSTOMER");
+
+        return ResponseEntity.created(URI.create("/api/v1/users/customers")).build();
     }
 
     /**
@@ -60,19 +70,56 @@ public class AuthController {
      * @param employeeDTO DTO con los datos que se guardaran del empleado
      * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
      */
-    @PostMapping("/admins")
+    @PostMapping("/employees")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public HttpEntity<Void> registerEmployee(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
+    public HttpEntity<Void> employeeSignUp(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
         this.service.assertEmailIsNotRegistered(employeeDTO.email());
         var userDTO = this.userMapper.employeeSaveToUserSave().map(employeeDTO);
-        if (!this.service.sendCreateMessage(userDTO, new CustomerCreate()))
-            throw new UserSaveException("Error al enviar el email", "Espera y vuelve a intentarlo o revisa el formato del email");
 
-        var user = service.saveUser(userDTO, "EMPLOYEE");
-        if (user == null)
-            throw new UserSaveException("Ocurrio un error al registar el empleado", "Revisa los datos el formato y que no haya datos nulos");
+        service.saveUser(userDTO, "EMPLOYEE");
 
-        return ResponseEntity.created(URI.create("/api/v1/admins")).build();
+        publisher.publishEvent(new UserCreatedEvent(
+                this,
+                userDTO.email(),
+                userDTO.name(),
+                userDTO.lastname(),
+                userDTO.password(),
+                new UserCreatedStrategy())
+        );
+
+        return ResponseEntity.created(URI.create("/api/v1/users/employees")).build();
+    }
+
+    /**
+     * Endpoint para realizar el registro de un cliente por Google
+     *
+     * @param employeeDTO DTO con los datos que se guardaran del empleado
+     * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
+     */
+    @PostMapping("/customers/google")
+    public HttpEntity<Void> googleRegister(@Valid @RequestBody UserGoogleTokenDTO model) {
+        //Compruebo la validez del token
+        this.googleOauth2Service.isValidToken(model.token());
+        //Recupero el email
+        var email = this.googleOauth2Service.extractEmail(model.token());
+        //Verifico que no este registrado
+        this.service.assertEmailIsNotRegistered(email);
+        //Recupero los datos del usuario
+        var googleUser = this.googleOauth2Service.extractUser(model.token());
+        //Hago el mapeo del GoogleUse a User
+        var user = this.userMapper.userGoogleToUser().map(googleUser);
+        //Guardo al usuario
+        this.service.saveGoogleUser(user);
+        //Publlico el evento UserCreated
+        publisher.publishEvent(new UserCreatedEvent(
+                this,
+                user.getEmail(),
+                user.getName(),
+                user.getLastname(),
+                user.getPassword(),
+                new UserCreatedStrategy())
+        );
+        return ResponseEntity.created(URI.create("/api/v1/users/customers/google")).build();
     }
 
     /**
@@ -83,31 +130,58 @@ public class AuthController {
      */
     @PostMapping(value = "/authentication", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, Object>> authentication(@RequestBody @Valid UserAuthDTO model) {
-        service.authenticate(model);
-        var user = this.service.findLoginInfo(model.email());
-        var token = this.authService.generateToken(userMapper.userProjectionToUser().map(user));
+        //Se autentica las credenciales del usuario
+        this.springAuth.authenticate(model.email(), model.password());
 
+        //Se recupera la informacion para pasar el front
+        var user = this.service.findLoginInfo(model.email());
+
+        //Se crea el token con la Info
+        var token = this.jwtService.generateToken(userMapper.userProjectionToUserEntity().map(user));
+
+        //Se envia el token
         return ResponseEntity.ok(Map.of(
-                "user", user,
-                "token", token
-        ));
+                "token", token,
+                "user", user));
+    }
+
+    /**
+     * Endpoint para realizar el Login del usuario
+     *
+     * @param model Modelo con las credenciales del usuario
+     * @Authroization No necesita
+     */
+    @PostMapping(value = "/authentication/google", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<Map<String, Object>> authenticationGoogle(@RequestBody @Valid UserGoogleTokenDTO model) {
+        //Compruebo la validez del token
+        this.googleOauth2Service.isValidToken(model.token());
+        //Recupero el email
+        var email = this.googleOauth2Service.extractEmail(model.token());
+        this.springAuth.authenticate(email, "google");
+        var user = this.service.findLoginInfo(email);
+        var token = this.jwtService.generateToken(userMapper.userProjectionToUserEntity().map(user));
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "user", user));
     }
 
     /**
      * Endpoint para actualizar el token del usuario si no ha expirado
-     *<<<
+     *
      * @param oldToken Token JWT del usuario
      * @Authroization No necesita
      */
     @PostMapping(value = "/update-session", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, Object>> active(@RequestHeader("Authorization") String oldToken) {
-        var email = this.authService.getCredentialEmail(oldToken.substring(7));
-        var user = this.service.findUserByEmail(email);
-        var token = this.authService.generateToken(user);
+        //Se recupera el email en base al token
+        var email = this.jwtService.extractSubject(oldToken.substring(7));
+        //Se busca si existe un usuario con ese email
+        var user = this.service.findLoginInfo(email);
+        //Se actualiza el token
+        var token = this.jwtService.generateToken(userMapper.userProjectionToUserEntity().map(user));
 
         return ResponseEntity.ok(Map.of(
-                "user", user,
-                "token", token
-        ));
+                "token", token,
+                "user", user));
     }
 }

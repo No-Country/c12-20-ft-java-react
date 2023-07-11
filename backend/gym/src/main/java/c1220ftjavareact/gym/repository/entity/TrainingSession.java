@@ -2,6 +2,7 @@ package c1220ftjavareact.gym.repository.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalTime;
 

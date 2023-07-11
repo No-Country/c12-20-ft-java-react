@@ -6,6 +6,7 @@ import lombok.Getter;
 public class UpdatePasswordException extends RuntimeException {
     private final String resolve;
     private final String target;
+
     public UpdatePasswordException(String message, String resolve, String target) {
         super(message);
         this.resolve = resolve;

@@ -9,15 +9,16 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @Data
-public class User {
-    private final String id;
-    private final String email;
-    private final String name;
-    private final String lastname;
-    private final String role;
-    private final LocalDate createAt;
-    private final String password;
-    private final String avatar;
+public final class User {
+    private String id;
+    private String email;
+    private String name;
+    private String lastname;
+    private String role;
+    private LocalDate createAt;
+    private String password;
+    private String picture;
+    private Boolean deleted;
 
 
     public String fullname() {
