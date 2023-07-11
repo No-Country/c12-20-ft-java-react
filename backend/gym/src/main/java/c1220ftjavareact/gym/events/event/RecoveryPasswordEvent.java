@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.context.ApplicationEvent;
 
-import java.time.Clock;
-
 @Getter
 @EqualsAndHashCode
 @ToString

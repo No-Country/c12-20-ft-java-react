@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Boolean existsByEmail(String email);
-    //
-   Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
     @Modifying
     @Query(value = "INSERT INTO user (name, email, lastname, password, role) VALUES " +
@@ -38,6 +39,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "SELECT count(*) FROM user WHERE user.id = :id AND user.role = :role", nativeQuery = true)
     Integer countUsersBy(@Param("id") String id, @Param("role") String role);
+
     @Query(value = "SELECT count(*) FROM user WHERE user.role = 'ADMIN'", nativeQuery = true)
     Integer countAdmins();
 }

@@ -12,9 +12,10 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.util.Collections;
+
 @Component
 @RequiredArgsConstructor
-public class GoogleJwtService {
+public class GoogleOauth2Service {
     @Value("spring.security.oauth2.client.google.clientId")
     private String googleClientId;
 
@@ -24,14 +25,15 @@ public class GoogleJwtService {
     private final GsonFactory jsonFactory = GsonFactory.getDefaultInstance();
     private final NetHttpTransport transport = new NetHttpTransport();
 
-    public String extractEmail(String token){
+    public String extractEmail(String token) {
         return this.extractPayload(token).getEmail();
     }
-    public Boolean extractVerified(String token){
+
+    public Boolean extractVerified(String token) {
         return this.extractPayload(token).getEmailVerified();
     }
 
-    public UserGoogleDTO extractUser(String token){
+    public UserGoogleDTO extractUser(String token) {
         var payload = this.extractPayload(token);
 
         return UserGoogleDTO.builder()
@@ -42,9 +44,10 @@ public class GoogleJwtService {
                 .build();
     }
 
-    public Boolean isExpired(String token){
-        return (System.currentTimeMillis()/1000) >= this.extractPayload(token).getExpirationTimeSeconds();
+    public Boolean isExpired(String token) {
+        return (System.currentTimeMillis() / 1000) >= this.extractPayload(token).getExpirationTimeSeconds();
     }
+
     public GoogleIdToken.Payload extractPayload(String token) {
         try {
             return GoogleIdToken.parse(this.getTokenVerifier().getJsonFactory(), token).getPayload();
@@ -53,13 +56,13 @@ public class GoogleJwtService {
         }
     }
 
-    public GoogleIdTokenVerifier getTokenVerifier(){
+    public GoogleIdTokenVerifier getTokenVerifier() {
         return new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
                 .setAudience(Collections.singletonList(googleClientId))
                 .build();
     }
 
-    public Boolean isValidToken(String token){
+    public Boolean isValidToken(String token) {
         Assert.hasText(token, "Token is empty, token invalid");
         Assert.isTrue(this.extractVerified(token), "Email in Google Account is not verified, token is invalid");
         var email = this.extractEmail(token);

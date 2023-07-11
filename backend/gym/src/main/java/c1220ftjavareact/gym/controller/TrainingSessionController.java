@@ -26,7 +26,7 @@ public class TrainingSessionController {
         this.iTrainingSessionService = iTrainingSessionService;
     }
 
-    @PostMapping(value="/create")
+    @PostMapping(value = "/create")
     public ResponseEntity<TrainingSessionDTO> saveTrainingSession(TrainingSessionSaveDTO trainingSessionSaveDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iTrainingSessionService.saveTrainingSession(trainingSessionSaveDTO));
     }
@@ -37,17 +37,17 @@ public class TrainingSessionController {
     }
 
     @GetMapping(value = "/find/{sessionId}")
-    public ResponseEntity<TrainingSessionDTO> getTrainingSessionsById( @PathVariable Long sessionId) {
+    public ResponseEntity<TrainingSessionDTO> getTrainingSessionsById(@PathVariable Long sessionId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getTrainingSessionById(sessionId));
     }
 
     @GetMapping(value = "/activity/{activityId}")
-    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsByActivityId( @PathVariable Long activityId) {
+    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsByActivityId(@PathVariable Long activityId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByActivityId(activityId));
     }
 
     @GetMapping(value = "/room/{roomId}")
-    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsByRoomId( @PathVariable Long roomId) {
+    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsByRoomId(@PathVariable Long roomId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByRoomId(roomId));
     }
 

@@ -1,7 +1,9 @@
 package c1220ftjavareact.gym.service;
 
 import c1220ftjavareact.gym.domain.User;
-import c1220ftjavareact.gym.domain.dto.*;
+import c1220ftjavareact.gym.domain.dto.UserProjection;
+import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
+import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
 import c1220ftjavareact.gym.domain.exception.ResourceAlreadyExistsException;
 import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
 import c1220ftjavareact.gym.domain.exception.UserSaveException;
@@ -38,7 +40,7 @@ public class UserServiceImp implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public User findUserById(String id){
+    public User findUserById(String id) {
         var user = repository.findById(Long.parseLong(id))
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "El ID no se encuentra registrado",
@@ -52,7 +54,7 @@ public class UserServiceImp implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserProjection findLoginInfo(String email){
+    public UserProjection findLoginInfo(String email) {
         //Devuelve una Proyeccion solo con los datos necesarios
         return this.repository.findUserForLogin(email);
     }
@@ -64,7 +66,7 @@ public class UserServiceImp implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "El email no se encuentra registrado",
                                 "Revisar bien el email enviado, o buscar si el registro esta eliminado",
-                                 email
+                                email
                         )
                 );
         //Mapeo el User de Jpa a un User normal
@@ -76,12 +78,12 @@ public class UserServiceImp implements UserService {
     public void saveUser(UserSaveDTO model, String role) {
         try {
             //Si el Usuario es ADMIN y ya hay una instancia guardada arroja un error
-            if(role.equals("ADMIN") && repository.countAdmins() == 1){
-                throw new RuntimeException("Ya hay un admin registrado al sistema");
+            if (role.equals("ADMIN") && repository.countAdmins() == 1) {
+                throw new UserSaveException("Ya hay un admin registrado al sistema", "User role is: "+role);
             }
             repository.saveUser(model.name(), model.email(), model.lastname(), userMapper.password().map(model.password()), role);
         } catch (Exception ex) {
-            throw new UserSaveException("Ocurrio un error al registar el usuario", model.toString());
+            throw new UserSaveException(ex.getMessage(), model.toString());
         }
     }
 
@@ -102,28 +104,27 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void changeDeletedStateUser(String id, String role, Boolean state) {
-        //Verifica que el ID del Usuario coincida con el Rol
-        if(this.repository.countUsersBy(id, role) < 1){
-            throw new ResourceNotFoundException("El usuario no se encuentra registra", "Revisa que el ID pertenezca a un usuario con rol de empleado/EMPLOYEE", "ID: "+id);
+        //Cuanta la cantidad de usuarios que existe con ese ID y Rol
+        if (this.repository.countUsersBy(id, role) < 1) {
+            throw new ResourceNotFoundException(
+                    "El usuario no se encuentra registra", "Revisa que el ID pertenezca a un usuario con rol de empleado/EMPLOYEE", "ID: " + id
+            );
         }
-
+        //Cambia el estado del usuario
         this.repository.changeStateUser(id, role, state.equals(true) ? "1" : "0");
     }
 
     @Override
-    public User updateUser(UserUpdateDTO dto, String id){
+    public User updateUser(UserUpdateDTO dto, String id) {
         //Busca el Usuario
         var user = this.repository.findById(Long.parseLong(id))
-                .orElseThrow(()->new ResourceNotFoundException(
-                                "Usuario no encontrado",
-                                "Revisa que el ID sea correcto",
-                                id
-                        )
+                .orElseThrow(() -> new ResourceNotFoundException
+                        ("Usuario no encontrado", "Revisa que el ID sea correcto", id)
                 );
         //Actualizo las propiedades solicitadas
         user.update(dto, encoder);
 
         //Guardo la Entidad y mapeo a un User normal
-        return this.userMapper.userEntityToUser().map( this.repository.saveAndFlush(user) );
+        return this.userMapper.userEntityToUser().map(this.repository.saveAndFlush(user));
     }
 }

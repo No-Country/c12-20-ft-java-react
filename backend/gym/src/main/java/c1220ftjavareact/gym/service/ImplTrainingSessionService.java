@@ -2,10 +2,10 @@ package c1220ftjavareact.gym.service;
 
 import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.repository.TrainingSessionRepository;
 import c1220ftjavareact.gym.repository.entity.Activity;
 import c1220ftjavareact.gym.repository.entity.Room;
 import c1220ftjavareact.gym.repository.entity.TrainingSession;
-import c1220ftjavareact.gym.repository.TrainingSessionRepository;
 import c1220ftjavareact.gym.service.interfaces.IActivityService;
 import c1220ftjavareact.gym.service.interfaces.IRoomService;
 import c1220ftjavareact.gym.service.interfaces.ITrainingSessionService;
@@ -77,11 +77,11 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     public TrainingSessionDTO getTrainingSessionById(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
-        if(trainingSession.isEmpty()) {
+        if (trainingSession.isEmpty()) {
             /// exception
         }
 
-        TrainingSessionDTO dto = mapper.map(trainingSession,TrainingSessionDTO.class);
+        TrainingSessionDTO dto = mapper.map(trainingSession, TrainingSessionDTO.class);
 
         return dto;
     }
@@ -90,7 +90,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     public TrainingSession getTrainingEntity(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
-        if(trainingSession.isEmpty()) {
+        if (trainingSession.isEmpty()) {
             /// throw exception
         }
 
@@ -103,7 +103,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     public TrainingSessionDTO updateTrainingSessionById(TrainingSessionDTO updateSession, Long id) {
 
         Optional<TrainingSession> optionalEntity = trainingSessionRepository.findById(id);
-        if(optionalEntity.isEmpty()) {
+        if (optionalEntity.isEmpty()) {
             /// throw exception
         }
 
@@ -144,8 +144,8 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     private List<TrainingSessionDTO> convertEntityList(List<TrainingSession> entityList) {
         List<TrainingSessionDTO> listDTO = new ArrayList<>();
 
-        for(TrainingSession item : entityList) {
-            TrainingSessionDTO aux = mapper.map(item,TrainingSessionDTO.class);
+        for (TrainingSession item : entityList) {
+            TrainingSessionDTO aux = mapper.map(item, TrainingSessionDTO.class);
             listDTO.add(aux);
         }
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class EmailSenderSubscriber {
-    private  final MailService service;
+    private final MailService service;
 
     @Async
     @EventListener
@@ -20,7 +20,7 @@ public class EmailSenderSubscriber {
         service.send(
                 event.getEmail(),
                 "Se ha creado su cuenta en PrimeFit",
-                service.executeTemplate(event.getName()+" "+event.getLastName(), event.getEmail(), event.getPassword()
+                service.executeTemplate(event.getName() + " " + event.getLastName(), event.getEmail(), event.getPassword()
                 )
         );
     }
@@ -39,7 +39,7 @@ public class EmailSenderSubscriber {
                 "CAMBIO DE CONTRASEÑA",
                 this.service.executeTemplate(
                         event.getFullName(),
-                        "http://localhost:3300/password?code="+event.getCode()+"&id="+event.getId()
+                        "http://localhost:3300/password?code=" + event.getCode() + "&id=" + event.getId()
                 )
         );
     }

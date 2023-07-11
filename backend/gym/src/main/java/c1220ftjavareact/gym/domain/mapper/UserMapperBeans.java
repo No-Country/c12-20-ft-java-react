@@ -23,6 +23,7 @@ public class UserMapperBeans {
     public UserMapper<String, String> password() {
         return encoder::encode;
     }
+
     @Bean
     public UserMapper<UserProjection, UserEntity> userProjectionToUserEntity() {
         return (dto) -> UserEntity.builder()
@@ -63,8 +64,8 @@ public class UserMapperBeans {
     @Bean
     public UserMapper<UserEntity, UserSaveDTO> userEntityToUserSave() {
         return (entity) -> UserSaveDTO.builder()
-                .name(entity.getName() )
-                .email(entity.getEmail() )
+                .name(entity.getName())
+                .email(entity.getEmail())
                 .lastname(entity.getLastname())
                 .password(entity.getPassword())
                 .build();
@@ -85,8 +86,8 @@ public class UserMapperBeans {
                 .build();
     }
 
-    public UserMapper<EmployeeSaveDTO, UserSaveDTO> employeeSaveToUserSave(){
-        return (dto)->UserSaveDTO.builder()
+    public UserMapper<EmployeeSaveDTO, UserSaveDTO> employeeSaveToUserSave() {
+        return (dto) -> UserSaveDTO.builder()
                 .name(dto.name())
                 .lastname(dto.lastname())
                 .email(dto.email())
@@ -94,8 +95,8 @@ public class UserMapperBeans {
                 .build();
     }
 
-    public UserMapper<UserGoogleDTO, User> userGoogleToUser(){
-        return (dto)-> User.builder()
+    public UserMapper<UserGoogleDTO, User> userGoogleToUser() {
+        return (dto) -> User.builder()
                 .name(dto.name())
                 .lastname(dto.lastName())
                 .email(dto.email())

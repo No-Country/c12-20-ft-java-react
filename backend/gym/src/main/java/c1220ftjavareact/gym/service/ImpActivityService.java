@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ImpActivityService implements IActivityService {
@@ -44,12 +43,12 @@ public class ImpActivityService implements IActivityService {
     @Transactional(readOnly = true)
     @Override
     public Activity getActivityById(Long id) {
-        return activityRepository.findById(id).orElseThrow(()-> new RuntimeException("Activities null"));
+        return activityRepository.findById(id).orElseThrow(() -> new RuntimeException("Activities null"));
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Activity> getAllActivities() {
-       return activityRepository.findAll();
+        return activityRepository.findAll();
     }
 }

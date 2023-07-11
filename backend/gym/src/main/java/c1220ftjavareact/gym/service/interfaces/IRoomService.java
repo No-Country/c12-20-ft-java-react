@@ -4,7 +4,6 @@ import c1220ftjavareact.gym.domain.dto.RoomInDto;
 import c1220ftjavareact.gym.repository.entity.Room;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IRoomService {
     public Room create(RoomInDto roomInDto);

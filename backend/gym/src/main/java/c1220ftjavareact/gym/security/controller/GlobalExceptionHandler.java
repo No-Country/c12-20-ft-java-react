@@ -1,6 +1,5 @@
 package c1220ftjavareact.gym.security.controller;
 
-import c1220ftjavareact.gym.domain.exception.ErrorDTO;
 import c1220ftjavareact.gym.domain.exception.*;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.http.HttpEntity;
@@ -85,7 +84,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     *  Handler de CustomIllegalArgsException, hereda de IllegalArgumentsException
+     * Handler de CustomIllegalArgsException, hereda de IllegalArgumentsException
      */
     @ExceptionHandler(CustomIllegalArgsException.class)
     public HttpEntity<ErrorDTO> handleCustomIllegalArgsException(CustomIllegalArgsException ex) {
