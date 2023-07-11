@@ -25,9 +25,21 @@ public class SubscriptionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SubscriptionDTO> updateSubscription(@PathVariable int id, @RequestBody SubscriptionDTO subscriptionDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.updateSubscription(id,subscriptionDTO));
+        return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.updateSubscription(id, subscriptionDTO));
     }
 
+
+    //100 | 99  | 101
+    //verificar que als suscripciones activas solo cuentan cuando estan activas y segun eso el traingi session lo manejo
+    //como 100/100 osea 100 clases y 100 sucripciones activas dar un mensaje que no se puede insertar por que esta lleno la
+    //training session osea ya no te puedes suscribir
+
+    //1 trainginf
+    //10 | 10  10/10 mensaje que ya esta lleno la traing session no puedes suscribirte
+    //capacidad suscripcion id los cuento y de ahi nada valido
+
+    //update canceled
+    //cambiar el nombre delete a cancelSuscription
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSubscription(@PathVariable int id) {
 
