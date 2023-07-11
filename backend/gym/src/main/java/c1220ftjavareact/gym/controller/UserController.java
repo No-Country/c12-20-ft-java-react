@@ -24,11 +24,10 @@ public class UserController {
      *
      * @param id ID del usuario
      * @Authorization Si necesita
-     *
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(value = "/employees/{id}")
-    public HttpEntity<Void> changeStateUser(@PathVariable("id") String id, @RequestParam(value = "deleted") Boolean deleted){
+    public HttpEntity<Void> changeStateUser(@PathVariable("id") String id, @RequestParam(value = "deleted") Boolean deleted) {
         this.service.changeDeletedStateUser(id, "EMPLOYEE", deleted);
         return ResponseEntity.noContent().build();
     }

@@ -10,14 +10,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface ForgotPasswordRepository extends JpaRepository<ForgotPasswordEntity, Long> {
-
-    Boolean existsByCode(String code);
-
     Optional<ForgotPasswordEntity> findByCode(String code);
 
-    Optional<ForgotPasswordEntity> findForgotPasswordEntityByUserEntityEmail(String email);
-    Boolean existsForgotPasswordEntityByUserEntityEmail(String email);
+    Optional<ForgotPasswordEntity> findByUserEntityEmail(String email);
 
+    Boolean existsByUserEntityEmail(String email);
 
     @Modifying
     @Query(value = "INSERT INTO forgot_password (id_user, code, expiration_date) VALUES " +

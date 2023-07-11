@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -59,10 +58,10 @@ public class JwtFilter extends OncePerRequestFilter {
                         : UserEntity.builder().build();
 
 
-        if(user.getDeleted()) throw new BadCredentialsException("User account is disabled");
+        if (user.getDeleted()) throw new BadCredentialsException("User account is disabled");
         if (
                 jwtService.isTokenValid(jwt, user) &&
-                SecurityContextHolder.getContext().getAuthentication() == null
+                        SecurityContextHolder.getContext().getAuthentication() == null
         ) {
             var authUser = new UsernamePasswordAuthenticationToken(
                     user.getUsername(),

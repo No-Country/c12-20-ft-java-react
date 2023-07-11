@@ -3,6 +3,7 @@ package c1220ftjavareact.gym.domain.mapper;
 import c1220ftjavareact.gym.domain.ForgotPassword;
 import c1220ftjavareact.gym.repository.entity.ForgotPasswordEntity;
 import c1220ftjavareact.gym.repository.entity.UserEntity;
+import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -14,13 +15,13 @@ import java.time.ZoneId;
 @Component
 @RequiredArgsConstructor
 public class ForgotPasswordMapperBean {
+
     @Bean
     public ForgotPasswordMapper<UserEntity, ForgotPasswordEntity> userToUpdatePassword() {
-        var time = LocalDateTime.now(Clock.system(ZoneId.systemDefault()));
         return (user) -> ForgotPasswordEntity.builder()
                 .id(user.getId())
                 .userEntity(user)
-                .expirationDate(LocalDateTime.of(time.getYear(), time.getMonth(), time.getDayOfMonth(), time.getHour() + 1, time.getMinute()))
+                .expirationDate(TimeUtils.gerFormatedLocalDateTime())
                 .build();
     }
 
@@ -42,7 +43,6 @@ public class ForgotPasswordMapperBean {
                 .expirationDate(model.expirationDate())
                 .build();
     }
-
 
 
 }

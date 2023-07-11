@@ -1,6 +1,9 @@
 package c1220ftjavareact.gym.repository.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -31,7 +34,7 @@ public class ForgotPasswordEntity {
     @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm")
     private LocalDateTime expirationDate;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user")
     private UserEntity userEntity;
 

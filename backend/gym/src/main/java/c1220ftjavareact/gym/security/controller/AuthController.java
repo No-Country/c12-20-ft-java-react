@@ -1,12 +1,14 @@
 package c1220ftjavareact.gym.security.controller;
 
-import c1220ftjavareact.gym.domain.dto.*;
+import c1220ftjavareact.gym.domain.dto.EmployeeSaveDTO;
+import c1220ftjavareact.gym.domain.dto.UserAuthDTO;
+import c1220ftjavareact.gym.domain.dto.UserGoogleTokenDTO;
+import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
 import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.events.event.UserCreatedEvent;
-import c1220ftjavareact.gym.security.jwt.GoogleJwtService;
+import c1220ftjavareact.gym.security.jwt.GoogleOauth2Service;
 import c1220ftjavareact.gym.security.jwt.JwtService;
 import c1220ftjavareact.gym.security.service.AuthService;
-import c1220ftjavareact.gym.security.service.SpringAuthService;
 import c1220ftjavareact.gym.service.email.UserCreatedStrategy;
 import c1220ftjavareact.gym.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,7 @@ public class AuthController {
     private final AuthService springAuth;
     private final JwtService jwtService;
     private final UserMapperBeans userMapper;
-    private final GoogleJwtService googleJwtService;
+    private final GoogleOauth2Service googleOauth2Service;
     private final ApplicationEventPublisher publisher;
 
     /**
@@ -66,7 +68,6 @@ public class AuthController {
      * Endpoint para realizar el registro de un empleado
      *
      * @param employeeDTO DTO con los datos que se guardaran del empleado
-     *
      * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
      */
     @PostMapping("/employees")
@@ -93,19 +94,18 @@ public class AuthController {
      * Endpoint para realizar el registro de un cliente por Google
      *
      * @param employeeDTO DTO con los datos que se guardaran del empleado
-     *
      * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
      */
     @PostMapping("/customers/google")
     public HttpEntity<Void> googleRegister(@Valid @RequestBody UserGoogleTokenDTO model) {
         //Compruebo la validez del token
-        this.googleJwtService.isValidToken(model.token());
+        this.googleOauth2Service.isValidToken(model.token());
         //Recupero el email
-        var email = this.googleJwtService.extractEmail(model.token());
+        var email = this.googleOauth2Service.extractEmail(model.token());
         //Verifico que no este registrado
         this.service.assertEmailIsNotRegistered(email);
         //Recupero los datos del usuario
-        var googleUser = this.googleJwtService.extractUser(model.token());
+        var googleUser = this.googleOauth2Service.extractUser(model.token());
         //Hago el mapeo del GoogleUse a User
         var user = this.userMapper.userGoogleToUser().map(googleUser);
         //Guardo al usuario
@@ -154,9 +154,9 @@ public class AuthController {
     @PostMapping(value = "/authentication/google", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, Object>> authenticationGoogle(@RequestBody @Valid UserGoogleTokenDTO model) {
         //Compruebo la validez del token
-        this.googleJwtService.isValidToken(model.token());
+        this.googleOauth2Service.isValidToken(model.token());
         //Recupero el email
-        var email = this.googleJwtService.extractEmail(model.token());
+        var email = this.googleOauth2Service.extractEmail(model.token());
         this.springAuth.authenticate(email, "google");
         var user = this.service.findLoginInfo(email);
         var token = this.jwtService.generateToken(userMapper.userProjectionToUserEntity().map(user));

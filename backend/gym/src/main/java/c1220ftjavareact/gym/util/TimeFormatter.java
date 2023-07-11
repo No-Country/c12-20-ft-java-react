@@ -12,14 +12,17 @@ public class TimeFormatter {
 
     /**
      * Funcion encargada de convertir horario en formato "hh:mm" a LocalTime
+     *
      * @param timeString formato "HH:mm"
      * @return LocalTime Localtime "HH:mm"
      */
     public static LocalTime fromString(String timeString) {
         return LocalTime.parse(timeString, TIME_FORMATTER);
     }
+
     /**
      * Funcion encargada de convertir horario en formato LocalTime a String "HH:mm"
+     *
      * @param time Localtime "HH:mm"
      * @return String formato "HH:mm"
      */

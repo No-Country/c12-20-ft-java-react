@@ -15,7 +15,7 @@ public class SpringAuthService implements AuthService {
     /**
      * Autentica las credenciales para validar el usuario
      *
-     * @param principal    Email de la cuenta del usuario
+     * @param principal  Email de la cuenta del usuario
      * @param credential Contraseña de la cuenta del usuario
      * @return True en caso de valdio, False en caso de invalido
      */

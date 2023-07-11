@@ -4,7 +4,6 @@ import c1220ftjavareact.gym.domain.dto.ActivityInDto;
 import c1220ftjavareact.gym.repository.entity.Activity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IActivityService {
 

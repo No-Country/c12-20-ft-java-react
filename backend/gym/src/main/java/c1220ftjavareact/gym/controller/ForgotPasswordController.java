@@ -34,10 +34,10 @@ public class ForgotPasswordController {
     public HttpEntity<Void> createForgotPassword(
             @RequestParam("email") @Email String email
     ) {
-        if(this.passwordService.existsByEmail(email)){
+        if (this.passwordService.existsByEmail(email)) {
             var forgotPassword = this.passwordService.findByEmail(email);
-            this.passwordService.AssertIsEnable(forgotPassword.enable());
-            this.passwordService.AssertIsNotExpired(forgotPassword.expirationDate());
+            this.passwordService.assertIsEnable(forgotPassword.enable());
+            this.passwordService.assertIsNotExpired(forgotPassword.expirationDate());
         }
 
         var values = this.passwordService.saveForgotPassword(email);
@@ -67,9 +67,9 @@ public class ForgotPasswordController {
             @PathVariable("id") String id
     ) {
         var forgotPassword = this.passwordService.findByCode(code);
-        this.passwordService.AssertKeysEquals(id, forgotPassword.id());
-        this.passwordService.AssertIsEnable(forgotPassword.enable());
-        this.passwordService.AssertIsNotExpired(forgotPassword.expirationDate());
+        this.passwordService.assertKeysEquals(id, forgotPassword.id());
+        this.passwordService.assertIsEnable(forgotPassword.enable());
+        this.passwordService.assertIsNotExpired(forgotPassword.expirationDate());
 
         return ResponseEntity.noContent().build();
     }
@@ -83,8 +83,8 @@ public class ForgotPasswordController {
      */
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> updateForgotenPassword(@RequestBody UserPasswordDTO dto) {
-        if(!dto.password().equals(dto.repeatedPassword()))
-            throw new UpdatePasswordException("Contraseñas distintas", "Ambas contraseñas que estas pasando debe de ser iguales", dto.password()+" != "+dto.repeatedPassword());
+        if (!dto.password().equals(dto.repeatedPassword()))
+            throw new UpdatePasswordException("Contraseñas distintas", "Ambas contraseñas que estas pasando debe de ser iguales", dto.password() + " != " + dto.repeatedPassword());
 
         this.passwordService.updateForgottenPassword(dto);
 

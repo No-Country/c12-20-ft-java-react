@@ -2,7 +2,10 @@ package c1220ftjavareact.gym.repository.entity;
 
 import c1220ftjavareact.gym.domain.dto.UserUpdateDTO;
 import c1220ftjavareact.gym.domain.exception.UserSaveException;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +16,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -65,14 +69,14 @@ public class UserEntity implements UserDetails {
                 .toString();
     }
 
-    public void update(UserUpdateDTO dto, PasswordEncoder encoder){
+    public void update(UserUpdateDTO dto, PasswordEncoder encoder) {
         this.setName(StringUtils.hasText(dto.name()) ? dto.name() : this.getName());
         this.setLastname(StringUtils.hasText(dto.lastName()) ? dto.lastName() : this.getLastname());
         this.setEmail(StringUtils.hasText(dto.email()) ? dto.email() : this.getEmail());
         this.setPicture(StringUtils.hasText(dto.picture()) ? dto.picture() : this.getPicture());
 
-        if( StringUtils.hasText(dto.updatedPassword()) ){
-            if(!encoder.matches(dto.oldPassword(), this.getPassword())){
+        if (StringUtils.hasText(dto.updatedPassword())) {
+            if (!encoder.matches(dto.oldPassword(), this.getPassword())) {
                 throw new UserSaveException("La contraseña antigua es incorrecta", "Poner la contraseña registrada, o no poner los datos de cambio de contraseña");
             }
             this.setPassword(encoder.encode(dto.updatedPassword()));

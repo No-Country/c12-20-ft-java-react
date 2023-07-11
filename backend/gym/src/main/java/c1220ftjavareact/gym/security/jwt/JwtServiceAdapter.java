@@ -39,7 +39,7 @@ public class JwtServiceAdapter implements JwtService<UserEntity> {
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
-                .setId(UUID.nameUUIDFromBytes(userDetails.getEmail().getBytes()).toString()+"-"+ userDetails.getId().toString())
+                .setId(UUID.nameUUIDFromBytes(userDetails.getEmail().getBytes()).toString() + "-" + userDetails.getId().toString())
                 .claim("id", userDetails.getId().toString())
                 .claim("authority", userDetails.getAuthorities().stream().findFirst().get().getAuthority())
                 .setIssuer("http://localhost:8080/api/v1")
