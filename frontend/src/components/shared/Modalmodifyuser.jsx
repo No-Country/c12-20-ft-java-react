@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import Success from "./Alert";
 import usuariodefault from "../../assets/usuariodefault.jpg";
-const Modaladduser = ({ clientes, addclientes }) => {
-  const [modalOpen, setModalOpen] = useState(true);
+const Modifyuser = ( {selectedClient,clientes,addclientes})  => {
+  const [modalOpen, setModalOpen] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState(usuariodefault);
 
   const [success, setSuccess] = useState(false);
 
+  {/* CONFIRMAR */}
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     if (formData.id !== "" && formData.name !== "" && formData.plan !== "") {
+
       addclientes([...clientes, formData]);
       setSuccess(true);
       setTimeout(() => {
@@ -20,7 +22,7 @@ const Modaladduser = ({ clientes, addclientes }) => {
     }
     setFormData({
       id: "",
-      photo:{usuariodefault},
+      photo: { usuariodefault },
       email: "",
       name: "",
       plan: "",
@@ -39,12 +41,12 @@ const Modaladduser = ({ clientes, addclientes }) => {
   };
 
   const [formData, setFormData] = useState({
-    id: "",
-    photo: "",
-    email: "",
-    name: "",
-    plan: "",
-    status: "true",
+    id: selectedClient.id,
+    photo: selectedClient.photo,
+    email: selectedClient.email,
+    name: selectedClient.name,
+    plan: selectedClient.plan,
+    status: selectedClient.status ,
   });
 
   const handleInputChange = (event) => {
@@ -61,10 +63,15 @@ const Modaladduser = ({ clientes, addclientes }) => {
       alert("El archivo seleccionado no es una imagen");
     }
   };
-
   return (
     <>
       {success && <Success />}
+      <button
+        className="btn btn-outline btn-sm text-blue-600"
+        onClick={openModal}
+      >
+        Add user
+      </button>
       {modalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-20">
           <div className="fixed inset-0 bg-gray-800 opacity-50"></div>
@@ -81,7 +88,7 @@ const Modaladduser = ({ clientes, addclientes }) => {
             {/* FormAvatar */}
             <div className="avatar relative">
               <div className="w-24 mask mask-hexagon">
-                <img src={selectedFile} />
+                <img src={formData.photo} />
               </div>
             </div>
             {/* Form */}
@@ -99,6 +106,7 @@ const Modaladduser = ({ clientes, addclientes }) => {
                   placeholder="Enter name"
                   onChange={handleInputChange}
                   required
+                    value={formData.name}
                 />
                 <input
                   className="w-full px-3 py-2 hover:ring border border-white rounded-md focus:outline-none focus:border-blue-500"
@@ -106,6 +114,7 @@ const Modaladduser = ({ clientes, addclientes }) => {
                   name="id"
                   onChange={handleInputChange}
                   required
+                    value={formData.id}
                 />
               </div>
 
@@ -116,6 +125,7 @@ const Modaladduser = ({ clientes, addclientes }) => {
                 name="email"
                 onChange={handleInputChange}
                 required
+                value={formData.email}
               />
 
               <div className="mt-4 flex gap-2">
@@ -125,7 +135,7 @@ const Modaladduser = ({ clientes, addclientes }) => {
                   onChange={handleInputChange}
                   required
                 >
-                  <option defaultValue>Training plan</option>
+                  <option selected>{formData.plan}</option>
                   <option>Crossfit</option>
                   <option>Full plan</option>
                 </select>
@@ -142,7 +152,7 @@ const Modaladduser = ({ clientes, addclientes }) => {
                   type="submit"
                   form="usuario"
                 >
-                  Register
+                  Modify
                 </button>
               </div>
             </form>
@@ -153,4 +163,4 @@ const Modaladduser = ({ clientes, addclientes }) => {
   );
 };
 
-export default Modaladduser;
+export default Modifyuser;

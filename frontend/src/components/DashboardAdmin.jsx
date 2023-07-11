@@ -4,6 +4,8 @@ import { useState } from "react";
 import logo from "../assets/Logo.png";
 import Modaladduser from "./shared/Modaladduser";
 import Modalcarduser from "./shared/Modalcarduser";
+import Modifyuser from "./shared/Modalmodifyuser";
+import usuariodefault from "../assets/usuariodefault.jpg";
 import {
   RiAdminFill,
   RiWalkFill,
@@ -14,11 +16,40 @@ import {
   RiDeleteBin5Fill,
   RiSettings4Fill,
 } from "react-icons/ri";
+
 const DasboardAdmin = () => {
-  {/*open and close modals*/}
+
+  const [clients, setClient] = useState([
+    {
+      id: "1",
+      photo: usuariodefault ,
+      email: "email1@gmail.com",
+      name: "Luca",
+      plan: "Crossfit",
+      status: "true",
+    },
+    { id: "2",
+    photo: usuariodefault ,
+    email: "email2@gmail.co,",
+    name: "Victorino",
+    plan: "Crossfit",
+    status: "false",},
+
+    { id: "3",
+    photo:  usuariodefault ,
+    email: "email3@gmail.com",
+    name: "lUCHO",
+    plan: "Full plan",
+    status: "true",}
+  ]);
+
+  const trueStatusClients = clients.filter((client) => client.status === "true");
+  const falseStatusClients = clients.filter((client) => client.status === "false");
   const [activeRow, setActiveRow] = useState(null);
   const [Alertdel, setAlertdel] = useState(true);
   const [Usercardopen, setusercardopen] = useState(null);
+  const [search, setSearch] = useState("");
+  const [selectedClient, setSelectedClient] = useState(null);
   {/*open and close events*/}
 
   const handlecardopen = (rowId) => {
@@ -27,6 +58,10 @@ const DasboardAdmin = () => {
     } else {
       setusercardopen(null);
     }
+  };
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
   };
 
   const handleRowClick = (rowId) => {
@@ -41,9 +76,6 @@ const DasboardAdmin = () => {
     setAlertdel(true);
   };
 
-  const Openusercard = () => {
-    setusercardopen(true);
-  };
   {/*delete user*/}
   const Deleteuser = (id) => {
     const updatedClients = clients.filter((client) => client.id !== id);
@@ -51,20 +83,22 @@ const DasboardAdmin = () => {
     setAlertdel(true);
   };
 
+    {/*search user*/}
+    const filteredClients = search
+  ? clients.filter((client) =>
+      client.name.toLowerCase().startsWith(search.toLowerCase())
+    )
+  : clients;
+    
+  const openModalForEdit = (client) => {
+    if(selectedClient !== null){
+    setSelectedClient(client);
+    let state1 = client;
+   {/* <Modifyuser selectedClient={selectedClient}  clientes={clients} addclientes={setClient} />*/} 
+    }
 
 
-
-  {/*Data states*/}
-  const [clients, setClient] = useState([
-    {
-      id: 1,
-      name: "Luca Victorino",
-      photo: "",
-      email: "vegajailer@gmail.com",
-      plan: "mensual",
-      status: "true",
-    },
-  ]);
+  };
 
   return (
     <Fragment>
@@ -149,16 +183,16 @@ const DasboardAdmin = () => {
                 <span className="text-white">Users</span>
               </div>
               <span className="text-bold text-white text-2xl justify-self-end">
-                167
+                {clients.length}
               </span>
             </div>
             <div className=" h-40  flex flex-col justify-between rounded bg-[#2F2F2F] shadow-xl p-5">
               <div className="flex gap-2 text-xl items-center">
                 <RiBarChart2Line className="text-blue-600 ring-1" />
-                <span className="text-white">Transactions</span>
+                <span className="text-white">Inactive Users</span>
               </div>
               <span className="text-bold text-white text-2xl justify-self-end">
-                167
+                {falseStatusClients.length}
               </span>
             </div>
             <div className=" h-40 flex flex-col justify-between rounded bg-[#2F2F2F] shadow-xl p-5">
@@ -167,7 +201,7 @@ const DasboardAdmin = () => {
                 <span className="text-white">Active users</span>
               </div>
               <span className="text-bold text-white text-2xl justify-self-end">
-                167
+                {trueStatusClients.length}
               </span>
             </div>
           </div>
@@ -183,6 +217,8 @@ const DasboardAdmin = () => {
                   type="text"
                   placeholder="Search"
                   className="input input-bordered w-24 md:w-auto"
+                  value={search}
+                  onChange={handleSearchChange} 
                 />
                 <RiSearch2Line className="text-2xl" />
               </div>
@@ -206,7 +242,7 @@ const DasboardAdmin = () => {
                 </tr>
               </thead>
               <tbody>
-                {clients.map((client) => (
+                {filteredClients.map((client) => (
                    <React.Fragment key={client.id}>
                      
                     <tr
@@ -242,7 +278,7 @@ const DasboardAdmin = () => {
                       </td>
                       <td>
                         <button>
-                          <RiSettings4Fill className="text-lg hover:text-blue-600" />
+                          <RiSettings4Fill  onClick={() => openModalForEdit(client)} className="text-lg hover:text-blue-600" />
                         </button>
                       </td>
                     </>) : (
