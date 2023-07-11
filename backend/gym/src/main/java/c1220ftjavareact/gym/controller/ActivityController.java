@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.controller;
 
-import c1220ftjavareact.gym.domain.dto.ActivityInDto;
-import c1220ftjavareact.gym.repository.entity.Activity;
+import c1220ftjavareact.gym.domain.dto.ActivityDto;
 import c1220ftjavareact.gym.service.interfaces.IActivityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,8 @@ public class ActivityController {
     }
 
     @PostMapping()
-    public ResponseEntity<Activity> createActivity(@RequestBody ActivityInDto activityInDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.iactivityService.createActivity(activityInDto));
+    public ResponseEntity<ActivityDto> createActivity(@RequestBody ActivityDto activityDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.iactivityService.createActivity(activityDto));
     }
 
     @DeleteMapping("/{id}")
@@ -30,18 +29,18 @@ public class ActivityController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Activity> updateActivity(@PathVariable Long id, ActivityInDto activity) {
+    public ResponseEntity<ActivityDto> updateActivity(@PathVariable Long id, @RequestBody ActivityDto activity) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.updateActivity(id, activity));
     }
 
     @GetMapping
-    public ResponseEntity<List<Activity>> getAllActivities() {
+    public ResponseEntity<List<ActivityDto>> getAllActivities() {
         return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.getAllActivities());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Activity> getActivityById(@PathVariable("id") Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.getActivityById(id));
+    public ResponseEntity<ActivityDto> getActivityById(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.getActivitDtoyById(id));
     }
 
 

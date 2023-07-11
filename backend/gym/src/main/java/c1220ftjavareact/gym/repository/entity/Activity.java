@@ -37,4 +37,6 @@ public class Activity implements Serializable {
 
     @Column(name = "img", nullable = false)
     private String img;
+
+
 }

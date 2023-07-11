@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActivityInDto {
+public class RoomDto {
     private String name;
-    private String description;
-    private String img;
+    private int maxCapacity;
 }
