@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomInDto {
+public class ActivityDto {
     private String name;
-    private int max_capacity;
+    private String description;
 }
