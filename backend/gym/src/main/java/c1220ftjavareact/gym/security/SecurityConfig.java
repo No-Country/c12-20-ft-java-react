@@ -42,6 +42,8 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/v1/authentication").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/admins/create").permitAll()
                 .antMatchers("/api/v1/passwords/**").permitAll()
+                //esto es para que mi enpoind poderusarlo sin necesisda de usar token ni logearme
+                .antMatchers("/subscriptions/**").permitAll()
                 .anyRequest().authenticated()
         );
 

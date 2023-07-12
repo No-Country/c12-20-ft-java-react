@@ -29,8 +29,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subscriptionMapper.convertToDto(savedSubscription);
     }
 
+
     @Override
-    public SubscriptionDTO updateSubscription(int id, SubscriptionDTO subscriptionDTO) {
+    public SubscriptionDTO updateSubscription(Long id, SubscriptionDTO subscriptionDTO) {
         SubscriptionEntity subscription = subscriptionRepository.findById(id).orElse(null);
         UserEntity user = userMapper.userToUserEntity().map(userService.findUserById(subscriptionDTO.getIdClient().toString()));
         TrainingSession trainingSession = trainingSessionService.getTrainingEntity(subscriptionDTO.getIdClass());
@@ -48,7 +49,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public Boolean deleteSubscription(int id) {
+    public Boolean deleteSubscription(Long id) {
         try {
             subscriptionRepository.deleteById(id);
             return true;
@@ -58,11 +59,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDTO getSubscriptionById(int id) {
+    public SubscriptionDTO getSubscriptionById(Long id) {
         SubscriptionEntity subscription = subscriptionRepository.findById(id).orElse(null);
         if (subscription != null) {
             return subscriptionMapper.convertToDto(subscription);
         }
         return null;
+    }
+
+    //cuenta todos los traingin session por id que le pasas
+    @Override
+    public Integer getCountTrainingSession(Long id) {
+        return  subscriptionRepository.countByTrainingSessionId(id);
     }
 }

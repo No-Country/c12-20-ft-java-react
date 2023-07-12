@@ -108,6 +108,11 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
     }
 
+    @Override
+    public Integer getCapacity(Long id) {
+        return trainingSessionRepository.findCapacityById(id);
+    }
+
     private List<TrainingSessionDTO> convertEntityList(List<TrainingSession> entityList) {
         List<TrainingSessionDTO> listDTO = new ArrayList<>();
 

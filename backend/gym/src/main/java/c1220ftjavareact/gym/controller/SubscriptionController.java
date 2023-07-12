@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.controller;
 
 import c1220ftjavareact.gym.domain.dto.SubscriptionDTO;
+import c1220ftjavareact.gym.service.interfaces.ITrainingSessionService;
 import c1220ftjavareact.gym.service.interfaces.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,37 +12,43 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/subscriptions")
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
+    private final ITrainingSessionService trainingSessionRepository;
 
     @Autowired
-    public SubscriptionController(SubscriptionService subscriptionService) {
+    public SubscriptionController(SubscriptionService subscriptionService,ITrainingSessionService trainingSessionService) {
         this.subscriptionService = subscriptionService;
+        this.trainingSessionRepository = trainingSessionService;
     }
 
     @PostMapping
     public ResponseEntity<SubscriptionDTO> createSubscription(@RequestBody SubscriptionDTO subscriptionDTO) {
+        Long trainingSessionId = subscriptionDTO.getIdTrainingSession();
+
+        // Obtener la cantidad de training sessions con el mismo ID
+        Integer countTrainingSessions = subscriptionService.getCountTrainingSession(trainingSessionId);
+
+        // Obtener la capacidad de la training session
+        Integer capacity = trainingSessionRepository.getCapacity(trainingSessionId);
+
+        // Verificar si la capacidad está agotada
+        if (countTrainingSessions >= capacity) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        // Lógica para crear la suscripción
         SubscriptionDTO createdSubscription = subscriptionService.createSubscription(subscriptionDTO);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSubscription);
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<SubscriptionDTO> updateSubscription(@PathVariable int id, @RequestBody SubscriptionDTO subscriptionDTO) {
+    public ResponseEntity<SubscriptionDTO> updateSubscription(@PathVariable Long id, @RequestBody SubscriptionDTO subscriptionDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.updateSubscription(id, subscriptionDTO));
     }
 
-
-    //100 | 99  | 101
-    //verificar que als suscripciones activas solo cuentan cuando estan activas y segun eso el traingi session lo manejo
-    //como 100/100 osea 100 clases y 100 sucripciones activas dar un mensaje que no se puede insertar por que esta lleno la
-    //training session osea ya no te puedes suscribir
-
-    //1 trainginf
-    //10 | 10  10/10 mensaje que ya esta lleno la traing session no puedes suscribirte
-    //capacidad suscripcion id los cuento y de ahi nada valido
-
-    //update canceled
-    //cambiar el nombre delete a cancelSuscription
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSubscription(@PathVariable int id) {
+    public ResponseEntity<String> deleteSubscription(@PathVariable Long id) {
 
         boolean success = subscriptionService.deleteSubscription(id);
 
@@ -54,7 +61,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionDTO> getSubscriptionById(@PathVariable int id) {
+    public ResponseEntity<SubscriptionDTO> getSubscriptionById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.getSubscriptionById(id));
     }
 }

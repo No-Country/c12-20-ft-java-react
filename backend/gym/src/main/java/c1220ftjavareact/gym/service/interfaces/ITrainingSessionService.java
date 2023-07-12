@@ -40,4 +40,6 @@ public interface ITrainingSessionService {
 
     /// eliminar una sesion disponible
     void removeTrainingSessionById(Long id);
+
+    Integer getCapacity(Long id);
 }
