@@ -1,11 +1,11 @@
 import { Fragment } from "react";
-import DasboardAdmin from "./components/DashboardAdmin";
+import DasboardUsers from "./components/DasboardUsers";
 
 function App() {
   return (
-    <>
-      <DasboardAdmin />
-  </>  
+  <Fragment>
+      <DasboardUsers />
+  </Fragment>  
   );
 }
 export default App;

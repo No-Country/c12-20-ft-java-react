@@ -1,25 +1,60 @@
 import React from "react";
 import { Fragment } from "react";
 import { useState } from "react";
-import logo from "../assets/Logo.png";
 import Modaladduser from "./shared/Modaladduser";
 import Modalcarduser from "./shared/Modalcarduser";
+import usuariodefault from "../assets/usuariodefault.jpg";
 import {
-  RiAdminFill,
-  RiWalkFill,
-  RiRidingFill,
-  RiMoneyDollarCircleFill,
   RiBarChart2Line,
   RiSearch2Line,
   RiDeleteBin5Fill,
   RiSettings4Fill,
 } from "react-icons/ri";
-const DasboardAdmin = () => {
-  {/*open and close modals*/}
+import Sidebar from "./shared/Sidebar";
+import DateTimePicker from "./shared/Timepicker";
+
+const DasboardUsers = () => {
+  const [clients, setClient] = useState([
+    {
+      id: "1",
+      photo: usuariodefault,
+      email: "email1@gmail.com",
+      name: "Luca",
+      plan: "Crossfit",
+      status: "true",
+    },
+    {
+      id: "2",
+      photo: usuariodefault,
+      email: "email2@gmail.co,",
+      name: "Victorino",
+      plan: "Crossfit",
+      status: "false",
+    },
+
+    {
+      id: "3",
+      photo: usuariodefault,
+      email: "email3@gmail.com",
+      name: "lUCHO",
+      plan: "Full plan",
+      status: "true",
+    },
+  ]);
+
+  const trueStatusClients = clients.filter(
+    (client) => client.status === "true"
+  );
+  const falseStatusClients = clients.filter(
+    (client) => client.status === "false"
+  );
   const [activeRow, setActiveRow] = useState(null);
   const [Alertdel, setAlertdel] = useState(true);
   const [Usercardopen, setusercardopen] = useState(null);
-  {/*open and close events*/}
+  const [search, setSearch] = useState("");
+  {
+    /*open and close events*/
+  }
 
   const handlecardopen = (rowId) => {
     if (activeRow === rowId) {
@@ -27,6 +62,10 @@ const DasboardAdmin = () => {
     } else {
       setusercardopen(null);
     }
+  };
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
   };
 
   const handleRowClick = (rowId) => {
@@ -41,104 +80,30 @@ const DasboardAdmin = () => {
     setAlertdel(true);
   };
 
-  const Openusercard = () => {
-    setusercardopen(true);
-  };
-  {/*delete user*/}
+  {
+    /*delete user*/
+  }
   const Deleteuser = (id) => {
     const updatedClients = clients.filter((client) => client.id !== id);
     setClient(updatedClients);
     setAlertdel(true);
   };
 
-
-
-
-  {/*Data states*/}
-  const [clients, setClient] = useState([
-    {
-      id: 1,
-      name: "Luca Victorino",
-      photo: "",
-      email: "vegajailer@gmail.com",
-      plan: "mensual",
-      status: "true",
-    },
-  ]);
+  {
+    /*search user*/
+  }
+  const filteredClients = search
+    ? clients.filter((client) =>
+        client.name.toLowerCase().startsWith(search.toLowerCase())
+      )
+    : clients;
 
   return (
     <Fragment>
       <div className="flex min-h-screen">
         {/*Sider*/}
-        <aside className="hidden flex-col items-center static gap-8 min-h-full w-80 p-4 bg-[#2F2F2F] md:flex">
-          <section>
-            {/*Logo*/}
-            <div className="flex items-center gap-4 mb-12">
-              <img src={logo} alt="Logo" className=" w-10 h-10" />
-              <div>
-                <h1 className="text-3xl font-bold text-white">Prime Fit</h1>
-              </div>
-            </div>
+        <Sidebar />
 
-            {/*user*/}
-            <div className="flex  items-center gap-4 mb-8">
-              <div>
-                <h1 className="text-xl font-bold text-white">Luca victorino</h1>
-                <button className="btn  btn-xs btn-outline">log out</button>
-              </div>
-
-              <div className="avatar  hover:cursor-pointer online">
-                <div className="w-12  hover:ring rounded-full">
-                  <img
-                    src="https://i.pinimg.com/564x/e7/c1/f6/e7c1f68fdabfa03c2414735a6a4bedc5.jpg"
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-            </div>
-            {/*nav*/}
-            <div className="">
-              <ul className="flex flex-col gap-2">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
-                  >
-                    <RiWalkFill className="w-5 " />
-                    <span className="text-white">Users</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
-                  >
-                    <RiAdminFill className="w-5 " />
-                    <span className="text-white">Administrators</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
-                  >
-                    <RiRidingFill className="w-5 " />
-                    <span className="text-white">Classes</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
-                  >
-                    <RiMoneyDollarCircleFill className="w-5 " />
-                    <span className="text-white">Payments</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </section>
-        </aside>
         {/*Main*/}
         <div className="p-10 w-full flex flex-col h-full items-center">
           {/*Cards*/}
@@ -149,16 +114,16 @@ const DasboardAdmin = () => {
                 <span className="text-white">Users</span>
               </div>
               <span className="text-bold text-white text-2xl justify-self-end">
-                167
+                {clients.length}
               </span>
             </div>
             <div className=" h-40  flex flex-col justify-between rounded bg-[#2F2F2F] shadow-xl p-5">
               <div className="flex gap-2 text-xl items-center">
                 <RiBarChart2Line className="text-blue-600 ring-1" />
-                <span className="text-white">Transactions</span>
+                <span className="text-white">Inactive Users</span>
               </div>
               <span className="text-bold text-white text-2xl justify-self-end">
-                167
+                {falseStatusClients.length}
               </span>
             </div>
             <div className=" h-40 flex flex-col justify-between rounded bg-[#2F2F2F] shadow-xl p-5">
@@ -167,7 +132,7 @@ const DasboardAdmin = () => {
                 <span className="text-white">Active users</span>
               </div>
               <span className="text-bold text-white text-2xl justify-self-end">
-                167
+                {trueStatusClients.length}
               </span>
             </div>
           </div>
@@ -183,6 +148,8 @@ const DasboardAdmin = () => {
                   type="text"
                   placeholder="Search"
                   className="input input-bordered w-24 md:w-auto"
+                  value={search}
+                  onChange={handleSearchChange}
                 />
                 <RiSearch2Line className="text-2xl" />
               </div>
@@ -190,7 +157,7 @@ const DasboardAdmin = () => {
           </div>
 
           {/*Table*/}
-          
+
           <div className="w-4/5 h-64 overflow-y-auto mt-10">
             <table className="table table-xs ">
               {/* head */}
@@ -206,9 +173,13 @@ const DasboardAdmin = () => {
                 </tr>
               </thead>
               <tbody>
-                {clients.map((client) => (
-                   <React.Fragment key={client.id}>
-                     
+                {filteredClients.map((client) => (
+                  <React.Fragment key={client.id}>
+                    {search === "" && clients.length === 0 && (
+                      <tr className="text-center">
+                        <td colSpan="7">No clients found</td>
+                      </tr>
+                    )}
                     <tr
                       className={`text-center border-top border-gray-600 ${
                         activeRow === client.id
@@ -233,43 +204,49 @@ const DasboardAdmin = () => {
                           } `}
                         ></span>
                       </td>
-                    {Alertdel ? (
-                    <>
-                      <td>
-                        <button onClick={() => ConfirmDeleteuser(client.id)}>
-                          <RiDeleteBin5Fill className="text-lg hover:text-red-600" />
-                        </button>
-                      </td>
-                      <td>
-                        <button>
-                          <RiSettings4Fill className="text-lg hover:text-blue-600" />
-                        </button>
-                      </td>
-                    </>) : (
-                    
-                    <>
-                    <td>
-                        <button className="btn btn-primary btn-sm" onClick={() => Deleteuser(client.id)}>
-                          Confirm
-                        </button>
-                      </td>
-                      <td>
-                        <button className="btn btn-sm text-blue-600" onClick={DenyDeleteuser}>
-                          Deny
-                        </button>
-                      </td>
-                      
-                    </>) }
-                      
+                      {Alertdel ? (
+                        <>
+                          <td>
+                            <button
+                              onClick={() => ConfirmDeleteuser(client.id)}
+                            >
+                              <RiDeleteBin5Fill className="text-lg hover:text-red-600" />
+                            </button>
+                          </td>
+                          <td>
+                            <button>
+                              <RiSettings4Fill className="text-lg hover:text-blue-600" />
+                            </button>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td>
+                            <button
+                              className="btn btn-primary btn-sm"
+                              onClick={() => Deleteuser(client.id)}
+                            >
+                              Confirm
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-sm text-blue-600"
+                              onClick={DenyDeleteuser}
+                            >
+                              Deny
+                            </button>
+                          </td>
+                        </>
+                      )}
                     </tr>
-                  
+
                     <Modalcarduser
                       key={client.id}
                       cliente={client}
                       usercard={Usercardopen}
                       setusercardopen={setusercardopen}
                     />
-                     
                   </React.Fragment>
                 ))}
               </tbody>
@@ -284,4 +261,4 @@ const DasboardAdmin = () => {
   );
 };
 
-export default DasboardAdmin;
+export default DasboardUsers;
