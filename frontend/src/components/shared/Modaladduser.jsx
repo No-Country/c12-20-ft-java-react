@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Success from "./Alert";
 import usuariodefault from "../../assets/usuariodefault.jpg";
 const Modaladduser = ({ clientes, addclientes }) => {
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState(usuariodefault);
 
@@ -65,6 +65,12 @@ const Modaladduser = ({ clientes, addclientes }) => {
   return (
     <>
       {success && <Success />}
+      <button
+        className="btn btn-outline btn-sm text-blue-600"
+        onClick={openModal}
+      >
+        Add user
+      </button>
       {modalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-20">
           <div className="fixed inset-0 bg-gray-800 opacity-50"></div>

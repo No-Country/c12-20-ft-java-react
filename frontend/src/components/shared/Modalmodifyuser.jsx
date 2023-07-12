@@ -83,7 +83,7 @@ const Modifyuser = ( {selectedClient,clientes,addclientes})  => {
             >
               ✕
             </button>
-            <span className="text-2xl text-bold">New user</span>
+            <span className="text-2xl text-bold">Modify</span>
             <div className="divider  w-full"></div>
             {/* FormAvatar */}
             <div className="avatar relative">
