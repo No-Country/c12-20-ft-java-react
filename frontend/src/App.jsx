@@ -3,7 +3,10 @@ import { PasswordResetEmailInput } from "./components/LoginRegister/PasswordRese
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./components/Context/AuthContext";
 import { Form } from "./components/LoginRegister/Form/Form";
+import DashboardUsers from "./components/DasboardUsers";
 import DashboardAdmin from "./components/DashboardAdmin";
+import DashboardClass from "./components/DashboardClass";
+import Sidebar from "./components/shared/Sidebar";
 
 function App() {
   return (
@@ -21,7 +24,10 @@ function App() {
             path={`/change-password/:token`}
             element={<ChangePassword />}
           />
-          <Route path="/admin-dashboard" element={<DashboardAdmin />} />
+          <Route path="/dashboard-users" element={<DashboardUsers />} />
+          <Route path="/dashboard-admins" element={<DashboardAdmin />} />
+          <Route path="/dashboard-classes" element={<DashboardClass />} />
+          <Route path="/dashboard-payments" element={<Sidebar />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

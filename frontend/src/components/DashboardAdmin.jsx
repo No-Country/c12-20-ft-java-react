@@ -10,6 +10,7 @@ import {
   RiBarChart2Line,
   RiSearch2Line,
 } from "react-icons/ri";
+import Sidebar from "./shared/Sidebar";
 const DasboardAdmin = () => {
   const [activeRow, setActiveRow] = useState(null);
 
@@ -44,76 +45,7 @@ const DasboardAdmin = () => {
     <Fragment>
       <div className="flex min-h-screen">
         {/*Sider*/}
-        <sidebar className="hidden flex-col items-center static gap-8 min-h-full w-80 p-4 bg-[#2F2F2F] md:flex">
-          <section>
-            {/*Logo*/}
-            <div className="flex items-center gap-4 mb-12">
-              <img src={logo} alt="Logo" className=" w-10 h-10" />
-              <div>
-                <h1 className="text-3xl font-bold text-white">Prime Fit</h1>
-              </div>
-            </div>
-
-            {/*user*/}
-            {/*<p className="text-xs">Admin logged{/*{status}</p>*/}
-            <div className="flex  items-center gap-4 mb-8">
-              <div>
-                <h1 className="text-xl font-bold text-white">Luca victorino</h1>
-                <button className="btn  btn-xs btn-outline">log out</button>
-              </div>
-
-              <div className="avatar  hover:cursor-pointer online">
-                <div className="w-12  hover:ring rounded-full">
-                  <img
-                    src="https://i.pinimg.com/564x/e7/c1/f6/e7c1f68fdabfa03c2414735a6a4bedc5.jpg"
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-            </div>
-            {/*nav*/}
-            <div className="">
-              <ul className="flex flex-col gap-2">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
-                  >
-                    <RiWalkFill className="w-5 " />
-                    <span className="text-white">Users</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
-                  >
-                    <RiAdminFill className="w-5 " />
-                    <span className="text-white">Administrators</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
-                  >
-                    <RiRidingFill className="w-5 " />
-                    <span className="text-white">Classes</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
-                  >
-                    <RiMoneyDollarCircleFill className="w-5 " />
-                    <span className="text-white">Payments</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </section>
-        </sidebar>
+        <Sidebar />
         {/*Main*/}
         <div className="p-10 w-full flex flex-col h-full items-center">
           {/*Cards*/}
@@ -179,33 +111,31 @@ const DasboardAdmin = () => {
               </thead>
               <tbody>
                 {clients.map((client) => (
-                  <>
-                    <tr
-                      key={client.id}
-                      className={`text-center border-top border-gray-600 ${
-                        activeRow === client.id
-                          ? "bg-gray-900 transition-colors duration-250 ease-linear"
-                          : ""
-                      }`}
-                      onClick={() => handleRowClick(client.id)}
-                    >
-                      <td>{client.id}</td>
-                      <td>{client.name}</td>
-                      <td>{client.plan}</td>
-                      <td>{client.date}</td>
-                      <td>
-                        <span
-                          className={`badge ${
-                            client.status == "true"
-                              ? "badge-success"
-                              : client.status == "false"
-                              ? "badge-error"
-                              : "badge-warning"
-                          } `}
-                        ></span>
-                      </td>
-                    </tr>
-                  </>
+                  <tr
+                    key={client.id}
+                    className={`text-center border-top border-gray-600 ${
+                      activeRow === client.id
+                        ? "bg-gray-900 transition-colors duration-250 ease-linear"
+                        : ""
+                    }`}
+                    onClick={() => handleRowClick(client.id)}
+                  >
+                    <td>{client.id}</td>
+                    <td>{client.name}</td>
+                    <td>{client.plan}</td>
+                    <td>{client.date}</td>
+                    <td>
+                      <span
+                        className={`badge ${
+                          client.status == "true"
+                            ? "badge-success"
+                            : client.status == "false"
+                            ? "badge-error"
+                            : "badge-warning"
+                        } `}
+                      ></span>
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>
