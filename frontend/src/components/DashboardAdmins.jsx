@@ -5,13 +5,12 @@ import Modaladduser from "./shared/Modaladduser";
 import Modalcarduser from "./shared/Modalcarduser";
 import usuariodefault from "../assets/usuariodefault.jpg";
 import {
-  RiBarChart2Line,
   RiSearch2Line,
   RiDeleteBin5Fill,
   RiSettings4Fill,
 } from "react-icons/ri";
 import Sidebar from "./shared/Sidebar";
-import DateTimePicker from "./shared/Timepicker";
+import ModaladdAdmin from "./shared/ModaladdAdmin";
 
 const DashboardAdmins = () => {
   const [Admins, setAdmins] = useState([
@@ -64,7 +63,7 @@ const DashboardAdmins = () => {
   }
   const Deleteuser = (id) => {
     const updatedAdmins = Admins.filter((Admin) => Admin.id !== id);
-    setAdmins(updatedClients);
+    setAdmins(updatedAdmins);
     setAlertdel(true);
   };
 
@@ -72,8 +71,8 @@ const DashboardAdmins = () => {
     /*search user*/
   }
   const filteredAdmins = search
-    ? Admins.filter((client) =>
-        client.name.toLowerCase().startsWith(search.toLowerCase())
+    ? Admins.filter((Admin) =>
+        Admin.name.toLowerCase().startsWith(search.toLowerCase())
       )
     : Admins;
 
@@ -86,7 +85,7 @@ const DashboardAdmins = () => {
         {/*Main*/}
         <div className="p-10 w-full flex flex-col h-full items-center">
           {/*Cards*/}
-
+          
           {/*Table title*/}
           <div className="flex items-center justify-between w-4/5 mt-10">
             <h1 className="text-2xl font-bold text-blue-600">
@@ -140,7 +139,7 @@ const DashboardAdmins = () => {
                       onDoubleClick={() => handlecardopen(Admin.id)}
                     >
                       <td>
-                        <div className="flex items-center space-x-3 justify-center text-start">
+                        <div className="flex items-center space-x-3 justify-start text-start">
                           <div className="avatar">
                             <div className="mask mask-squircle w-12 h-12">
                               <img
@@ -209,7 +208,7 @@ const DashboardAdmins = () => {
               </tbody>
             </table>
             <div className=" flex justify-end mt-5">
-              {/*<Modaladduser clientes={clients} addclientes={setClient} />*/}
+              <ModaladdAdmin Admins={Admins} setAdmins={setAdmins} />
             </div>
           </div>
         </div>

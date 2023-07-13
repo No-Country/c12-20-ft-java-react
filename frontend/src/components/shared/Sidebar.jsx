@@ -65,15 +65,6 @@ const Sidebar = () => {
                   <span className="text-white">Classes</span>
                 </a>
               </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
-                >
-                  <RiMoneyDollarCircleFill className="w-5 " />
-                  <span className="text-white">Payments</span>
-                </a>
-              </li>
             </ul>
           </div>
         </section>

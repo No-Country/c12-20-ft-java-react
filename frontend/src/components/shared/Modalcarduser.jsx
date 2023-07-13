@@ -32,7 +32,7 @@ const Modalcarduser = ({ cliente, usercard, setusercardopen }) => {
               <div className="bg-gray-900 mx-4 rounded-lg flex  justify-between items-center gap-10 -mt-8 z-10 shadow-xl py-2 px-6">
                 <h3 className="text-white text-lg font-semibold">{name}</h3>
                 <div className="flex gap-2">
-                        <h1 className="text-white text-sm">{status== "true" ? "Pagado" : "Debe"}</h1>
+                        <h1 className="text-white text-sm">{status== "true" ? "Pagado" : "Debt"}</h1>
                 <span 
                           
                           className={`badge badge-sm ring-1 ${
