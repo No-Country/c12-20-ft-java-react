@@ -84,7 +84,9 @@ public class ForgotPasswordController {
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> updateForgotenPassword(@RequestBody UserPasswordDTO dto) {
         if (!dto.password().equals(dto.repeatedPassword()))
-            throw new UpdatePasswordException("Contraseñas distintas", "Ambas contraseñas que estas pasando debe de ser iguales", dto.password() + " != " + dto.repeatedPassword());
+            throw new UpdatePasswordException(
+                    "Error en peticion cambio de contraseña", "Las contraseñas enviadas no coinciden"
+            );
 
         this.passwordService.updateForgottenPassword(dto);
 

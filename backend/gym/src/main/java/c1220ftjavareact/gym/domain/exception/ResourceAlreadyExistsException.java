@@ -3,13 +3,9 @@ package c1220ftjavareact.gym.domain.exception;
 import lombok.Getter;
 
 @Getter
-public class ResourceAlreadyExistsException extends RuntimeException {
-    private final String resolve;
-    private final String target;
+public class ResourceAlreadyExistsException extends ApiException {
 
-    public ResourceAlreadyExistsException(String message, String resolve, String target) {
-        super(message);
-        this.resolve = resolve;
-        this.target = target;
+    public ResourceAlreadyExistsException(String message, String title) {
+        super(message, title);
     }
 }

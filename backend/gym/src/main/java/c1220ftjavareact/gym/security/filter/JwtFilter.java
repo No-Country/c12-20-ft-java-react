@@ -1,5 +1,6 @@
 package c1220ftjavareact.gym.security.filter;
 
+import c1220ftjavareact.gym.domain.exception.CredentialException;
 import c1220ftjavareact.gym.repository.entity.UserEntity;
 import c1220ftjavareact.gym.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
                         : UserEntity.builder().build();
 
 
-        if (user.getDeleted()) throw new BadCredentialsException("User account is disabled");
+        if (user.getDeleted()) throw new CredentialException("Error en FiltroJWT", "El usuario que intenta ingresa esta deshabilitado");
         if (
                 jwtService.isTokenValid(jwt, user) &&
                         SecurityContextHolder.getContext().getAuthentication() == null

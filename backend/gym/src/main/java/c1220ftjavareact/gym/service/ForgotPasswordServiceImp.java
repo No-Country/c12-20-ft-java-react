@@ -53,7 +53,9 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
             forgottenModel = this.generateForgotPassword(user.getId(), email);
             this.passwordRepository.saveForgotPassword(user.getId(), forgottenModel.code(), forgottenModel.expirationDate());
         } catch (Exception ex) {
-            throw new UpdatePasswordException("Ocurrio un error inesparado al guardar", "Puedes revisar: "+email+" y "+forgottenModel, ex.toString());
+            throw new UpdatePasswordException(
+                    "Error en peticion cambio de contraseña", "Ha ocurrido un error inesperado al guardar el usuario"
+            );
         }
 
         return Map.of(
@@ -69,7 +71,8 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         //Arroja una excepcion si no encuentra la Instacio con el codigo
         var forgotPassword = passwordRepository.findByCode(code)
                 .orElseThrow(() -> new UpdatePasswordException(
-                        "El codigo no fue encontrado", "El codigo envido esta mal o no esta registrado", code)
+                        "Error en peticion cambio de contraseña", "No se ha encontrado una peticion con ese codigo"
+                        )
                 );
 
         return this.passwordMapper.entityToModel().map(forgotPassword);
@@ -79,9 +82,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     public void assertKeysEquals(String idModel, String idSaved) {
         if (!idSaved.equals(idModel)) {
             throw new UpdatePasswordException(
-                    "Los codigos comparados no coinciden",
-                    "Revisa bien los datos enviados",
-                    idModel + " != " + idSaved
+                    "Error en peticion cambio de contraseña", "Esta clave no pertenece al usuario solicitado"
             );
         }
     }
@@ -90,9 +91,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     public void assertIsNotExpired(LocalDateTime dateTime) {
         if (dateTime.isBefore(TimeUtils.getLocalDateTime())) {
             throw new UpdatePasswordException(
-                    "EL codigo ya ha caducado",
-                    "Crea un nuevo codigo",
-                    dateTime.toString()
+                    "Error en peticion cambio de contraseña", "La peticion de contraseña ha caducado, vuelve a crear la peticion de cambio"
             );
         }
     }
@@ -101,9 +100,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     public void assertIsEnable(Boolean enable) {
         if (!enable) {
             throw new UpdatePasswordException(
-                    "El codigo ya no es valido",
-                    "El codigo se desactiva al usarlo o al caducar",
-                    enable.toString()
+                    "Error en peticion cambio de contraseña", "La peticion de contraseña no esta habilitada, vuelva a crear la peticion"
             );
         }
     }
@@ -112,7 +109,10 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     public void updateForgottenPassword(UserPasswordDTO model) {
         var entity = this.passwordRepository
                 .findById(Long.parseLong(model.id()))
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado", "Revisa que el ID sea correcto", model.id()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                            "Recurso no encontrado", "El usuario todabia no ha echo una peticion de cambio de contraseña"
+                        )
+                );
         //Comprueba que los datos sean validos antes de actualizar<
         this.assertKeysEquals(model.code(), entity.getCode());
         this.assertIsEnable(entity.isEnable());
@@ -130,9 +130,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         //Arroja una excepcion si no encuentra la Instancia de Forgot Password con ese email
         var entity = passwordRepository.findByUserEntityEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "El email no se encuentra registrado",
-                                "Revisar bien el email enviado, o buscar si el registro esta eliminado",
-                                email
+                                "Recurso no encontrado", "El usuario todabia no ha echo una peticion de cambio de contraseña"
                         )
                 );
         return passwordMapper.entityToModel().map(entity);

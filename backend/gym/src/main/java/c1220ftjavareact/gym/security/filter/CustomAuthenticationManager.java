@@ -1,5 +1,6 @@
 package c1220ftjavareact.gym.security.filter;
 
+import c1220ftjavareact.gym.domain.exception.CredentialException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
@@ -47,7 +48,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
             return auth;
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new BadCredentialsException(ex.getLocalizedMessage());
+            throw new CredentialException("Error en la autenticacion", "Ha ocurrido un error al autenticar las credenciales del usuario");
         }
     }
 
@@ -58,7 +59,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
      */
     private void verifyEnable(Boolean enable) {
         if (!enable)
-            throw new BadCredentialsException("User account is disabled");
+            throw new CredentialException("Error en la autenticacion", "El usuario que intenta acceder esta deshabilitado");
     }
 
     /**
@@ -69,6 +70,6 @@ public class CustomAuthenticationManager implements AuthenticationManager {
      */
     private void verifyPasswords(String rawPassword, String encodedPassword) {
         if (!this.encoder.matches(rawPassword, encodedPassword))
-            throw new BadCredentialsException("The password does not match the account password");
+            throw new CredentialException("Error en la autenticacion", "La contraseña no pertenece al usuario");
     }
 }
