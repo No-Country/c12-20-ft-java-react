@@ -1,10 +1,9 @@
-<<<<<<< HEAD
 import { ChangePassword } from "./components/LoginRegister/ChangePassword/ChangePassword";
 import { PasswordResetEmailInput } from "./components/LoginRegister/PasswordResetEmailInput/PasswordResetEmailInput";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
 import { AuthProvider } from "./components/Context/AuthContext";
 import { Form } from "./components/LoginRegister/Form/Form";
+import DashboardAdmin from "./components/DashboardAdmin";
 
 function App() {
   return (
@@ -22,19 +21,10 @@ function App() {
             path={`/change-password/:token`}
             element={<ChangePassword />}
           />
+          <Route path="/admin-dashboard" element={<DashboardAdmin />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
-=======
-import { Fragment } from "react";
-import DasboardAdmin from "./components/DashboardAdmin";
-
-function App() {
-  return (
-    <>
-      <DasboardAdmin />
-  </>  
->>>>>>> 2b69a60108f1440e2659c20bdef694f45ae2d726
   );
 }
 export default App;

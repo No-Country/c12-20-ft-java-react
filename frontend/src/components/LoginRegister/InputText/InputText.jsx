@@ -1,20 +1,21 @@
 import { useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext";
+import { useLocation } from "react-router-dom";
 
 export const InputText = ({ type }) => {
   const {
     handleNameChange,
-    handleSurnameChange,
+    handleLastnameChange,
     handleEmailChange,
     emailValue,
     nameValue,
-    surnameValue,
-    nameValid,
-    surnameValid,
+    lastnameValue,
+    error,
     emailValid,
-    invalid,
   } = useContext(AuthContext);
-  const currentPath = window.location.pathname;
+  const location = useLocation();
+  const errorMessageLogin = error?.message;
+  const errorMessageRegister = error && error?.[type.toLocaleLowerCase()];
 
   return (
     <>
@@ -27,8 +28,8 @@ export const InputText = ({ type }) => {
               ? emailValue
               : type === "Name"
               ? nameValue
-              : type === "Surname"
-              ? surnameValue
+              : type === "Lastname"
+              ? lastnameValue
               : ""
           }
           onChange={
@@ -36,39 +37,36 @@ export const InputText = ({ type }) => {
               ? handleEmailChange
               : type === "Name"
               ? handleNameChange
-              : type === "Surname"
-              ? handleSurnameChange
-              : ""
+              : type === "Lastname"
+              ? handleLastnameChange
+              : () => {}
           }
-          placeholder={`Enter your ${type.toLocaleLowerCase()}`}
+          placeholder={`Enter your ${type.toLowerCase()}`}
           className={`border h-10 border-[#2e2e2e80] outline-[#000] rounded-md p-3 pr-10 relative w-full ${
-            type === "Name" && nameValid === true && currentPath === "/register"
-              ? "border-[red] border-2"
-              : ""
+            errorMessageRegister ? "border-[red] border-2" : ""
           }${
-            type === "Surname" &&
-            surnameValid === true &&
-            currentPath === "/register"
-              ? "border-[red] border-2"
-              : ""
-          }${
-            type === "Email" &&
-            emailValid === true &&
-            currentPath === "/register"
-              ? "border-[red] border-2"
-              : ""
-          }${
-            currentPath === "/login" && invalid === true
+            errorMessageLogin &&
+            errorMessageLogin !=
+              "The password does not match the account password" &&
+            location.pathname == "/login"
               ? "border-[red] border-2"
               : ""
           }`}
         />
-        {currentPath === "/register" &&
-          ((type === "Name" && nameValid) ||
-            (type === "Surname" && surnameValid) ||
-            (type === "Email" && emailValid)) && (
-            <p className="text-xs text-[red]">{`Invalid ${type.toLowerCase()}*`}</p>
-          )}
+        {errorMessageRegister && (
+          <p className="text-red-500 text-xs">{errorMessageRegister}</p>
+        )}
+        {emailValid === false && type === "Email" && (
+          <p className="text-red-500 text-xs">Email already taken*</p>
+        )}
+        {errorMessageLogin &&
+        errorMessageLogin !=
+          "The password does not match the account password" &&
+        location.pathname == "/login" ? (
+          <p className="text-red-500 text-xs">Email not registered*</p>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

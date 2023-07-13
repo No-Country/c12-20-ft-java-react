@@ -1,13 +1,14 @@
 import googleIcon from "../../../assets/google-icon.png";
-import jwt_decode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 export const GoogleButtonLogin = () => {
+  const navigate = useNavigate();
   const googleLoginCallback = (res) => {
     // console.log(
     //   `Se inició sesión correctamente. Aquí esta el token: ${res.credential}`
     // );
-    // const userObject = jwt_decode(res.credential);
     // console.log(userObject);
     console.log("iniciao con google");
+    navigate("/");
   };
 
   const initializeGoogleId = () => {
@@ -41,7 +42,8 @@ export const GoogleButtonLogin = () => {
     };
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = (e) => {
+    e.preventDefault();
     const googleButtonWrapper = createFakeGoogleWrapper();
     googleButtonWrapper.click();
   };

@@ -1,30 +1,42 @@
 import React, { createContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [nameValue, setNameValue] = useState("");
-  const [surnameValue, setSurnameValue] = useState("");
+  const [lastnameValue, setLastnameValue] = useState("");
   const [nameValid, setNameValid] = useState(null);
-  const [surnameValid, setSurnameValid] = useState(null);
+  const [lastnameValid, setLastnameValid] = useState(null);
   const [emailValid, setEmailValid] = useState(null);
   const [passwordValid, setPasswordValid] = useState(null);
   const [invalid, setInvalid] = useState(false);
-  const [logged, setLogged] = useState(false);
-  const [requirements, setRequirements] = useState([]);
   const [checked, setChecked] = useState(false);
+  const [userLogged, setUserLogged] = useState({});
+  const [error, setError] = useState({});
+  const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setEmailValue("");
+    setPasswordValue("");
+  }, [location.pathname]);
+
+  useEffect(() => {
+    console.log(userLogged);
+  }, [userLogged]);
+
   const handleNameChange = (event) => {
     const newValue = event.target.value;
     setNameValue(newValue);
   };
 
-  const handleSurnameChange = (event) => {
+  const handleLastnameChange = (event) => {
     const newValue = event.target.value;
-    setSurnameValue(newValue);
+    setLastnameValue(newValue);
   };
 
   const handleEmailChange = (event) => {
@@ -39,165 +51,126 @@ export const AuthProvider = ({ children }) => {
 
   const currentPath = window.location.pathname;
 
-  useEffect(() => {
-    if (
-      nameValid === false &&
-      surnameValid === false &&
-      emailValid === false &&
-      passwordValid === true &&
-      currentPath === "/register"
-    ) {
-      const createdUser = {
-        name: nameValue,
-        surname: surnameValue,
-        email: emailValue,
-        password: passwordValue,
-      };
-      console.log(createdUser);
-      // navigate("/");
-    }
-  }, [
-    nameValid,
-    surnameValid,
-    emailValid,
-    passwordValid,
-    currentPath,
-    navigate,
-  ]);
-
-  const validatePassword = (password) => {
-    const missingRequirements = [];
-
-    // Check minimum length of 8 characters
-    if (password.length < 8) {
-      missingRequirements.push("Minimum length of 8 characters.");
-    }
-
-    // Check presence of at least one uppercase letter
-    if (!/[A-Z]/.test(password)) {
-      missingRequirements.push("At least one uppercase letter.");
-    }
-
-    // Check presence of at least one number
-    if (!/[0-9]/.test(password)) {
-      missingRequirements.push("At least one number.");
-    }
-
-    // Check presence of at least one special character
-    if (!/[^A-Za-z0-9]/.test(password)) {
-      missingRequirements.push("At least one special character.");
-    }
-
-    // Return the missing requirements
-    return missingRequirements;
-  };
-
   const validateForm = async () => {
     if (currentPath === "/login") {
       // Validation for login
-      return new Promise((res, rej) => {
-        fetch("../../emails.json")
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              throw new Error("Fatal error...");
+      const authLogin = async (email, password) => {
+        try {
+          const response = await fetch(
+            "http://localhost:8080/api/v1/users/authentication",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                email: email,
+                password: password,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
             }
-          })
-          .then((data) => {
-            const emailFounded = data.find((user) => user.email === emailValue);
-            if (emailFounded === undefined) {
-              setInvalid(false);
-            }
-            if (emailFounded.password !== passwordValue) {
-              setInvalid(true);
-            } else {
-              setLogged(true);
-              setInvalid(false);
-              const userLogged = {
-                email: emailValue,
-                password: passwordValue,
-                remember: checked,
-              };
-              console.log(userLogged);
-              if (emailFounded.role === "admin") {
-                console.log("redirecting to admin panel");
-              } else {
-                console.log("redirecting to user panel");
-              }
-            }
-          })
-          .catch((error) => {
-            setLogged(false);
-            setInvalid(true);
-            console.error(error);
-          });
-      });
+          );
+
+          if (response.status === 400) {
+            const errorInfo = await response.json();
+            setError(errorInfo);
+          } else {
+            const responseData = await response.json();
+            console.log(responseData);
+            setError(null);
+            setUserLogged(responseData.user);
+            navigate("/");
+          }
+        } catch (error) {
+          console.log("Error en la solicitud:", error);
+        }
+      };
+      authLogin(emailValue, passwordValue);
     }
 
     if (currentPath === "/register") {
-      // Validation for registration
-      return new Promise((res, rej) => {
-        fetch("../../emails.json")
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              throw new Error("Fatal error...");
+      // Validation for register
+      const authRegister = async () => {
+        try {
+          const res = await fetch(
+            "http://localhost:8080/api/v1/users/customers",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                name: nameValue,
+                lastname: lastnameValue,
+                email: emailValue,
+                password: passwordValue,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
             }
-          })
-          .then((data) => {
-            const emailRegex =
-              /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            const nameRegex = /^[a-zA-Z]{3,}(?:\s[a-zA-Z]+)*$/;
-            const emailFounded = data.find((user) => user.email === emailValue);
+          );
 
-            setEmailValid(
-              emailFounded === undefined && emailRegex.test(emailValue)
-            );
-            setNameValid(!nameRegex.test(nameValue));
-            setSurnameValid(!nameRegex.test(surnameValue));
-            setEmailValid(!emailRegex.test(emailValue));
+          if (res.ok) {
+            const data = await res;
+            console.log(data);
+            toast.success("¡Cuenta creada exitosamente!");
+            setError(null);
+            setEmailValid(true);
+            navigate("/login");
+          } else if (res.status === 409) {
+            setEmailValid(false);
+            console.log("Conflicto: Ya existe un usuario con esa información");
+            console.log(await res.json());
+            setError(null);
+          } else {
+            console.log("Error en la solicitud:", res.status);
+            const errorInfo = await res.json();
+            setError(errorInfo);
+            console.log(errorInfo);
+          }
+        } catch (error) {
+          console.log("Error en la solicitud:", error);
+          setError({ message: "Error en la solicitud" });
+        }
+      };
 
-            const missingRequirements = validatePassword(passwordValue);
-            setRequirements(missingRequirements);
-            setPasswordValid(missingRequirements.length === 0);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      });
+      authRegister();
     }
   };
 
   const values = {
+    nameValue,
+    lastnameValue,
     emailValue,
     passwordValue,
-    nameValue,
-    surnameValue,
+    nameValid,
+    lastnameValid,
+    emailValid,
+    passwordValid,
     handleNameChange,
-    handleSurnameChange,
+    handleLastnameChange,
     handleEmailChange,
     handlePasswordChange,
     validateForm,
     invalid,
-    setSurnameValue,
+    setLastnameValue,
     setNameValue,
     setEmailValue,
     setPasswordValue,
     setInvalid,
     setNameValid,
-    setSurnameValid,
+    setLastnameValid,
     setEmailValid,
     setPasswordValid,
-    nameValid,
-    surnameValid,
-    emailValid,
-    passwordValid,
-    requirements,
     setChecked,
     checked,
+    error,
+    setError,
   };
 
-  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
+  return (
+    <>
+      <AuthContext.Provider value={values}>
+        {children}
+        <ToastContainer />
+      </AuthContext.Provider>
+    </>
+  );
 };

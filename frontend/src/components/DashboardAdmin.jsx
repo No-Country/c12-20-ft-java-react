@@ -39,7 +39,6 @@ const DasboardAdmin = () => {
       date: "123/12/12",
       status: "near",
     },
-
   ]);
   return (
     <Fragment>
@@ -164,7 +163,7 @@ const DasboardAdmin = () => {
               </div>
             </div>
           </div>
-          
+
           {/*Table*/}
           <div className="w-4/5 h-64 overflow-y-auto mt-10">
             <table className="table table-xs table-pin-rows table-pin-cols">
@@ -197,7 +196,11 @@ const DasboardAdmin = () => {
                       <td>
                         <span
                           className={`badge ${
-                            client.status=="true" ? "badge-success" : client.status=="false" ? "badge-error" : "badge-warning"
+                            client.status == "true"
+                              ? "badge-success"
+                              : client.status == "false"
+                              ? "badge-error"
+                              : "badge-warning"
                           } `}
                         ></span>
                       </td>

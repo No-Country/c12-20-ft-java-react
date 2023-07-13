@@ -7,19 +7,20 @@ import { HeaderForm } from "../HeaderForm/HeaderForm";
 import { InputText } from "../InputText/InputText";
 import { AuthContext } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 export const Form = ({ type }) => {
   const navigate = useNavigate();
 
   const {
-    setSurnameValue,
+    setLastnameValue,
     setNameValue,
     setPasswordValue,
     setEmailValue,
-    setInvalid,
     setChecked,
     checked,
+    isLoading,
+    setError,
+    validateForm,
   } = useContext(AuthContext);
   const handleCheckboxChange = (event) => {
     setChecked(event.target.checked);
@@ -28,16 +29,15 @@ export const Form = ({ type }) => {
     setEmailValue("");
     setPasswordValue("");
     setNameValue("");
-    setSurnameValue("");
-    setInvalid(false);
+    setLastnameValue("");
+    setError(null);
   };
-  const { validateForm } = useContext(AuthContext);
   const handleSubmit = (e) => {
     e.preventDefault();
     validateForm();
   };
   return (
-    <div className="flex justify-center min-h-screen items-center md:bg-[#fafafa]">
+    <div className="flex justify-center min-h-screen items-center max-sm:bg-[#fff] bg-[#fafafa] text-[#111]">
       <form
         onSubmit={handleSubmit}
         className="bg-white flex flex-col gap-7 p-16 max-md:p-8 rounded-xl md:shadow-md"
@@ -60,10 +60,10 @@ export const Form = ({ type }) => {
                   checked={checked}
                   onChange={handleCheckboxChange}
                 />
-                Remember me
+                <p className="text-[#111]">Remember me</p>
               </div>
               <Link
-                to="/change-password"
+                // to="/change-password"
                 className="text-[#FF0000] hover:underline"
               >
                 Forgot password?
@@ -77,7 +77,7 @@ export const Form = ({ type }) => {
               </p>
             </div>
             <GoogleButtonLogin />
-            <p className="text-sm text-center hover:[&>a]:underline">
+            <p className="text-sm text-center hover:[&>a]:underline text-[#111111a8]">
               Don't have an account?
               <button
                 onClick={(e) => {
@@ -85,7 +85,7 @@ export const Form = ({ type }) => {
                   handleReset();
                   navigate("/register");
                 }}
-                className="text-[#FF0000] ml-1"
+                className="text-[#FF0000] ml-1 hover:underline "
               >
                 Sign Up
               </button>
@@ -93,6 +93,7 @@ export const Form = ({ type }) => {
           </>
         ) : (
           <>
+            {isLoading && <div className="progressBar"></div>}
             <img className="w-20" src={primefitLogo} alt="logo" />
             <div>
               <HeaderForm
@@ -101,11 +102,11 @@ export const Form = ({ type }) => {
               />
             </div>
             <InputText type="Name" />
-            <InputText type="Surname" />
+            <InputText type="Lastname" />
             <InputText type="Email" />
             <InputPassword />
             <ButtonSign>Sign up</ButtonSign>
-            <p className="text-sm text-center hover:[&>a]:underline">
+            <p className="text-sm text-center hover:[&>a]:underline text-[#111]">
               Already have an account?
               <button
                 onClick={(e) => {
@@ -113,7 +114,7 @@ export const Form = ({ type }) => {
                   handleReset();
                   navigate("/login");
                 }}
-                className="text-[#FF0000] ml-1"
+                className="text-[#FF0000] ml-1 hover:underline"
               >
                 Log in
               </button>
