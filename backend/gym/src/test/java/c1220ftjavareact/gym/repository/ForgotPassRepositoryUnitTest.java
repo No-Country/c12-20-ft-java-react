@@ -1,8 +1,8 @@
 package c1220ftjavareact.gym.repository;
 
-import c1220ftjavareact.gym.password.entity.ForgotPasswordEntity;
+import c1220ftjavareact.gym.user.entity.ForgotPasswordEntity;
 import c1220ftjavareact.gym.user.enums.Role;
-import c1220ftjavareact.gym.password.repository.ForgotPasswordRepository;
+import c1220ftjavareact.gym.user.repository.ForgotPasswordRepository;
 import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.user.repository.UserRepository;
 import c1220ftjavareact.gym.util.TimeUtils;

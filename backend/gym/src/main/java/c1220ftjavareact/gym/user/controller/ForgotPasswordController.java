@@ -1,10 +1,10 @@
-package c1220ftjavareact.gym.password.controller;
+package c1220ftjavareact.gym.user.controller;
 
-import c1220ftjavareact.gym.password.exception.UpdatePasswordException;
-import c1220ftjavareact.gym.password.service.ForgotPasswordService;
-import c1220ftjavareact.gym.security.dto.UserPasswordDTO;
-import c1220ftjavareact.gym.user.events.event.RecoveryPasswordEvent;
-import c1220ftjavareact.gym.user.email.RecoveryPassStrategy;
+import c1220ftjavareact.gym.user.exception.UpdatePasswordException;
+import c1220ftjavareact.gym.user.service.ForgotPasswordService;
+import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
+import c1220ftjavareact.gym.events.event.RecoveryPasswordEvent;
+import c1220ftjavareact.gym.email.RecoveryPassStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.password.model;
+package c1220ftjavareact.gym.user.model;
 
 import lombok.Builder;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.user.email;
+package c1220ftjavareact.gym.email;
 
 import java.io.File;
 

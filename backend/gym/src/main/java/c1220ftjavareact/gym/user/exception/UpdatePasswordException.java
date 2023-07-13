@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.password.exception;
+package c1220ftjavareact.gym.user.exception;
 
 import c1220ftjavareact.gym.common.ApiException;
 import lombok.Getter;

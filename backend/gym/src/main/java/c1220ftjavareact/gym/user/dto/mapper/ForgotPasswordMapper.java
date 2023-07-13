@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.password.dto;
+package c1220ftjavareact.gym.user.dto.mapper;
 
 @FunctionalInterface
 public interface ForgotPasswordMapper<T, R> {
