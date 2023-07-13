@@ -24,11 +24,13 @@ spring:
   main:
     #Desactivo el Banner de Spring Booy de consola
     banner-mode: off
+  #Configuracion de conexion con MySQL
   datasource:
     password: admin
     url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
     username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+  #Configuracion de JPA
   jpa:
     #Activa el mostrar el SQL ejecutado
     show-sql: true

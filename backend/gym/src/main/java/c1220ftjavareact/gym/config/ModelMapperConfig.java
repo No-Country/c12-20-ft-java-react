@@ -1,8 +1,8 @@
 package c1220ftjavareact.gym.config;
 
-import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
-import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
-import c1220ftjavareact.gym.repository.entity.TrainingSession;
+import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
+import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.util.TimeFormatter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;

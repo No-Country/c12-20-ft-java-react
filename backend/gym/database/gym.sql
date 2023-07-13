@@ -325,7 +325,7 @@ CREATE TABLE `user` (
                         `role` enum('CUSTOMER','EMPLOYEE','ADMIN') NOT NULL,
                         `create_at` date NOT NULL DEFAULT (now()),
                         `deleted` tinyint(1) NOT NULL DEFAULT '0',
-                        `avatar` varchar(200) NOT NULL DEFAULT 'default',
+                        `picture` varchar(200) NOT NULL DEFAULT 'default',
                         PRIMARY KEY (`id`),
                         UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
