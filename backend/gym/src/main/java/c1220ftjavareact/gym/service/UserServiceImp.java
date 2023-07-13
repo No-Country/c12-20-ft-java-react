@@ -31,9 +31,7 @@ public class UserServiceImp implements UserService {
         //Si el email esta registrado arroja la excepcion "ResourceAlreadyExistsException"
         if (repository.existsByEmail(email)) {
             throw new ResourceAlreadyExistsException(
-                    "El email ya se encuentra registrado",
-                    "El email " + email + " se encuentra en uso borra el registro o prueba otro",
-                    email
+                    "Recurso ya esta registrado", "El email ya se encuentra en uso"
             );
         }
     }
@@ -43,9 +41,7 @@ public class UserServiceImp implements UserService {
     public User findUserById(String id) {
         var user = repository.findById(Long.parseLong(id))
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "El ID no se encuentra registrado",
-                                "El ID no esta en la base de datos o has puesto mal el ID",
-                                id
+                                "Recurso no encontrado", "El usuario no fue encontrado para actualizarlo"
                         )
                 );
         //Mapeo el User de Jpa a un User normal
@@ -64,9 +60,7 @@ public class UserServiceImp implements UserService {
     public User findUserByEmail(String email) {
         var user = repository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "El email no se encuentra registrado",
-                                "Revisar bien el email enviado, o buscar si el registro esta eliminado",
-                                email
+                                "Recurso no encontrado", "El usuario no fue encontrado para actualizarlo"
                         )
                 );
         //Mapeo el User de Jpa a un User normal
@@ -79,11 +73,11 @@ public class UserServiceImp implements UserService {
         try {
             //Si el Usuario es ADMIN y ya hay una instancia guardada arroja un error
             if (role.equals("ADMIN") && repository.countAdmins() == 1) {
-                throw new UserSaveException("Ya hay un admin registrado al sistema", "User role is: "+role);
+                throw new UserSaveException("Error al guardar usuario", "Ya hay un admin registrado, no es posible crear dos admins");
             }
             repository.saveUser(model.name(), model.email(), model.lastname(), userMapper.password().map(model.password()), role);
         } catch (Exception ex) {
-            throw new UserSaveException(ex.getMessage(), model.toString());
+            throw new UserSaveException("Error al guardar usuario", "Ocurrio un error inesperado en el guardado del usuario");
         }
     }
 
@@ -97,7 +91,7 @@ public class UserServiceImp implements UserService {
             entity.setPassword(userMapper.password().map(model.getPassword()));
             this.repository.save(entity);
         } catch (Exception ex) {
-            throw new UserSaveException(ex.getMessage(), ex.toString());
+            throw new UserSaveException("Error al guardar usuario", "Ocurrio un error inesperado en el guardado del usuario");
         }
     }
 
@@ -107,7 +101,7 @@ public class UserServiceImp implements UserService {
         //Cuanta la cantidad de usuarios que existe con ese ID y Rol
         if (this.repository.countUsersBy(id, role) < 1) {
             throw new ResourceNotFoundException(
-                    "El usuario no se encuentra registra", "Revisa que el ID pertenezca a un usuario con rol de empleado/EMPLOYEE", "ID: " + id
+                    "Recurso no encontrado", "El usuario no es un empleado"
             );
         }
         //Cambia el estado del usuario
@@ -118,8 +112,9 @@ public class UserServiceImp implements UserService {
     public User updateUser(UserUpdateDTO dto, String id) {
         //Busca el Usuario
         var user = this.repository.findById(Long.parseLong(id))
-                .orElseThrow(() -> new ResourceNotFoundException
-                        ("Usuario no encontrado", "Revisa que el ID sea correcto", id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Recurso no encontrado", "El usuario no fue encontrado para actualizarlo"
+                    )
                 );
         //Actualizo las propiedades solicitadas
         user.update(dto, encoder);

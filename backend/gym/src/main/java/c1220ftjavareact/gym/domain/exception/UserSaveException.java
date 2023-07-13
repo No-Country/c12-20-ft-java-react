@@ -3,11 +3,9 @@ package c1220ftjavareact.gym.domain.exception;
 import lombok.Getter;
 
 @Getter
-public class UserSaveException extends RuntimeException {
-    private final String resolve;
+public class UserSaveException extends ApiException {
 
-    public UserSaveException(String message, String resolve) {
-        super(message);
-        this.resolve = resolve;
+    public UserSaveException(String message, String title) {
+        super(message, title);
     }
 }

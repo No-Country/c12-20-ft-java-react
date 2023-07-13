@@ -3,13 +3,9 @@ package c1220ftjavareact.gym.domain.exception;
 import lombok.Getter;
 
 @Getter
-public class CredentialException extends RuntimeException {
-    private final String resolve;
-    private final String target;
+public class CredentialException extends ApiException {
 
-    public CredentialException(String message, String resolve, String target) {
-        super(message);
-        this.resolve = resolve;
-        this.target = target;
+    public CredentialException(String message, String title) {
+        super(message, title);
     }
 }

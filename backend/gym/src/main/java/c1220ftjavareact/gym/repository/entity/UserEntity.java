@@ -77,7 +77,7 @@ public class UserEntity implements UserDetails {
 
         if (StringUtils.hasText(dto.updatedPassword())) {
             if (!encoder.matches(dto.oldPassword(), this.getPassword())) {
-                throw new UserSaveException("La contraseña antigua es incorrecta", "Poner la contraseña registrada, o no poner los datos de cambio de contraseña");
+                throw new UserSaveException("Error al actualizar usuario", "La contraseña antigua no coincide");
             }
             this.setPassword(encoder.encode(dto.updatedPassword()));
         }
