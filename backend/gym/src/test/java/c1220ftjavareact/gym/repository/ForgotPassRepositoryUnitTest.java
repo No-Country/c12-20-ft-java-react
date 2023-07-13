@@ -1,8 +1,10 @@
 package c1220ftjavareact.gym.repository;
 
-import c1220ftjavareact.gym.repository.entity.ForgotPasswordEntity;
-import c1220ftjavareact.gym.repository.entity.Role;
-import c1220ftjavareact.gym.repository.entity.UserEntity;
+import c1220ftjavareact.gym.user.entity.ForgotPasswordEntity;
+import c1220ftjavareact.gym.user.enums.Role;
+import c1220ftjavareact.gym.user.repository.ForgotPasswordRepository;
+import c1220ftjavareact.gym.user.entity.UserEntity;
+import c1220ftjavareact.gym.user.repository.UserRepository;
 import c1220ftjavareact.gym.util.TimeUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

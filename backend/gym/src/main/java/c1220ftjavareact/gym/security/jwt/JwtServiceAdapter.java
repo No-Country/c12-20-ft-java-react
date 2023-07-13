@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.security.jwt;
 
-import c1220ftjavareact.gym.repository.entity.UserEntity;
+import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.util.TimeUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

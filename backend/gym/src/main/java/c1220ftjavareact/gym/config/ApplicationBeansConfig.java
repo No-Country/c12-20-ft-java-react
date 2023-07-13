@@ -1,7 +1,7 @@
 package c1220ftjavareact.gym.config;
 
-import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
-import c1220ftjavareact.gym.repository.UserRepository;
+import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -32,8 +32,7 @@ public class ApplicationBeansConfig {
                 .findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "El email no se encuentra registrado",
-                                "Revisar bien el email enviado, o buscar si el registro esta eliminado",
-                                email
+                                "Revisar bien el email enviado, o buscar si el registro esta eliminado"
                         )
                 );
     }

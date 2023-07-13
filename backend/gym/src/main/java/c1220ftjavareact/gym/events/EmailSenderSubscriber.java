@@ -2,7 +2,7 @@ package c1220ftjavareact.gym.events;
 
 import c1220ftjavareact.gym.events.event.RecoveryPasswordEvent;
 import c1220ftjavareact.gym.events.event.UserCreatedEvent;
-import c1220ftjavareact.gym.service.email.MailService;
+import c1220ftjavareact.gym.email.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -13,6 +13,11 @@ import org.springframework.stereotype.Component;
 public class EmailSenderSubscriber {
     private final MailService service;
 
+    /**
+     * Envia un email de aviso que se ha creado el usuario
+     *
+     * @param event
+     */
     @Async
     @EventListener
     public void userCreatedEevent(UserCreatedEvent event) {
@@ -26,7 +31,7 @@ public class EmailSenderSubscriber {
     }
 
     /**
-     * Envia el email con el codigo para actualizar su contraseña
+     * Envia el email con el codigo para actualizar su contraseña olvidada
      *
      * @param event
      */
