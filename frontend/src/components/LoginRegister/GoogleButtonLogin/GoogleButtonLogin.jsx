@@ -5,8 +5,9 @@ export const GoogleButtonLogin = () => {
     // console.log(
     //   `Se inició sesión correctamente. Aquí esta el token: ${res.credential}`
     // );
-    // const userObject = jwt_decode(res.credential);
-    // console.log(userObject);
+    const userObject = jwt_decode(res.credential);
+    console.log(res.credential);
+    console.log(userObject);
     console.log("iniciao con google");
   };
 
@@ -41,7 +42,8 @@ export const GoogleButtonLogin = () => {
     };
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = (e) => {
+    e.preventDefault();
     const googleButtonWrapper = createFakeGoogleWrapper();
     googleButtonWrapper.click();
   };

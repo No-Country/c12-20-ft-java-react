@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { ChangePassword } from "./components/LoginRegister/ChangePassword/ChangePassword";
 import { PasswordResetEmailInput } from "./components/LoginRegister/PasswordResetEmailInput/PasswordResetEmailInput";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -25,16 +24,6 @@ function App() {
         </Routes>
       </AuthProvider>
     </BrowserRouter>
-=======
-import { Fragment } from "react";
-import DasboardAdmin from "./components/DashboardAdmin";
-
-function App() {
-  return (
-    <>
-      <DasboardAdmin />
-  </>  
->>>>>>> 2b69a60108f1440e2659c20bdef694f45ae2d726
   );
 }
 export default App;

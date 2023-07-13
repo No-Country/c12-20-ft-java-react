@@ -53,6 +53,16 @@ export const AuthProvider = ({ children }) => {
         email: emailValue,
         password: passwordValue,
       };
+
+      const body = {
+        name: "Juanito",
+        lastname: "Ramirez",
+        email: "jr@gmail.com",
+        password: "123456"
+      };
+
+      JSON.stringify(body);
+
       console.log(createdUser);
       // navigate("/");
     }
