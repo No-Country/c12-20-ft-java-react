@@ -27,3 +27,23 @@
   background-color: #ff0000;
   animation: progressAnimation 0.5s linear;
 }
+.navBar {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #1e1e1e;
+}
+.logo {
+  width: 180px;
+  height: auto;
+}
+
+.iconNavBar {
+  width: 20px;
+  height: auto;
+}
+.navBarTxt {
+  display: flex;
+  align-items: center;
+}

@@ -20,9 +20,7 @@ const DateTimePicker = () => {
     <div className="flex items-center">
       <input
         type="datetime-local"
-        value={
-          selectedDateTime ? format(selectedDateTime, "yyyy-MM-dd'T'HH:mm") : ""
-        }
+        value={selectedDateTime ? format(selectedDateTime, "yyyy-MM-dd'T'HH:mm") : ""}
         onChange={handleDateTimeChange}
         className="appearance-none block w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
       />

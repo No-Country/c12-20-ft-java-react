@@ -7,12 +7,14 @@ import DashboardUsers from "./components/DasboardUsers";
 import DashboardAdmin from "./components/DashboardAdmin";
 import DashboardClass from "./components/DashboardClass";
 import Sidebar from "./components/shared/Sidebar";
+import LandingPage from "./components/LandingPage";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Form type="login" />} />
           <Route path="/register" element={<Form type="register" />} />
           <Route
