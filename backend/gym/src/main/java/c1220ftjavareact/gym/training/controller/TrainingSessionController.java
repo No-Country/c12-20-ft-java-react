@@ -27,7 +27,7 @@ public class TrainingSessionController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<TrainingSessionDTO> saveTrainingSession(TrainingSessionSaveDTO trainingSessionSaveDTO) {
+    public ResponseEntity<TrainingSessionDTO> saveTrainingSession(@RequestBody TrainingSessionSaveDTO trainingSessionSaveDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iTrainingSessionService.saveTrainingSession(trainingSessionSaveDTO));
     }
 
@@ -56,5 +56,9 @@ public class TrainingSessionController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.updateTrainingSessionById(updatedTraining, sessionId));
     }
 
+    @DeleteMapping(value = "/delete/{sessionId}")
+    public ResponseEntity<TrainingSessionDTO> deleteTrainingSessionsById( @PathVariable Long sessionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.removeTrainingSessionById(sessionId));
+    }
 
 }

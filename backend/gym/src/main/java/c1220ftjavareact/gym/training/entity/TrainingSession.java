@@ -29,6 +29,7 @@ public class TrainingSession {
     private boolean friday;
     private boolean saturday;
     private boolean sunday;
+    private boolean deleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore

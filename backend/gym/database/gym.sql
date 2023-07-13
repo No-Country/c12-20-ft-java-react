@@ -166,6 +166,7 @@ CREATE TABLE `training_session` (
                                     `capacity` int NOT NULL,
                                     `time_start` time NOT NULL,
                                     `time_end` time NOT NULL,
+                                    `deleted` tinyint(1) NOT NULL DEFAULT '0',
                                     `monday` tinyint(1) NOT NULL DEFAULT '0',
                                     `tuesday` tinyint(1) NOT NULL DEFAULT '0',
                                     `wednesday` tinyint(1) NOT NULL DEFAULT '0',

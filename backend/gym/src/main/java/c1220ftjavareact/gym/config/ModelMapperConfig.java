@@ -42,6 +42,7 @@ public class ModelMapperConfig {
                     mapper.map(TrainingSessionDTO::getId, TrainingSession::setId);
                     mapper.using(stringToLocalTimeConverter).map(TrainingSessionDTO::getTimeStart, TrainingSession::setTimeStart);
                     mapper.using(stringToLocalTimeConverter).map(TrainingSessionDTO::getTimeEnd, TrainingSession::setTimeEnd);
+                    mapper.map(src -> false, TrainingSession::setDeleted);
                 });
 
         // Configure the custom mapping from TrainingSession to TrainingSessionDTO
