@@ -1,6 +1,9 @@
 package c1220ftjavareact.gym.security.controller;
 
-import c1220ftjavareact.gym.domain.exception.*;
+import c1220ftjavareact.gym.common.ApiException;
+import c1220ftjavareact.gym.common.ExceptionDTO;
+import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
+import c1220ftjavareact.gym.common.ResourceNotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

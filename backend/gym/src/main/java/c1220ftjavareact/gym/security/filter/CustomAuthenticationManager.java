@@ -1,11 +1,10 @@
 package c1220ftjavareact.gym.security.filter;
 
-import c1220ftjavareact.gym.domain.exception.CredentialException;
+import c1220ftjavareact.gym.security.exception.CredentialException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
