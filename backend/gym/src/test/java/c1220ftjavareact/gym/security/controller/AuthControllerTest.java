@@ -4,7 +4,7 @@ import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
 import c1220ftjavareact.gym.user.dto.UserSaveDTO;
 import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.events.event.UserCreatedEvent;
-import c1220ftjavareact.gym.security.jwt.GoogleOauth2Service;
+import c1220ftjavareact.gym.security.service.GoogleOauth2Service;
 import c1220ftjavareact.gym.security.jwt.JwtService;
 import c1220ftjavareact.gym.security.service.AuthService;
 import c1220ftjavareact.gym.email.UserCreatedStrategy;
