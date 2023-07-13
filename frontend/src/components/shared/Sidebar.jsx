@@ -5,8 +5,10 @@ import {
   RiRidingFill,
   RiMoneyDollarCircleFill,
 } from "react-icons/ri";
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   return (
     <>
       <aside className="hidden flex-col items-center static gap-8 min-h-full w-80 p-4 bg-[#2F2F2F] md:flex">
@@ -23,7 +25,12 @@ const Sidebar = () => {
           <div className="flex  items-center gap-4 mb-8">
             <div>
               <h1 className="text-xl font-bold text-white">Luca victorino</h1>
-              <button className="btn  btn-xs btn-outline">log out</button>
+              <button
+                onClick={() => navigate("/")}
+                className="btn  btn-xs btn-outline"
+              >
+                log out
+              </button>
             </div>
 
             <div className="avatar  hover:cursor-pointer online">
@@ -39,40 +46,40 @@ const Sidebar = () => {
           <div className="">
             <ul className="flex flex-col gap-2">
               <li>
-                <a
-                  href="/c12-20-ft-java-react/DasboardUsers"
+                <Link
+                  to="/dashboard-users"
                   className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
                 >
                   <RiWalkFill className="w-5 " />
                   <span className="text-white">Users</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/c12-20-ft-java-react/DashboardAdmins"
+                <Link
+                  to="/dashboard-admins"
                   className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
                 >
                   <RiAdminFill className="w-5 " />
                   <span className="text-white">Administrators</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/c12-20-ft-java-react/Classes"
+                <Link
+                  to="/dashboard-classes"
                   className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
                 >
                   <RiRidingFill className="w-5 " />
                   <span className="text-white">Classes</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/dashboard-payments"
                   className="flex items-center gap-4 p-2 hover:bg-gray-600 focus:bg-gray-600 transition-colors rounded-lg"
                 >
                   <RiMoneyDollarCircleFill className="w-5 " />
                   <span className="text-white">Payments</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
