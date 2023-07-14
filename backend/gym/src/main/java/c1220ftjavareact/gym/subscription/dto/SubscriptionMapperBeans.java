@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.user.dto.mapper;
+package c1220ftjavareact.gym.subscription.dto;
 
 import c1220ftjavareact.gym.subscription.dto.SubscriptionDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionMapper;
