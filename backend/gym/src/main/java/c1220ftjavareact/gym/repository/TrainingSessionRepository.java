@@ -7,6 +7,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface TrainingSessionRepository extends JpaRepository<TrainingSession, Long> {
 
-    @Query("SELECT ts.capacity FROM TrainingSession ts WHERE ts.id = :id")
-    Integer findCapacityById(@Param("id") Long id);
+
 }

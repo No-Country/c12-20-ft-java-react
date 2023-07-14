@@ -3,6 +3,8 @@ package c1220ftjavareact.gym.controller;
 import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
 import c1220ftjavareact.gym.service.interfaces.ITrainingSessionService;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +19,8 @@ import java.util.List;
  * correctamente los horarios disponibles en la vista
  */
 @RestController
-@RequestMapping(value = "api/v1/sessions")
+@RequestMapping(value = "/api/v1/sessions")
+@Slf4j
 public class TrainingSessionController {
 
     private final ITrainingSessionService iTrainingSessionService;
@@ -26,8 +29,9 @@ public class TrainingSessionController {
         this.iTrainingSessionService = iTrainingSessionService;
     }
 
-    @PostMapping(value="/create")
-    public ResponseEntity<TrainingSessionDTO> saveTrainingSession(TrainingSessionSaveDTO trainingSessionSaveDTO) {
+    @PostMapping(value = "/create")
+    public ResponseEntity<TrainingSessionDTO> saveTrainingSession(@RequestBody TrainingSessionSaveDTO trainingSessionSaveDTO) {
+        log.info("entro creatre");
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iTrainingSessionService.saveTrainingSession(trainingSessionSaveDTO));
     }
 
@@ -37,10 +41,24 @@ public class TrainingSessionController {
     }
 
     @GetMapping(value = "/find/{sessionId}")
-    public ResponseEntity<TrainingSessionDTO> getTrainingSessionsById( @PathVariable Long sessionId) {
+    public ResponseEntity<TrainingSessionDTO> getTrainingSessionsById(@PathVariable Long sessionId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getTrainingSessionById(sessionId));
     }
 
+    @GetMapping(value = "/activity/{activityId}")
+    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsByActivityId(@PathVariable Long activityId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByActivityId(activityId));
+    }
+
+    @GetMapping(value = "/room/{roomId}")
+    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsByRoomId(@PathVariable Long roomId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByRoomId(roomId));
+    }
+
+    @PutMapping(value = "/update/{sessionId}")
+    public ResponseEntity<TrainingSessionDTO> updateTrainingSessionById(@RequestBody TrainingSessionDTO updatedTraining, @PathVariable Long sessionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.updateTrainingSessionById(updatedTraining, sessionId));
+    }
 
 
 }

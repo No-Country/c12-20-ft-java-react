@@ -12,4 +12,6 @@ public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity
     @Query("SELECT COUNT(s) FROM SubscriptionEntity s WHERE s.training.id = :trainingSessionId")
     Integer countByTrainingSessionId(@Param("trainingSessionId") Long trainingSessionId);
 
+
+
 }

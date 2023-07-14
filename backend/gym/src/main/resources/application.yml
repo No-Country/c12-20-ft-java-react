@@ -42,5 +42,12 @@ spring:
         format_sql: true
   mail:
     username: marcoslopezdev18@gmail.com
-  jwt:
-    secret: yGhqRjT4eibeqKq25Ps5DM2pWUdkVhPS
+  security:
+    oauth2:
+      client:
+        google:
+          clientId: 320929967348-eor0sq7ja2gkem00m6i09rue80ar49s2.apps.googleusercontent.com
+          clientSecret: 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
+    jwt:
+      secret: yGhqRjT4eibeqKq25Ps5DM2pWUdkVhPS
+

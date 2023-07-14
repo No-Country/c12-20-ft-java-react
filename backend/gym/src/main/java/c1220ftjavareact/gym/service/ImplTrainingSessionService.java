@@ -2,10 +2,11 @@ package c1220ftjavareact.gym.service;
 
 import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
+import c1220ftjavareact.gym.repository.TrainingSessionRepository;
 import c1220ftjavareact.gym.repository.entity.Activity;
 import c1220ftjavareact.gym.repository.entity.Room;
 import c1220ftjavareact.gym.repository.entity.TrainingSession;
-import c1220ftjavareact.gym.repository.TrainingSessionRepository;
 import c1220ftjavareact.gym.service.interfaces.IActivityService;
 import c1220ftjavareact.gym.service.interfaces.IRoomService;
 import c1220ftjavareact.gym.service.interfaces.ITrainingSessionService;
@@ -40,12 +41,12 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         TrainingSession savedTraining = mapper.map(trainingSession, TrainingSession.class);
 
         /// Activity
-        Optional<Activity> activity = iActivityService.getActivityById(trainingSession.getActivityId());
-        savedTraining.setActivity(activity.get());
+        Activity activity = iActivityService.getActivityById(trainingSession.getActivityId());
+        savedTraining.setActivity(activity);
 
         /// Room
-        Optional<Room> room = iRoomService.getRoomById(trainingSession.getRoomId());
-        savedTraining.setRoom(room.get());
+        Room room = iRoomService.getRoomById(trainingSession.getRoomId());
+        savedTraining.setRoom(room);
 
         /// Persistence
         savedTraining = trainingSessionRepository.save(savedTraining);
@@ -63,43 +64,73 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
     @Override
     public List<TrainingSessionDTO> getAllByActivityId(Long activityId) {
-        return null;
+        List<TrainingSession> listSessions = iActivityService.getActivityById(activityId).getTrainingSession();
+        return this.convertEntityList(listSessions);
     }
 
     @Override
     public List<TrainingSessionDTO> getAllByRoomId(Long roomId) {
-        return null;
+        List<TrainingSession> listSessions = iRoomService.getRoomById(roomId).getTrainingSession();
+        return this.convertEntityList(listSessions);
     }
 
 
     @Override
     public TrainingSessionDTO getTrainingSessionById(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
-        if(trainingSession.isEmpty()) {
-            /// exception
+        if (trainingSession.isEmpty()) {
         }
 
-        TrainingSessionDTO dto = mapper.map(trainingSession,TrainingSessionDTO.class);
-
+        TrainingSessionDTO dto = mapper.map(trainingSession.get(), TrainingSessionDTO.class);
         return dto;
     }
 
-    /// Obtener entidad de training session
     @Override
     public TrainingSession getTrainingEntity(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
-        if(trainingSession.isEmpty()) {
-            /// throw exception
+        if (trainingSession.isEmpty()) {
         }
 
         return trainingSession.get();
     }
 
 
+
     @Override
     @Transactional
     public TrainingSessionDTO updateTrainingSessionById(TrainingSessionDTO updateSession, Long id) {
-        return null;
+
+        Optional<TrainingSession> optionalEntity = trainingSessionRepository.findById(id);
+        if (optionalEntity.isEmpty()) {
+            /// throw exception
+        }
+
+        /// actualizar atributos
+        TrainingSession aux = mapper.map(updateSession, TrainingSession.class);
+        TrainingSession trainingEntity = optionalEntity.get();
+        trainingEntity.setCapacity(aux.getCapacity());
+        trainingEntity.setTimeEnd(aux.getTimeEnd());
+        trainingEntity.setTimeStart(aux.getTimeStart());
+        trainingEntity.setMonday(aux.isMonday());
+        trainingEntity.setFriday(aux.isFriday());
+        trainingEntity.setSunday(aux.isSunday());
+        trainingEntity.setSaturday(aux.isSaturday());
+        trainingEntity.setThursday(aux.isThursday());
+        trainingEntity.setTuesday(aux.isTuesday());
+        trainingEntity.setWednesday(aux.isWednesday());
+
+        /// Activity
+        Activity activity = iActivityService.getActivityById(updateSession.getActivityId());
+        trainingEntity.setActivity(activity);
+
+        /// Room
+        Room room = iRoomService.getRoomById(updateSession.getRoomId());
+        trainingEntity.setRoom(room);
+
+        trainingEntity = trainingSessionRepository.save(trainingEntity);
+        TrainingSessionDTO dto = mapper.map(trainingEntity, TrainingSessionDTO.class);
+
+        return dto;
     }
 
     @Override
@@ -110,14 +141,18 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
     @Override
     public Integer getCapacity(Long id) {
-        return trainingSessionRepository.findCapacityById(id);
+        TrainingSessionDTO trainingSessionDTO = getTrainingSessionById(id);
+        if (trainingSessionDTO == null) {
+            return null;
+        }
+        return trainingSessionDTO.getCapacity();
     }
 
     private List<TrainingSessionDTO> convertEntityList(List<TrainingSession> entityList) {
         List<TrainingSessionDTO> listDTO = new ArrayList<>();
 
-        for(TrainingSession item : entityList) {
-            TrainingSessionDTO aux = mapper.map(item,TrainingSessionDTO.class);
+        for (TrainingSession item : entityList) {
+            TrainingSessionDTO aux = mapper.map(item, TrainingSessionDTO.class);
             listDTO.add(aux);
         }
 

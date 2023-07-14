@@ -1,20 +1,21 @@
 package c1220ftjavareact.gym.service.interfaces;
 
-import c1220ftjavareact.gym.domain.dto.RoomInDto;
+import c1220ftjavareact.gym.domain.dto.RoomDto;
 import c1220ftjavareact.gym.repository.entity.Room;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IRoomService {
-    public Room create(RoomInDto roomInDto);
+    public RoomDto create(RoomDto roomDto);
 
     public void delete(Long id);
 
-    public Room updateRoom(Long id, Room room);
+    public RoomDto updateRoom(Long id, RoomDto roomDto);
 
-    public List<Room> getAllRooms();
+    public List<RoomDto> getAllRooms();
 
-    public Optional<Room> getRoomById(Long id);
+    public Room getRoomById(Long id);
+
+    public RoomDto getRoomDtoById(Long id);
 
 }

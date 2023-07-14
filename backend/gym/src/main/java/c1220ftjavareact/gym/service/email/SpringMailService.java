@@ -1,8 +1,6 @@
 package c1220ftjavareact.gym.service.email;
 
-import c1220ftjavareact.gym.domain.exception.CustomIllegalArgsException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,10 +31,9 @@ public class SpringMailService implements MailService {
     /**
      * Envia un Email
      *
-     * @param to Email al que va dirigido
-     * @param subject Titulo/Asunto del Email
+     * @param to          Email al que va dirigido
+     * @param subject     Titulo/Asunto del Email
      * @param textMessage Template del cuerpo del email
-     *
      * @return Estado de envio del correo
      */
     @Override
@@ -48,22 +45,18 @@ public class SpringMailService implements MailService {
     /**
      * Envia un Email
      *
-     * @param to Email al que va dirigido
-     * @param subject Titulo/Asunto del Email
+     * @param to          Email al que va dirigido
+     * @param subject     Titulo/Asunto del Email
      * @param textMessage Template del cuerpo del email
      * @param attachments Archivos a enviar
-     *
      * @return Estado de envio del correo
      */
     @Override
     public Boolean send(final String to, final String subject, final String textMessage, File... attachments) {
         var send = false;
-        Assert.hasLength( to, ()-> {
-            throw new CustomIllegalArgsException("Error al enviar el email","Verifica que los valores no sean nulos","to: "+to);});
-        Assert.hasLength( subject, ()-> {
-            throw new CustomIllegalArgsException("Error al enviar el email","Verifica que los valores no sean nulos", "subject: "+subject);});
-        Assert.hasLength( textMessage, ()-> {
-            throw new CustomIllegalArgsException("Error al enviar el email","Verifica que los valores no sean nulos",to);});
+        Assert.hasLength(to, () ->  "Verifica que los valores no sean nulos, to is: "+to );
+        Assert.hasLength(subject, () -> "Verifica que los valores no sean nulos, subject is: "+subject );
+        Assert.hasLength(textMessage, () -> "Verifica que los valores no sean nulos");
 
         final MimeMessage message = sender.createMimeMessage();
         try {
@@ -98,7 +91,6 @@ public class SpringMailService implements MailService {
      * Ejecuta el template y se pasan los valores para remplazar en el template
      *
      * @param values Valores dentro del template
-     *
      * @return Template del Email
      */
     @Override

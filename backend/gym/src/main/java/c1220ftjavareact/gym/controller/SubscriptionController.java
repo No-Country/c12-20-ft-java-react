@@ -3,6 +3,7 @@ package c1220ftjavareact.gym.controller;
 import c1220ftjavareact.gym.domain.dto.SubscriptionDTO;
 import c1220ftjavareact.gym.service.interfaces.ITrainingSessionService;
 import c1220ftjavareact.gym.service.interfaces.SubscriptionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/subscriptions")
+@Slf4j
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
     private final ITrainingSessionService trainingSessionRepository;
@@ -22,7 +24,7 @@ public class SubscriptionController {
 
     @PostMapping
     public ResponseEntity<SubscriptionDTO> createSubscription(@RequestBody SubscriptionDTO subscriptionDTO) {
-        Long trainingSessionId = subscriptionDTO.getIdTrainingSession();
+        Long trainingSessionId = subscriptionDTO.idTrainingSession();
 
         // Obtener la cantidad de training sessions con el mismo ID
         Integer countTrainingSessions = subscriptionService.getCountTrainingSession(trainingSessionId);
@@ -35,11 +37,17 @@ public class SubscriptionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
+        // Verificar si customer_id es nulo
+        if (subscriptionDTO.customerId() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
         // Lógica para crear la suscripción
         SubscriptionDTO createdSubscription = subscriptionService.createSubscription(subscriptionDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSubscription);
     }
+
 
 
     @PutMapping("/{id}")

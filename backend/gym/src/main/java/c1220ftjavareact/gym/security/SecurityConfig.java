@@ -38,12 +38,18 @@ public class SecurityConfig {
         http.exceptionHandling().authenticationEntryPoint(entryPoint);
 
         http.authorizeRequests(configurer -> configurer
-                .antMatchers(HttpMethod.POST, "/api/v1/customers").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/authentication").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/admins/create").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users/customers").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users/customers/google").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users/admins").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users/authentication").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users/authentication/google").permitAll()
                 .antMatchers("/api/v1/passwords/**").permitAll()
                 //esto es para que mi enpoind poderusarlo sin necesisda de usar token ni logearme
                 .antMatchers("/subscriptions/**").permitAll()
+                .antMatchers("/api/v1/activities/**").permitAll()
+                .antMatchers("/api/v1/sessions/**").permitAll()
+                .antMatchers("/api/v1/rooms/**").permitAll()
+
                 .anyRequest().authenticated()
         );
 

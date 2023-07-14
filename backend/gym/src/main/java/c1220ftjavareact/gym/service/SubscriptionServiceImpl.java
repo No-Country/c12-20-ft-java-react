@@ -17,33 +17,37 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
-    private final SubscriptionMapper subscriptionMapper;
     private final UserMapperBeans userMapper;
     private final UserService userService;
     private final ITrainingSessionService trainingSessionService;
+    private final SubscriptionMapper<SubscriptionDTO, SubscriptionEntity> subscriptionSaveToUserEntityMapper;
+    private final SubscriptionMapper<SubscriptionEntity,SubscriptionDTO> subscriptionSaveToUserDtoMapper;
+
 
     @Override
     public SubscriptionDTO createSubscription(SubscriptionDTO subscriptionDTO) {
-        SubscriptionEntity subscription = subscriptionMapper.convertToEntity(subscriptionDTO);
+
+        SubscriptionEntity subscription = subscriptionSaveToUserEntityMapper.map(subscriptionDTO);
+
         SubscriptionEntity savedSubscription = subscriptionRepository.save(subscription);
-        return subscriptionMapper.convertToDto(savedSubscription);
+        return subscriptionSaveToUserDtoMapper.map(savedSubscription);
     }
 
 
     @Override
     public SubscriptionDTO updateSubscription(Long id, SubscriptionDTO subscriptionDTO) {
         SubscriptionEntity subscription = subscriptionRepository.findById(id).orElse(null);
-        UserEntity user = userMapper.userToUserEntity().map(userService.findUserById(subscriptionDTO.getIdClient().toString()));
-        TrainingSession trainingSession = trainingSessionService.getTrainingEntity(subscriptionDTO.getIdClass());
+        UserEntity user = userMapper.userToUserEntity().map(userService.findUserById(subscriptionDTO.customerId().toString()));
+        TrainingSession trainingSession = trainingSessionService.getTrainingEntity(subscriptionDTO.idTrainingSession());
 
 
         if (subscription != null) {
             subscription.setIdCustomer(user);
             subscription.setTraining(trainingSession);
-            subscription.setState(subscriptionDTO.getState());
-            subscription.setSubscriptionDay(subscriptionDTO.getSubscriptionDay());
+            subscription.setState(subscriptionDTO.state());
+            subscription.setSubscriptionDay(subscriptionDTO.subscriptionDay());
             SubscriptionEntity updatedSubscription = subscriptionRepository.save(subscription);
-            return subscriptionMapper.convertToDto(updatedSubscription);
+            return subscriptionSaveToUserDtoMapper.map(updatedSubscription);
         }
         return null;
     }
@@ -62,7 +66,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public SubscriptionDTO getSubscriptionById(Long id) {
         SubscriptionEntity subscription = subscriptionRepository.findById(id).orElse(null);
         if (subscription != null) {
-            return subscriptionMapper.convertToDto(subscription);
+            return subscriptionSaveToUserDtoMapper.map(subscription);
         }
         return null;
     }

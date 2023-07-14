@@ -2,14 +2,20 @@ package c1220ftjavareact.gym.repository.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "subscription")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubscriptionEntity {
 
     @Id
@@ -18,17 +24,17 @@ public class SubscriptionEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "id_customer")
+    @JoinColumn(name = "customer_id")
     UserEntity idCustomer;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "id_training_session")
+    @JoinColumn(name = "training_session_id")
     TrainingSession training;
     @NotNull
     State state;
     @NotNull
-    @Column(name = "subscription_day")
-    LocalDateTime subscriptionDay;
+    @Column(name = "create_date")
+    LocalDate subscriptionDay;
 
 
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActivityInDto {
+public class ActivityDto {
     private String name;
+    private String description;
 }
