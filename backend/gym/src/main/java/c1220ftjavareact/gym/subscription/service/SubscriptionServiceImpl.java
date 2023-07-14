@@ -4,7 +4,7 @@ import c1220ftjavareact.gym.subscription.dto.SubscriptionDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionMapper;
 import c1220ftjavareact.gym.subscription.entity.SubscriptionEntity;
 import c1220ftjavareact.gym.subscription.repository.SubscriptionRepository;
-import c1220ftjavareact.gym.user.dto.UserMapperBeans;
+import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.training.service.ITrainingSessionService;

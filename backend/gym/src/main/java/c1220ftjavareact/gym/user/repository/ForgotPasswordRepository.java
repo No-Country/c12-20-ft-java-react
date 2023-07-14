@@ -1,6 +1,6 @@
-package c1220ftjavareact.gym.password.repository;
+package c1220ftjavareact.gym.user.repository;
 
-import c1220ftjavareact.gym.password.entity.ForgotPasswordEntity;
+import c1220ftjavareact.gym.user.entity.ForgotPasswordEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.user.email;
+package c1220ftjavareact.gym.email;
 
 /**
  * Interfaz que para aplicar el patron Strategy a los template

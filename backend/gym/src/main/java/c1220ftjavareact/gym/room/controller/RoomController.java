@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.room.controller;
 
-import c1220ftjavareact.gym.room.dto.RoomDto;
+import c1220ftjavareact.gym.room.dto.RoomSaveDto;
+import c1220ftjavareact.gym.room.dto.RoomWithIdDto;
 import c1220ftjavareact.gym.room.service.IRoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class RoomController {
     }
 
     @PostMapping
-    public ResponseEntity<RoomDto> create(@RequestBody RoomDto roomDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.iroomService.create(roomDto));
+    public ResponseEntity<RoomSaveDto> create(@RequestBody RoomSaveDto roomSaveDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.iroomService.create(roomSaveDto));
     }
 
     @DeleteMapping("/{id}")
@@ -30,17 +31,17 @@ public class RoomController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RoomDto> updateRoom(@PathVariable("id") long id, @RequestBody RoomDto roomDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.iroomService.updateRoom(id, roomDto));
+    public ResponseEntity<RoomSaveDto> updateRoom(@PathVariable("id") long id, @RequestBody RoomSaveDto roomSaveDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.iroomService.updateRoom(id, roomSaveDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<RoomDto>> getAllDtoRoom() {
+    public ResponseEntity<List<RoomWithIdDto>> getAllDtoRoom() {
         return ResponseEntity.status(HttpStatus.OK).body(this.iroomService.getAllRooms());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RoomDto> getRoomDto(@PathVariable("id") Long id) {
+    public ResponseEntity<RoomWithIdDto> getRoomDto(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iroomService.getRoomDtoById(id));
     }
 }

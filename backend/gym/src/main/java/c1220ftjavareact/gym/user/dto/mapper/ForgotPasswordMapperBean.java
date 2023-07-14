@@ -1,8 +1,8 @@
-package c1220ftjavareact.gym.password.dto;
+package c1220ftjavareact.gym.user.dto.mapper;
 
 import c1220ftjavareact.gym.user.entity.UserEntity;
-import c1220ftjavareact.gym.password.entity.ForgotPasswordEntity;
-import c1220ftjavareact.gym.password.model.ForgotPassword;
+import c1220ftjavareact.gym.user.entity.ForgotPasswordEntity;
+import c1220ftjavareact.gym.user.model.ForgotPassword;
 import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -1,7 +1,7 @@
-package c1220ftjavareact.gym.password.service;
+package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.password.model.ForgotPassword;
-import c1220ftjavareact.gym.security.dto.UserPasswordDTO;
+import c1220ftjavareact.gym.user.model.ForgotPassword;
+import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
 
 import java.time.LocalDateTime;
 import java.util.Map;

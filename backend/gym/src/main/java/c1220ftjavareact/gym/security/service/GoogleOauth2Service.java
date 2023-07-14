@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.security.jwt;
+package c1220ftjavareact.gym.security.service;
 
 import c1220ftjavareact.gym.security.dto.UserGoogleDTO;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;

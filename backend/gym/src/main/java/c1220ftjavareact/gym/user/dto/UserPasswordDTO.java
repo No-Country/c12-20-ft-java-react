@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.security.dto;
+package c1220ftjavareact.gym.user.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;

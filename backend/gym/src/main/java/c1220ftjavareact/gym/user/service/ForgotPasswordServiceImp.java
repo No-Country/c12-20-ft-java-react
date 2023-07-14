@@ -1,14 +1,13 @@
-package c1220ftjavareact.gym.password.service;
+package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.password.dto.ForgotPasswordMapperBean;
-import c1220ftjavareact.gym.password.exception.UpdatePasswordException;
-import c1220ftjavareact.gym.password.model.ForgotPassword;
-import c1220ftjavareact.gym.password.repository.ForgotPasswordRepository;
-import c1220ftjavareact.gym.security.dto.UserPasswordDTO;
-import c1220ftjavareact.gym.user.dto.UserMapperBeans;
+import c1220ftjavareact.gym.user.dto.mapper.ForgotPasswordMapperBean;
+import c1220ftjavareact.gym.user.exception.UpdatePasswordException;
+import c1220ftjavareact.gym.user.model.ForgotPassword;
+import c1220ftjavareact.gym.user.repository.ForgotPasswordRepository;
+import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
+import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.common.ResourceNotFoundException;
 import c1220ftjavareact.gym.user.model.User;
-import c1220ftjavareact.gym.user.service.UserService;
 import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

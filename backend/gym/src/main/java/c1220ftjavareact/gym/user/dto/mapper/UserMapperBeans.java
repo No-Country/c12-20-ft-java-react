@@ -1,6 +1,8 @@
-package c1220ftjavareact.gym.user.dto;
+package c1220ftjavareact.gym.user.dto.mapper;
 
 import c1220ftjavareact.gym.security.dto.UserGoogleDTO;
+import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
+import c1220ftjavareact.gym.user.dto.UserSaveDTO;
 import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.user.enums.Role;
 import c1220ftjavareact.gym.user.model.User;

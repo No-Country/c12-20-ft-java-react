@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.user.dto.UserMapperBeans;
+import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.user.dto.UserSaveDTO;
 import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
 import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;

@@ -5,9 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class RoomDto {
+@NoArgsConstructor
+public class RoomWithIdDto {
+    private Long id;
     private String name;
     private int maxCapacity;
 }
