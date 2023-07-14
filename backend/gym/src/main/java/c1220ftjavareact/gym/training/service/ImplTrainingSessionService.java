@@ -37,8 +37,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     @Transactional
     public TrainingSessionDTO saveTrainingSession(TrainingSessionSaveDTO trainingSession) {
-        System.out.println("Objeto en servicio (ENTRADA): " + trainingSession);
-
         /// Verificar si existe Activity
         Activity activity = iActivityService.getActivityById(trainingSession.getActivityId());
 
@@ -50,13 +48,9 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
             throw new TrainingException("Capacity out of room range", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        System.out.println("Objeto en servicio (ANTES DE ROOM): " + trainingSession);
-
         /// obtener sesiones en un room y conservar no borradas
         List<TrainingSession> sessionsAtRoom = room.getTrainingSession();
         sessionsAtRoom = this.filterSessions(sessionsAtRoom);
-
-        System.out.println("Objeto en servicio (DESPUES DE ROOM): " + trainingSession);
 
         /// verificar por dias
         if (this.verifyRoomAvailable(trainingSession)) {
@@ -70,7 +64,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
             savedTraining.setRoom(room);
 
             /// Persistence
-            System.out.println("Objeto en servicio (SALIENDO DE IF): " + trainingSession);
             savedTraining = trainingSessionRepository.save(savedTraining);
             TrainingSessionDTO dto = mapper.map(savedTraining, TrainingSessionDTO.class);
 

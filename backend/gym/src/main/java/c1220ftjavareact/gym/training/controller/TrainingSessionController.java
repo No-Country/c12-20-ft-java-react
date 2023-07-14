@@ -28,7 +28,6 @@ public class TrainingSessionController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<TrainingSessionDTO> saveTrainingSession(@RequestBody TrainingSessionSaveDTO trainingSessionSaveDTO) {
-        System.out.println("Objeto en controlador: " + trainingSessionSaveDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iTrainingSessionService.saveTrainingSession(trainingSessionSaveDTO));
     }
 
