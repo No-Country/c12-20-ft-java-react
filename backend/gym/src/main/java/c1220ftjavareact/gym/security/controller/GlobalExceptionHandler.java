@@ -27,7 +27,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handler de Exception
      */
-    @ExceptionHandler(Exception.class)
+/*    @ExceptionHandler(Exception.class)
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(Exception ex) {
         var errorDetails = ExceptionDTO.builder()
                 .title("Excepcion no manejada")
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
+    }*/
 
     @ExceptionHandler(ApiException.class)
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ApiException ex) {

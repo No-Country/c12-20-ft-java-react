@@ -42,8 +42,10 @@ public class TrainingSession {
     private Room room;
 
     /// descomentar cuando este la relacion con subscription
-    /*@JoinColumn(name = "id_training_session", referencedColumnName = "id")
+    /*
+    @JoinColumn(name = "id_training_session", referencedColumnName = "id")
     @OneToMany
-    private List<Subscription> subscriptions;*/
+    private List<Subscription> subscriptions;
+    */
 
 }
