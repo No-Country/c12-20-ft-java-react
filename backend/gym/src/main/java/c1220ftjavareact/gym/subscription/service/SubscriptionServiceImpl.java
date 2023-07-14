@@ -11,6 +11,7 @@ import c1220ftjavareact.gym.training.service.ITrainingSessionService;
 import c1220ftjavareact.gym.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -71,6 +72,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     //cuenta todos los traingin session por id que le pasas
+    @Transactional(readOnly = true)
     @Override
     public Integer getCountTrainingSession(Long id) {
         return  subscriptionRepository.countByTrainingSessionId(id);

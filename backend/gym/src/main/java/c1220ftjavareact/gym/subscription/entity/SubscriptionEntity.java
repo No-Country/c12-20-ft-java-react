@@ -21,24 +21,24 @@ public class SubscriptionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "customer_id")
-    UserEntity idCustomer;
+    private UserEntity idCustomer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @ToString.Exclude
-    @JsonIgnore
     @JoinColumn(name = "training_session_id")
-    TrainingSession training;
+    private TrainingSession training;
 
-    @NotNull
-    State state;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state", columnDefinition = "enum('RESERVED', 'ACTIVE', 'INACTIVE', 'CANCELED')")
+    private State state;
+
     @NotNull
     @Column(name = "create_date")
-    LocalDate subscriptionDay;
-
-
+    private LocalDate subscriptionDay;
 }

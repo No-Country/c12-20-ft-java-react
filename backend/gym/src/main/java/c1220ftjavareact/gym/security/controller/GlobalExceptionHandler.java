@@ -27,7 +27,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handler de Exception
      */
-/*    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(Exception ex) {
         var errorDetails = ExceptionDTO.builder()
                 .title("Excepcion no manejada")
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }*/
+    }
 
     @ExceptionHandler(ApiException.class)
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ApiException ex) {
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Handler de ResourceAlreadyExistsException
      */
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public HttpEntity<ExceptionDTO> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, WebRequest webRequest) {
+    public HttpEntity<ExceptionDTO> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
         var errorDetails = ExceptionDTO.builder()
                 .title(ex.getTitle())
                 .detail(ex.getMessage())
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Handler de ResourceNotFoundException
      */
     @ExceptionHandler(ResourceNotFoundException.class)
-    public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest webRequest) {
+    public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
         var errorDetails = ExceptionDTO.builder()
                 .title(ex.getTitle())
                 .detail(ex.getMessage())

@@ -4,6 +4,7 @@ import c1220ftjavareact.gym.activity.entity.Activity;
 import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.subscription.entity.SubscriptionEntity;
 import c1220ftjavareact.gym.subscription.model.Subscription;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -43,14 +44,16 @@ public class TrainingSession {
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @ToString.Exclude
     @JsonIgnore
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @OneToMany
+    @ToString.Exclude
+    @JsonBackReference
     @JoinColumn(name = "training_session_id", referencedColumnName = "id")
-    @OneToMany(fetch = FetchType.EAGER)
     private List<SubscriptionEntity> subscription;
 
 

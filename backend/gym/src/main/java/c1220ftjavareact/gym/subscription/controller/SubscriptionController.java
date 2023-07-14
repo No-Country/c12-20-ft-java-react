@@ -2,6 +2,7 @@ package c1220ftjavareact.gym.subscription.controller;
 
 
 import c1220ftjavareact.gym.training.service.ITrainingSessionService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionDTO;
 import c1220ftjavareact.gym.subscription.service.SubscriptionService;
@@ -13,15 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/subscriptions")
 @Slf4j
+@RequiredArgsConstructor
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
     private final ITrainingSessionService trainingSessionRepository;
-
-    @Autowired
-    public SubscriptionController(SubscriptionService subscriptionService,ITrainingSessionService trainingSessionService) {
-        this.subscriptionService = subscriptionService;
-        this.trainingSessionRepository = trainingSessionService;
-    }
 
     @PostMapping
     public ResponseEntity<SubscriptionDTO> createSubscription(@RequestBody SubscriptionDTO subscriptionDTO) {
