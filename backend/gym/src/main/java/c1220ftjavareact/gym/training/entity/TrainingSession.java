@@ -29,6 +29,7 @@ public class TrainingSession {
     private boolean friday;
     private boolean saturday;
     private boolean sunday;
+    private boolean deleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
@@ -41,8 +42,10 @@ public class TrainingSession {
     private Room room;
 
     /// descomentar cuando este la relacion con subscription
-    /*@JoinColumn(name = "id_training_session", referencedColumnName = "id")
+    /*
+    @JoinColumn(name = "id_training_session", referencedColumnName = "id")
     @OneToMany
-    private List<Subscription> subscriptions;*/
+    private List<Subscription> subscriptions;
+    */
 
 }

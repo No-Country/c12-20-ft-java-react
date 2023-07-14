@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/passwords/**").permitAll()
                 .antMatchers("/api/v1/activities/**").permitAll()
                 .antMatchers("/api/v1/rooms/**").permitAll()
+                .antMatchers("/api/v1/sessions/**").permitAll()
                 .anyRequest().authenticated()
         );
 
