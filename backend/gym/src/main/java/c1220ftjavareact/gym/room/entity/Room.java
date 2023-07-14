@@ -27,7 +27,7 @@ public class Room implements Serializable {
     private int maxCapacity;
 
     @JoinColumn(name = "room_id", referencedColumnName = "id")
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<TrainingSession> trainingSession;
 
 }

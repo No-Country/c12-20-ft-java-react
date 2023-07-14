@@ -4,8 +4,6 @@ import c1220ftjavareact.gym.training.dto.AvailableTimesDTO;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
-import org.mapstruct.Qualifier;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

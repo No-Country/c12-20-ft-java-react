@@ -2,21 +2,21 @@ package c1220ftjavareact.gym.training.entity;
 
 import c1220ftjavareact.gym.activity.entity.Activity;
 import c1220ftjavareact.gym.room.entity.Room;
+import c1220ftjavareact.gym.subscription.entity.SubscriptionEntity;
+import c1220ftjavareact.gym.subscription.model.Subscription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.util.List;
 
 
 @Entity
-@Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Table(name = "training_session")
 public class TrainingSession {
 
@@ -37,21 +37,21 @@ public class TrainingSession {
     private boolean sunday;
     private boolean deleted;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @ToString.Exclude
     @JsonIgnore
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @ToString.Exclude
     @JsonIgnore
     @JoinColumn(name = "room_id")
     private Room room;
 
-    /// descomentar cuando este la relacion con subscription
-    /*
-    @JoinColumn(name = "id_training_session", referencedColumnName = "id")
-    @OneToMany
-    private List<Subscription> subscriptions;
-    */
+    @JoinColumn(name = "training_session_id", referencedColumnName = "id")
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<SubscriptionEntity> subscription;
+
 
 }

@@ -10,12 +10,11 @@ import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.training.exception.TrainingException;
 import c1220ftjavareact.gym.training.repository.TrainingSessionRepository;
-import org.mapstruct.Qualifier;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,7 +54,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
         /// verificar por dias
         if (this.verifyRoomAvailable(trainingSession)) {
-            System.out.println("Objeto en servicio (ENTRANDO A IF): " + trainingSession);
             TrainingSession savedTraining = mapper.map(trainingSession, TrainingSession.class);
 
             /// Relacion Activity
@@ -101,11 +99,12 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     public TrainingSessionDTO getTrainingSessionById(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
+        TrainingSession aux = trainingSession.get();
         if (trainingSession.isEmpty() || trainingSession.get().isDeleted()) {
             throw new TrainingException("Training session not found", HttpStatus.NOT_FOUND);
         }
 
-        TrainingSessionDTO dto = mapper.map(trainingSession, TrainingSessionDTO.class);
+        TrainingSessionDTO dto = mapper.map(aux, TrainingSessionDTO.class);
         return dto;
     }
 
@@ -163,6 +162,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     }
 
     @Override
+    @Transactional
     public Integer getCapacity(Long id) {
         return trainingSessionRepository.getReferenceById(id).getCapacity();
     }
@@ -200,6 +200,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         List<TrainingSessionDTO> listDTO = new ArrayList<>();
 
         for (TrainingSession item : entityList) {
+            System.out.println("PRUEBA:" + item);
             TrainingSessionDTO aux = mapper.map(item, TrainingSessionDTO.class);
             listDTO.add(aux);
         }
