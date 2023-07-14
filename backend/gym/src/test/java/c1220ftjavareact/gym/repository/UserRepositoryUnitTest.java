@@ -1,8 +1,8 @@
 package c1220ftjavareact.gym.repository;
 
-import c1220ftjavareact.gym.repository.entity.Role;
-import c1220ftjavareact.gym.repository.entity.UserEntity;
-import org.assertj.core.api.Assertions;
+import c1220ftjavareact.gym.user.enums.Role;
+import c1220ftjavareact.gym.user.entity.UserEntity;
+import c1220ftjavareact.gym.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

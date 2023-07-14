@@ -1,7 +1,9 @@
 package c1220ftjavareact.gym.security.controller;
 
-import c1220ftjavareact.gym.domain.exception.*;
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import c1220ftjavareact.gym.common.ApiException;
+import c1220ftjavareact.gym.common.ExceptionDTO;
+import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
+import c1220ftjavareact.gym.common.ResourceNotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,102 +27,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handler de Exception
      */
-    @ExceptionHandler(Exception.class)
-    public HttpEntity<ErrorDTO> handleResourceNotFoundException(Exception ex) {
-        var errorDetails = ErrorDTO.builder()
-                .message(ex.getMessage())
-                .resolve(ex.toString())
-                .target(ex.getClass().getTypeName())
-                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+/*    @ExceptionHandler(Exception.class)
+    public HttpEntity<ExceptionDTO> handleResourceNotFoundException(Exception ex) {
+        var errorDetails = ExceptionDTO.builder()
+                .title("Excepcion no manejada")
+                .detail(ex.getMessage())
+                .type(ex.getClass().getTypeName())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
+    }*/
 
-    /**
-     * Handler de UserSaveException
-     */
-    @ExceptionHandler(UserSaveException.class)
-    public HttpEntity<ErrorDTO> handleUserSaveException(UserSaveException ex) {
-        var errorDetails = ErrorDTO.builder()
-                .message(ex.getMessage())
-                .resolve(ex.getResolve())
-                .target(ex.getLocalizedMessage())
-                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                .build();
-
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Handler de UpdatePasswordException
-     */
-    @ExceptionHandler(UpdatePasswordException.class)
-    public HttpEntity<ErrorDTO> handleUpdatePasswordException(UpdatePasswordException ex) {
-        var errorDetails = ErrorDTO.builder()
-                .message(ex.getMessage())
-                .resolve(ex.getResolve())
-                .target(ex.getTarget())
-                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                .build();
-
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Handler de UpdatePasswordException
-     */
-    @ExceptionHandler(CredentialException.class)
-    public HttpEntity<ErrorDTO> handleCredentialException(CredentialException ex) {
-        var errorDetails = ErrorDTO.builder()
-                .message(ex.getMessage())
-                .resolve(ex.getResolve())
-                .target(ex.getTarget())
-                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                .build();
-
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Handler de CustomIllegalArgsException, hereda de IllegalArgumentsException
-     */
-    @ExceptionHandler(CustomIllegalArgsException.class)
-    public HttpEntity<ErrorDTO> handleCustomIllegalArgsException(CustomIllegalArgsException ex) {
-        var errorDetails = ErrorDTO.builder()
-                .message(ex.getMessage())
-                .resolve(ex.getResolve())
-                .target(ex.getTarget())
-                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                .build();
-
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Handler de ValueInstantiationException
-     */
-    @ExceptionHandler(ValueInstantiationException.class)
-    public HttpEntity<ErrorDTO> handleValueInstantiationException(ValueInstantiationException ex) {
-        var errorDetails = ErrorDTO.builder()
-                .message(ex.getMessage())
-                .resolve(ex.getOriginalMessage())
-                .target(ex.getType().getTypeName())
-                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                .build();
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Handler de IOException
-     */
-    @ExceptionHandler(IOException.class)
-    public HttpEntity<ErrorDTO> handleIOException(IOException ex) {
-        var errorDetails = ErrorDTO.builder()
-                .message(ex.getMessage())
-                .resolve(ex.getLocalizedMessage())
-                .target(ex.getClass().getTypeName())
-                .status(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+    @ExceptionHandler(ApiException.class)
+    public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ApiException ex) {
+        var errorDetails = ExceptionDTO.builder()
+                .title(ex.getTitle())
+                .detail(ex.getMessage())
+                .type(ex.getClass().getTypeName())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
@@ -131,12 +55,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Handler de ResourceAlreadyExistsException
      */
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public HttpEntity<ErrorDTO> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, WebRequest webRequest) {
-        var errorDetails = ErrorDTO.builder()
-                .message(ex.getMessage())
-                .resolve(ex.getResolve())
-                .target(ex.getTarget())
-                .status(String.valueOf(HttpStatus.CONFLICT.value()))
+    public HttpEntity<ExceptionDTO> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, WebRequest webRequest) {
+        var errorDetails = ExceptionDTO.builder()
+                .title(ex.getTitle())
+                .detail(ex.getMessage())
+                .type(ex.getClass().getTypeName())
+                .status(HttpStatus.CONFLICT.value())
                 .build();
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
@@ -145,12 +69,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Handler de ResourceNotFoundException
      */
     @ExceptionHandler(ResourceNotFoundException.class)
-    public HttpEntity<ErrorDTO> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest webRequest) {
-        var errorDetails = ErrorDTO.builder()
-                .message(ex.getMessage())
-                .resolve(ex.getResolve())
-                .target(ex.getTarget())
-                .status(String.valueOf(HttpStatus.NOT_FOUND.value()))
+    public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest webRequest) {
+        var errorDetails = ExceptionDTO.builder()
+                .title(ex.getTitle())
+                .detail(ex.getMessage())
+                .type(ex.getClass().getTypeName())
+                .status(HttpStatus.NOT_FOUND.value())
                 .build();
 
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);

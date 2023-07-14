@@ -1,15 +1,15 @@
 package c1220ftjavareact.gym.service;
 
-import c1220ftjavareact.gym.domain.dto.TrainingSessionDTO;
-import c1220ftjavareact.gym.domain.dto.TrainingSessionSaveDTO;
-import c1220ftjavareact.gym.domain.exception.ResourceNotFoundException;
+import c1220ftjavareact.gym.activity.entity.Activity;
+import c1220ftjavareact.gym.activity.service.IActivityService;
 import c1220ftjavareact.gym.repository.TrainingSessionRepository;
-import c1220ftjavareact.gym.repository.entity.Activity;
-import c1220ftjavareact.gym.repository.entity.Room;
-import c1220ftjavareact.gym.repository.entity.TrainingSession;
-import c1220ftjavareact.gym.service.interfaces.IActivityService;
-import c1220ftjavareact.gym.service.interfaces.IRoomService;
-import c1220ftjavareact.gym.service.interfaces.ITrainingSessionService;
+import c1220ftjavareact.gym.room.entity.Room;
+import c1220ftjavareact.gym.room.service.IRoomService;
+import c1220ftjavareact.gym.training.dto.AvailableTimesDTO;
+import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
+import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.training.entity.TrainingSession;
+import c1220ftjavareact.gym.training.service.ITrainingSessionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -135,8 +135,19 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
     @Override
     @Transactional
-    public void removeTrainingSessionById(Long id) {
+    public TrainingSessionDTO removeTrainingSessionById(Long id) {
 
+        return null;
+    }
+
+    @Override
+    public AvailableTimesDTO getAvailableTimes() {
+        return null;
+    }
+
+    @Override
+    public AvailableTimesDTO getUnavailableTimes() {
+        return null;
     }
 
     @Override

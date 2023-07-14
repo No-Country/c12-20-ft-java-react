@@ -1,18 +1,17 @@
 package c1220ftjavareact.gym.security.controller;
 
-import c1220ftjavareact.gym.domain.dto.EmployeeSaveDTO;
-import c1220ftjavareact.gym.domain.dto.UserSaveDTO;
-import c1220ftjavareact.gym.domain.mapper.UserMapperBeans;
+import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
+import c1220ftjavareact.gym.user.dto.UserSaveDTO;
+import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.events.event.UserCreatedEvent;
-import c1220ftjavareact.gym.security.jwt.GoogleOauth2Service;
+import c1220ftjavareact.gym.security.service.GoogleOauth2Service;
 import c1220ftjavareact.gym.security.jwt.JwtService;
 import c1220ftjavareact.gym.security.service.AuthService;
-import c1220ftjavareact.gym.service.email.UserCreatedStrategy;
-import c1220ftjavareact.gym.service.interfaces.UserService;
+import c1220ftjavareact.gym.email.UserCreatedStrategy;
+import c1220ftjavareact.gym.user.service.UserService;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.UUID;
