@@ -1,9 +1,9 @@
 package c1220ftjavareact.gym.activity.service;
 
-import c1220ftjavareact.gym.activity.dto.ActivityDto;
+import c1220ftjavareact.gym.activity.dto.ActivitySaveDto;
+import c1220ftjavareact.gym.activity.dto.ActivityWithIdDto;
 import c1220ftjavareact.gym.activity.repository.ActivityRepository;
 import c1220ftjavareact.gym.activity.entity.Activity;
-import c1220ftjavareact.gym.activity.service.IActivityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +26,12 @@ public class ImpActivityService implements IActivityService {
 
     @Transactional
     @Override
-    public ActivityDto createActivity(ActivityDto activityDto) {
-        Activity activity = modelMapper.map(activityDto, Activity.class);
+    public ActivitySaveDto createActivity(ActivitySaveDto activitySaveDto) {
+        Activity activity = modelMapper.map(activitySaveDto, Activity.class);
         activity.setImg("img");
         activity.setCreateDate(LocalDate.now());
         this.activityRepository.save(activity);
-        return this.modelMapper.map(activity, ActivityDto.class);
+        return this.modelMapper.map(activity, ActivitySaveDto.class);
     }
 
     @Transactional
@@ -42,35 +42,35 @@ public class ImpActivityService implements IActivityService {
 
     @Transactional
     @Override
-    public ActivityDto updateActivityDto(Long id, ActivityDto activityDto) {
+    public ActivitySaveDto updateActivityDto(Long id, ActivitySaveDto activitySaveDto) {
         Activity activity = this.activityRepository.findById(id).orElseThrow(null);
         if (activity != null) {
-            this.modelMapper.map(activityDto, activity);
-            Activity updateActivite = this.activityRepository.save(activity);
-            return this.modelMapper.map(updateActivite, ActivityDto.class);
+            this.modelMapper.map(activitySaveDto, activity);
+            Activity updateActivity = this.activityRepository.save(activity);
+            return this.modelMapper.map(updateActivity, ActivitySaveDto.class);
         }
         return null;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public ActivityDto getActivityDtoById(Long id) {
+    public ActivityWithIdDto getActivityDtoById(Long id) {
         Activity activity = activityRepository.findById(id).orElseThrow(() -> new RuntimeException("Activities null"));
-        ActivityDto activityDto = new ActivityDto();
-        return this.modelMapper.map(activity, ActivityDto.class);
+        ActivityWithIdDto activityWithIdDto = new ActivityWithIdDto();
+        return this.modelMapper.map(activity, ActivityWithIdDto.class);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<ActivityDto> getAllActivitiesDto() {
+    public List<ActivityWithIdDto> getAllActivitiesDto() {
         List<Activity> activities = this.activityRepository.findAll();
-        List<ActivityDto> activityDtos = new ArrayList();
+        List<ActivityWithIdDto> activityWithIdDtos = new ArrayList();
 
         for(Activity activity : activities) {
-            ActivityDto activityDto = this.modelMapper.map(activity, ActivityDto.class);
-            activityDtos.add(activityDto);
+            ActivityWithIdDto activityWithIdDto = this.modelMapper.map(activity, ActivityWithIdDto.class);
+            activityWithIdDtos.add(activityWithIdDto);
         }
-        return activityDtos;
+        return activityWithIdDtos;
     }
 
     @Transactional(readOnly = true)
