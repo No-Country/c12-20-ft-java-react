@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.room.service;
 
-import c1220ftjavareact.gym.room.dto.RoomDto;
+import c1220ftjavareact.gym.room.dto.RoomSaveDto;
+import c1220ftjavareact.gym.room.dto.RoomWithIdDto;
 import c1220ftjavareact.gym.room.repository.RoomRepository;
 import c1220ftjavareact.gym.room.entity.Room;
 import org.modelmapper.ModelMapper;
@@ -22,10 +23,10 @@ public class ImpRoomService implements IRoomService {
 
     @Transactional
     @Override
-    public RoomDto create(RoomDto roomDto) {
-        Room room = this.modelMapper.map(roomDto, Room.class);
+    public RoomSaveDto create(RoomSaveDto roomSaveDto) {
+        Room room = this.modelMapper.map(roomSaveDto, Room.class);
         this.roomRepository.save(room);
-        return this.modelMapper.map(room, RoomDto.class);
+        return this.modelMapper.map(room, RoomSaveDto.class);
     }
 
     @Transactional
@@ -36,28 +37,28 @@ public class ImpRoomService implements IRoomService {
 
     @Transactional
     @Override
-    public RoomDto updateRoom(Long id, RoomDto roomDto) {
+    public RoomSaveDto updateRoom(Long id, RoomSaveDto roomSaveDto) {
         Room room = this.roomRepository.findById(id).orElseThrow(null);
         if (room != null) {
-            this.modelMapper.map(roomDto, room);
+            this.modelMapper.map(roomSaveDto, room);
             Room updateRoom = this.roomRepository.save(room);
-            return this.modelMapper.map(room, RoomDto.class);
+            return this.modelMapper.map(room, RoomSaveDto.class);
         }
         return null;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<RoomDto> getAllRooms() {
+    public List<RoomWithIdDto> getAllRooms() {
         List<Room> rooms = this.roomRepository.findAll();
-        List<RoomDto> roomsDto = new ArrayList<>();
+        List<RoomWithIdDto> roomWithIdDtos = new ArrayList<>();
 
         for (Room room : rooms) {
-            RoomDto roomDto = this.modelMapper.map(room, RoomDto.class);
-            roomsDto.add(roomDto);
+            RoomWithIdDto roomWithIdDto = this.modelMapper.map(room, RoomWithIdDto.class);
+            roomWithIdDtos.add(roomWithIdDto);
         }
 
-        return roomsDto;
+        return roomWithIdDtos;
     }
 
     @Transactional(readOnly = true)
@@ -68,8 +69,8 @@ public class ImpRoomService implements IRoomService {
 
     @Transactional(readOnly = true)
     @Override
-    public RoomDto getRoomDtoById(Long id) {
+    public RoomWithIdDto getRoomDtoById(Long id) {
         Room room = this.roomRepository.findById(id).orElseThrow(null);
-        return this.modelMapper.map(room, RoomDto.class);
+        return this.modelMapper.map(room, RoomWithIdDto.class);
     }
 }

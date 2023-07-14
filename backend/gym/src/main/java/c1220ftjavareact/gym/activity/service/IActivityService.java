@@ -1,21 +1,22 @@
 package c1220ftjavareact.gym.activity.service;
 
-import c1220ftjavareact.gym.activity.dto.ActivityDto;
+import c1220ftjavareact.gym.activity.dto.ActivitySaveDto;
+import c1220ftjavareact.gym.activity.dto.ActivityWithIdDto;
 import c1220ftjavareact.gym.activity.entity.Activity;
 
 import java.util.List;
 
 public interface IActivityService {
 
-    public ActivityDto createActivity(ActivityDto activityDto);
+    public ActivitySaveDto createActivity(ActivitySaveDto activitySaveDto);
 
     public void deleteActivity(Long id);
 
-    public ActivityDto updateActivityDto(Long id, ActivityDto activityDto);
+    public ActivitySaveDto updateActivityDto(Long id, ActivitySaveDto activitySaveDto);
 
-    public ActivityDto getActivityDtoById(Long id);
+    public ActivityWithIdDto getActivityDtoById(Long id);
 
-    public List<ActivityDto> getAllActivitiesDto();
+    public List<ActivityWithIdDto> getAllActivitiesDto();
 
     public Activity getActivityById(Long id);
 
