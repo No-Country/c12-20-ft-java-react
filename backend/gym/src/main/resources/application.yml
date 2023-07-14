@@ -3,20 +3,20 @@ enableLoggingRequestDetails: false
 server:
   error:
     #Al haber un error envia siempre message y los parametros
-    #include-message: always
-    #include-binding-errors: always
+    include-message: always
+    include-binding-errors: always
 #Se asigna los niveles de Logging para mensajes en consola
 logging:
-#  level:
-#    root: INFO
-#    web: DEBUG
-#    org:
-#      hibernate:
-#        SQL: DEBUG
-#        type:
-#          descriptor:
-#            sql:
-#              BasicBinder: TRACE
+  level:
+    root: INFO
+    web: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
   #Cambio el formato de la hora en consola
   pattern:
     dateformat: HH:mm:ss
@@ -28,7 +28,7 @@ spring:
     # conexion con localhost
     url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
     username: root
-    password: root
+    password: admin
     # conexion con base de datos
 #    password: p7Mw1nO979WOfvW9AXdS
 #    url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry

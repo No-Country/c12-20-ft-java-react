@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class PaymentDTO {
 
     private SubscriptionDTO idSubscription;
-    private LocalDateTime day;
-    private LocalDateTime expired;
+    private LocalDate day;
+    private LocalDate expired;
 
 }

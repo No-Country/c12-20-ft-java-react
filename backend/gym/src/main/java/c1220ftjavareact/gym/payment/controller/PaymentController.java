@@ -2,23 +2,24 @@ package c1220ftjavareact.gym.payment.controller;
 
 import c1220ftjavareact.gym.payment.dto.PaymentDTO;
 import c1220ftjavareact.gym.payment.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/payments")
+@RequestMapping("/api/v1/payments")
+@RequiredArgsConstructor
 public class PaymentController {
     private final PaymentService paymentService;
 
-    @Autowired
-    public PaymentController(PaymentService paymentService) {
-        this.paymentService = paymentService;
-    }
-
     @PostMapping
     public PaymentDTO createPayment(@RequestBody PaymentDTO paymentDTO) {
+        /*
+            Revisa el DTO de Payment, estas recibiendo un DTO entero para la subscripcion solo deberias revisar el ID
+                y recuperar el resto de ser necesario (Borra este msg xd)
+         */
         return paymentService.createPayment(paymentDTO);
     }
 

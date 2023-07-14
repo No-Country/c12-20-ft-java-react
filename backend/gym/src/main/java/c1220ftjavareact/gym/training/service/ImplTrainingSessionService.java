@@ -162,7 +162,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Integer getCapacity(Long id) {
         return trainingSessionRepository.getReferenceById(id).getCapacity();
     }
