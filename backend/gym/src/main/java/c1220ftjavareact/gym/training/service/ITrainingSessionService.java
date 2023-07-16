@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.training.service;
 
-import c1220ftjavareact.gym.training.dto.AvailableTimesDTO;
+import c1220ftjavareact.gym.training.model.AvailableTimes;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
@@ -42,10 +42,10 @@ public interface ITrainingSessionService {
 
     /// eliminar una sesion disponible
     Integer getCapacity(Long id);
+
+    /// eliminar una sesion
     TrainingSessionDTO removeTrainingSessionById(Long id);
-    /// obtener turnos libres
-    AvailableTimesDTO getAvailableTimes();
 
     /// obtener turnos ocupados
-    AvailableTimesDTO getUnavailableTimes();
+    AvailableTimes getUnavailableTimes();
 }
