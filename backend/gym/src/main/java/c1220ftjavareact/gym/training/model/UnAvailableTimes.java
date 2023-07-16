@@ -1,22 +1,20 @@
 package c1220ftjavareact.gym.training.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Los horarios podrian gestionarse en intervalos de 30m para tener la mayor personalizacion posible
  */
 @Getter
 @Setter
-public class AvailableTimes {
+public class UnAvailableTimes {
     ArrayList<RoomTimes> listRooms;
 
-    public AvailableTimes() {
+    public UnAvailableTimes() {
         this.listRooms = new ArrayList<>();
     }
 
@@ -28,7 +26,7 @@ public class AvailableTimes {
 
     }
 
-    public boolean addTime(Long roomId, DayOfWeek day, AuxTimes saveTime) {
+    public boolean addTime(Long roomId, DayOfWeek day, String[] saveTime) {
         for(RoomTimes item : listRooms) {
              if(item.getRoomId() == roomId) {
                  item.add(day, saveTime);

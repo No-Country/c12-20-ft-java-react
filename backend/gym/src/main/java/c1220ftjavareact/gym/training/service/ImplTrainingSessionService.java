@@ -4,13 +4,12 @@ import c1220ftjavareact.gym.activity.entity.Activity;
 import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.activity.service.IActivityService;
 import c1220ftjavareact.gym.room.service.IRoomService;
-import c1220ftjavareact.gym.training.model.AvailableTimes;
+import c1220ftjavareact.gym.training.model.UnAvailableTimes;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.training.exception.TrainingException;
 import c1220ftjavareact.gym.training.model.RoomTimes;
-import c1220ftjavareact.gym.training.model.AuxTimes;
 import c1220ftjavareact.gym.training.repository.TrainingSessionRepository;
 import c1220ftjavareact.gym.util.TimeFormatter;
 import org.modelmapper.ModelMapper;
@@ -189,9 +188,9 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     }
 
     @Override
-    public AvailableTimes getUnavailableTimes() {
+    public UnAvailableTimes getUnavailableTimes() {
         List<TrainingSession> allTrainingSessions = trainingSessionRepository.findByDeletedFalse();
-        AvailableTimes aux = new AvailableTimes();
+        UnAvailableTimes aux = new UnAvailableTimes();
         boolean flag = false;
 
         for(TrainingSession item : allTrainingSessions) {
@@ -201,7 +200,9 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
             /// Creamos auxTimes, ejemplo: ["10:30","11:30"]
             String auxString = TimeFormatter.toString(item.getTimeStart());
             String auxString2 = TimeFormatter.toString(item.getTimeEnd());
-            AuxTimes auxTimes = new AuxTimes(auxString, auxString2);
+            String[] auxTimes = new String[2];
+            auxTimes[0] = auxString;
+            auxTimes[1] = auxString2;
 
             /// Buscamos coincidencia dentro de Available Times
             for(RoomTimes dto : aux.getListRooms()) {
