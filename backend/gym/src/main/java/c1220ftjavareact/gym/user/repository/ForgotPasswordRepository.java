@@ -22,7 +22,7 @@ public interface ForgotPasswordRepository extends JpaRepository<ForgotPasswordEn
     void saveForgotPassword(
             @Param("id") String id,
             @Param("code") String code,
-            @Param("enable") String enable,
+            @Param("enable") Integer enable,
             @Param("expirationDate") LocalDateTime expirationDate
     );
 }

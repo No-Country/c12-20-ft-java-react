@@ -49,7 +49,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
 
             //Genera la instancia de Forgot Password
             forgottenModel = this.generateForgotPassword(user.getId(), email);
-            this.passwordRepository.saveForgotPassword(user.getId(), forgottenModel.code(), "1", forgottenModel.expirationDate());
+            this.passwordRepository.saveForgotPassword(user.getId(), forgottenModel.code(), 1, forgottenModel.expirationDate());
         } catch (Exception ex) {
             throw new UpdatePasswordException(
                     "Error en peticion cambio de contraseña", "Ha ocurrido un error inesperado al guardar el usuario"

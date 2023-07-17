@@ -66,7 +66,7 @@ public class ForgotPassRepositoryUnitTest {
         var user2 = userRepository.save(user);
         assertDoesNotThrow(()->
                 this.repository.saveForgotPassword(
-                        user2.getId().toString(), UUID.randomUUID().toString(), "1", TimeUtils.gerFormatedLocalDateTime().plusHours(1)
+                        user2.getId().toString(), UUID.randomUUID().toString(), 1, TimeUtils.gerFormatedLocalDateTime().plusHours(1)
                 )
         );
 
