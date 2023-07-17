@@ -18,7 +18,7 @@ public interface ForgotPasswordRepository extends JpaRepository<ForgotPasswordEn
 
     @Modifying
     @Query(value = "INSERT INTO forgot_password (id_user, code, enable, expiration_date) VALUES " +
-            "(:id, :code, :expirationDate, :enable)", nativeQuery = true)
+            "(:id, :code, :enable, :expirationDate)", nativeQuery = true)
     void saveForgotPassword(
             @Param("id") String id,
             @Param("code") String code,
