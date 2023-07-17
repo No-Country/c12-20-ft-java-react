@@ -35,7 +35,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
                 .email(email)
                 .enable(true)
                 .code(UUID.randomUUID().toString())
-                .expirationDate(TimeUtils.gerFormatedLocalDateTime().plusHours(1L))
+                .expirationDate(TimeUtils.gerFormatedLocalDateTime().plusMinutes(5L))
                 .build();
     }
 

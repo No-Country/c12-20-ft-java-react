@@ -39,7 +39,7 @@ public class EmailSenderSubscriber {
                 "CAMBIO DE CONTRASEÑA",
                 this.service.executeTemplate(
                         event.getFullName(),
-                        "http://localhost:3300/password?code=" + event.getCode() + "&id=" + event.getId()
+                        "http://localhost:5173/change-password/"+event.getId()+"?code=" + event.getCode()
                 )
         );
     }
