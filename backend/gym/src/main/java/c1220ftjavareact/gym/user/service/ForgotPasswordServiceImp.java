@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.user.service;
 
 import c1220ftjavareact.gym.user.dto.mapper.ForgotPasswordMapperBean;
+import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.user.exception.UpdatePasswordException;
 import c1220ftjavareact.gym.user.model.ForgotPassword;
 import c1220ftjavareact.gym.user.repository.ForgotPasswordRepository;
@@ -8,6 +9,7 @@ import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.common.ResourceNotFoundException;
 import c1220ftjavareact.gym.user.model.User;
+import c1220ftjavareact.gym.user.repository.UserRepository;
 import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     private final ForgotPasswordRepository passwordRepository;
     private final ForgotPasswordMapperBean passwordMapper;
     private final UserMapperBeans userMapper;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public ForgotPassword generateForgotPassword(String id, String email) {
@@ -42,14 +44,14 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     @Transactional
     @Override
     public Map<String, String> saveForgotPassword(String email) {
-        User user = User.builder().build();
+        UserEntity user = UserEntity.builder().build();
         var forgottenModel = ForgotPassword.builder().build();
         try {
-            user = this.userService.findUserByEmail(email);
+            user = this.userRepository.findByEmail(email).get();
 
             //Genera la instancia de Forgot Password
-            forgottenModel = this.generateForgotPassword(user.getId(), email);
-            this.passwordRepository.saveForgotPassword(user.getId(), forgottenModel.code(), 1, forgottenModel.expirationDate());
+            forgottenModel = this.generateForgotPassword(user.getId().toString(), email);
+            this.passwordRepository.saveForgotPassword(user.getId().toString(), forgottenModel.code(), 1, forgottenModel.expirationDate());
         } catch (Exception ex) {
             throw new UpdatePasswordException(
                     "Error en peticion cambio de contraseña", "Ha ocurrido un error inesperado al guardar el usuario"
@@ -68,13 +70,15 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     public Map<String, String> createOtherPassword(ForgotPassword forgotPassword) {
         forgotPassword = this.generateForgotPassword(forgotPassword.id(), forgotPassword.email());
         var entity = this.passwordMapper.modelToEntity().map(forgotPassword);
-        var userModel = this.userService.findUserByEmail(forgotPassword.email());
-        entity.setUserEntity(userMapper.userToUserEntity().map(userModel));
+
+        var userEntity = this.userRepository.findByEmail(forgotPassword.email()).get();
+
+        entity.setUserEntity(userEntity);
         this.passwordRepository.save(entity);
 
         return Map.of(
                 "id", forgotPassword.id().toString(),
-                "fullName", userModel.fullname(),
+                "fullName", userEntity.fullname(),
                 "code", forgotPassword.code()
         );
     }
