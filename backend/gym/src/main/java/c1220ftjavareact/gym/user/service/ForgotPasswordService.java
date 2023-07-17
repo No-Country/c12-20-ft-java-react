@@ -2,6 +2,7 @@ package c1220ftjavareact.gym.user.service;
 
 import c1220ftjavareact.gym.user.model.ForgotPassword;
 import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -22,6 +23,9 @@ public interface ForgotPasswordService {
      * @param email Email del usuario que crea la instancia
      */
     ForgotPassword generateForgotPassword(String id, String email);
+
+    @Transactional
+    Map<String, String> createOtherPassword(ForgotPassword forgotPassword);
 
     /**
      * Busca una instancia del ForgotPassword por el codigo

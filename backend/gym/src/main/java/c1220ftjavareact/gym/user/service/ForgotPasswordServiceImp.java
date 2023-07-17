@@ -63,6 +63,22 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         );
     }
 
+    @Transactional
+    @Override
+    public Map<String, String> createOtherPassword(ForgotPassword forgotPassword) {
+        forgotPassword = this.generateForgotPassword(forgotPassword.id(), forgotPassword.email());
+        var entity = this.passwordMapper.modelToEntity().map(forgotPassword);
+        var userModel = this.userService.findUserByEmail(forgotPassword.email());
+        entity.setUserEntity(userMapper.userToUserEntity().map(userModel));
+        this.passwordRepository.save(entity);
+
+        return Map.of(
+                "id", forgotPassword.id().toString(),
+                "fullName", userModel.fullname(),
+                "code", forgotPassword.code()
+        );
+    }
+
     @Transactional(readOnly = true)
     @Override
     public ForgotPassword findByCode(String code) {

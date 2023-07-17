@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Email;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -34,13 +36,17 @@ public class ForgotPasswordController {
     public HttpEntity<Void> createForgotPassword(
             @RequestParam("email") @Email String email
     ) {
+        Map<String, String> values = new HashMap<>();
         if (this.passwordService.existsByEmail(email)) {
             var forgotPassword = this.passwordService.findByEmail(email);
             this.passwordService.assertIsNotEnable(forgotPassword.enable());
             this.passwordService.assertIsExpired(forgotPassword.expirationDate());
+
+            values =this.passwordService.createOtherPassword(forgotPassword);
+        } else {
+            values = this.passwordService.saveForgotPassword(email);
         }
 
-        var values = this.passwordService.saveForgotPassword(email);
         this.publisher.publishEvent(new RecoveryPasswordEvent(
                 this,
                 values.get("id"),
@@ -49,6 +55,7 @@ public class ForgotPasswordController {
                 values.get("code"),
                 new RecoveryPassStrategy()
         ));
+
         return ResponseEntity.noContent().build();
     }
 
