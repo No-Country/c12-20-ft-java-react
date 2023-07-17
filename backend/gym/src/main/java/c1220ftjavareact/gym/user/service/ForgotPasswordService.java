@@ -45,12 +45,16 @@ public interface ForgotPasswordService {
      */
     void assertIsNotExpired(LocalDateTime dateTime);
 
+    void assertIsExpired(LocalDateTime dateTime);
+
     /**
      * Arroja una excepcion si Enable es False
      *
      * @param enable Enable
      */
     void assertIsEnable(Boolean enable);
+
+    void assertIsNotEnable(Boolean enable);
 
     /**
      * Actualiza el Forggot Password

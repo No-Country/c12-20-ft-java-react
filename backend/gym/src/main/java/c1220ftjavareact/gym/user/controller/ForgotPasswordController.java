@@ -36,8 +36,8 @@ public class ForgotPasswordController {
     ) {
         if (this.passwordService.existsByEmail(email)) {
             var forgotPassword = this.passwordService.findByEmail(email);
-            this.passwordService.assertIsEnable(forgotPassword.enable());
-            this.passwordService.assertIsNotExpired(forgotPassword.expirationDate());
+            this.passwordService.assertIsNotEnable(forgotPassword.enable());
+            this.passwordService.assertIsExpired(forgotPassword.expirationDate());
         }
 
         var values = this.passwordService.saveForgotPassword(email);
@@ -68,6 +68,7 @@ public class ForgotPasswordController {
     ) {
         var forgotPassword = this.passwordService.findByCode(code);
         this.passwordService.assertKeysEquals(id, forgotPassword.id());
+
         this.passwordService.assertIsEnable(forgotPassword.enable());
         this.passwordService.assertIsNotExpired(forgotPassword.expirationDate());
 

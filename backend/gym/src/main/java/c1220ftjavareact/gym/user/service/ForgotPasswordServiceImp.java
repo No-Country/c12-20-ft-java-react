@@ -95,7 +95,25 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     }
 
     @Override
+    public void assertIsExpired(LocalDateTime dateTime) {
+        if (!dateTime.isBefore(TimeUtils.getLocalDateTime())) {
+            throw new UpdatePasswordException(
+                    "Error en peticion cambio de contraseña", "La peticion de contraseña no ha caducado, utiliza el codigo existente"
+            );
+        }
+    }
+
+    @Override
     public void assertIsEnable(Boolean enable) {
+        if (!enable) {
+            throw new UpdatePasswordException(
+                    "Error en peticion cambio de contraseña", "La peticion de contraseña esta habilitada, vuelva a crear la peticion"
+            );
+        }
+    }
+
+    @Override
+    public void assertIsNotEnable(Boolean enable) {
         if (!enable) {
             throw new UpdatePasswordException(
                     "Error en peticion cambio de contraseña", "La peticion de contraseña no esta habilitada, vuelva a crear la peticion"
