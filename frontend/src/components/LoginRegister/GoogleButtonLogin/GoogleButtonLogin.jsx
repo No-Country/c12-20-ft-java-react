@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 export const GoogleButtonLogin = () => {
   const navigate = useNavigate();
   const googleLoginCallback = (res) => {
-    // console.log(
-    //   `Se inició sesión correctamente. Aquí esta el token: ${res.credential}`
-    // );
-    // console.log(userObject);
+    console.log(
+      `Se inició sesión correctamente. Aquí esta el token: ${res.credential}`
+    );
+    console.log(res);
     console.log("iniciao con google");
     navigate("/");
   };

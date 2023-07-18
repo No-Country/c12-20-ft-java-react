@@ -14,8 +14,8 @@ export const InputText = ({ type }) => {
     emailValid,
   } = useContext(AuthContext);
   const location = useLocation();
-  const errorMessageLogin = error?.message;
-  const errorMessageRegister = error && error?.[type.toLocaleLowerCase()];
+  const errorMessageLogin = error?.title;
+  const errorMessageRegister = error && error?.[type?.toLocaleLowerCase()];
 
   return (
     <>
@@ -41,7 +41,7 @@ export const InputText = ({ type }) => {
               ? handleLastnameChange
               : () => {}
           }
-          placeholder={`Enter your ${type.toLowerCase()}`}
+          placeholder={`Enter your ${type?.toLowerCase()}`}
           className={`border h-10 border-[#2e2e2e80] outline-[#000] rounded-md p-3 pr-10 relative w-full ${
             errorMessageRegister ? "border-[red] border-2" : ""
           }${
@@ -59,13 +59,8 @@ export const InputText = ({ type }) => {
         {emailValid === false && type === "Email" && (
           <p className="text-red-500 text-xs">Email already taken*</p>
         )}
-        {errorMessageLogin &&
-        errorMessageLogin !=
-          "The password does not match the account password" &&
-        location.pathname == "/login" ? (
-          <p className="text-red-500 text-xs">Email not registered*</p>
-        ) : (
-          ""
+        {errorMessageLogin && (
+          <p className="text-[red] text-xs">{errorMessageLogin}.</p>
         )}
       </div>
     </>

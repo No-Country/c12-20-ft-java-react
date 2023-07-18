@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.events.event;
 
-import c1220ftjavareact.gym.service.email.TemplateStrategy;
+import c1220ftjavareact.gym.email.TemplateStrategy;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

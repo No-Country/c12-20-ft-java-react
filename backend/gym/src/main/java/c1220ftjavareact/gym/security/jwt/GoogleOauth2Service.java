@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.security.jwt;
 
-import c1220ftjavareact.gym.domain.dto.UserGoogleDTO;
+import c1220ftjavareact.gym.security.dto.UserGoogleDTO;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;

@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
   const [passwordValid, setPasswordValid] = useState(null);
   const [invalid, setInvalid] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [userLogged, setUserLogged] = useState({});
   const [error, setError] = useState({});
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,10 +23,6 @@ export const AuthProvider = ({ children }) => {
     setEmailValue("");
     setPasswordValue("");
   }, [location.pathname]);
-
-  useEffect(() => {
-    console.log(userLogged);
-  }, [userLogged]);
 
   const handleNameChange = (event) => {
     const newValue = event.target.value;
@@ -57,7 +52,7 @@ export const AuthProvider = ({ children }) => {
       const authLogin = async (email, password) => {
         try {
           const response = await fetch(
-            "http://localhost:8080/api/v1/users/authentication",
+            "https://c12-20-ft-java-react-production.up.railway.app/api/v1/users/authentication",
             {
               method: "POST",
               body: JSON.stringify({
@@ -73,12 +68,24 @@ export const AuthProvider = ({ children }) => {
           if (response.status === 400) {
             const errorInfo = await response.json();
             setError(errorInfo);
+            console.log(errorInfo);
           } else {
             const responseData = await response.json();
-            console.log(responseData);
+            const responseDataString = JSON.stringify(responseData);
             setError(null);
-            setUserLogged(responseData.user);
-            navigate("/");
+            if (
+              responseData.user.role === "ADMIN" ||
+              responseData.user.role === "EMPLOYEE"
+            ) {
+              navigate("/dashboard-users");
+            } else {
+              navigate("/");
+              if (checked === true) {
+                localStorage.setItem("user", responseDataString);
+              } else {
+                sessionStorage.setItem("user", responseDataString);
+              }
+            }
           }
         } catch (error) {
           console.log("Error en la solicitud:", error);
@@ -92,7 +99,7 @@ export const AuthProvider = ({ children }) => {
       const authRegister = async () => {
         try {
           const res = await fetch(
-            "http://localhost:8080/api/v1/users/customers",
+            "https://c12-20-ft-java-react-production.up.railway.app/api/v1/users/customers",
             {
               method: "POST",
               body: JSON.stringify({
