@@ -1,11 +1,23 @@
-import { Fragment } from "react";
-import DasboardUsers from "./components/DasboardUsers";
+import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import NavBar from './components/NavBar'
+import LandingPage from './components/LandingPage'
+import ContactUs from './components/ContactUs'
+import Footer from './components/Footer'
 
-function App() {
+
+
+
+const App = () => {
   return (
-  <Fragment>
-      <DasboardUsers />
-  </Fragment>  
-  );
+    
+    <BrowserRouter>
+    <NavBar/>
+    <LandingPage/>
+    <ContactUs/>
+    <Footer/>
+    </BrowserRouter>
+    
+  )
 }
 export default App;

@@ -1,7 +1,6 @@
 {
   "name": "frontend",
   "private": true,
-  "homepage": "https://joshuajadaniel.github.io/c12-20-ft-java-react/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -13,20 +12,18 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.14",
-    "daisyui": "^3.1.7",
     "gh-pages": "^5.0.0",
     "postcss": "^8.4.24",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.10.1",
     "react-router-dom": "^6.14.1",
-    "react-time-picker": "^6.2.0",
     "tailwindcss": "^3.3.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^4.0.0",
+    "daisyui": "^3.1.11",
     "eslint": "^8.38.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
