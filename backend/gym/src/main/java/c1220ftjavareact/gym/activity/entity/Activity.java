@@ -40,5 +40,8 @@ public class Activity implements Serializable {
     private String img;
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
 }

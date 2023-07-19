@@ -27,7 +27,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handler de Exception
      */
+<<<<<<< HEAD
 /*    @ExceptionHandler(Exception.class)
+=======
+    @ExceptionHandler(Exception.class)
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(Exception ex) {
         var errorDetails = ExceptionDTO.builder()
                 .title("Excepcion no manejada")

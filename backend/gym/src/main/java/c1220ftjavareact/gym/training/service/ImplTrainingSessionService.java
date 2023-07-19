@@ -4,6 +4,7 @@ import c1220ftjavareact.gym.activity.entity.Activity;
 import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.activity.service.IActivityService;
 import c1220ftjavareact.gym.room.service.IRoomService;
+<<<<<<< HEAD
 import c1220ftjavareact.gym.training.dto.AvailableTimesDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
@@ -18,6 +19,19 @@ import javax.transaction.Transactional;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
+=======
+import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
+import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.training.entity.TrainingSession;
+import c1220ftjavareact.gym.training.repository.TrainingSessionRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
 
 @Service
 public class ImplTrainingSessionService implements ITrainingSessionService {
@@ -37,6 +51,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     @Transactional
     public TrainingSessionDTO saveTrainingSession(TrainingSessionSaveDTO trainingSession) {
+<<<<<<< HEAD
         /// Verificar si existe Activity
         Activity activity = iActivityService.getActivityById(trainingSession.getActivityId());
 
@@ -71,28 +86,57 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         } else {
             throw new TrainingException("Room not available at the selected time", HttpStatus.UNPROCESSABLE_ENTITY);
         }
+=======
+        /// Verificar si existe Activity, verificar si existe Room, verificar disponibilidad (pendiente)
+
+        TrainingSession savedTraining = mapper.map(trainingSession, TrainingSession.class);
+
+        /// Activity
+        Activity activity = iActivityService.getActivityById(trainingSession.getActivityId());
+        savedTraining.setActivity(activity);
+
+        /// Room
+        Room room = iRoomService.getRoomById(trainingSession.getRoomId());
+        savedTraining.setRoom(room);
+
+        /// Persistence
+        savedTraining = trainingSessionRepository.save(savedTraining);
+        TrainingSessionDTO dto = mapper.map(savedTraining, TrainingSessionDTO.class);
+
+        return dto;
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
     }
 
 
     @Override
     public List<TrainingSessionDTO> getAllTrainingSession() {
+<<<<<<< HEAD
         List<TrainingSession> listSessions = trainingSessionRepository.findByDeletedFalse();
+=======
+        List<TrainingSession> listSessions = trainingSessionRepository.findAll();
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
         return this.convertEntityList(listSessions);
     }
 
     @Override
     public List<TrainingSessionDTO> getAllByActivityId(Long activityId) {
         List<TrainingSession> listSessions = iActivityService.getActivityById(activityId).getTrainingSession();
+<<<<<<< HEAD
         listSessions = this.filterSessions(listSessions);
 
+=======
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
         return this.convertEntityList(listSessions);
     }
 
     @Override
     public List<TrainingSessionDTO> getAllByRoomId(Long roomId) {
         List<TrainingSession> listSessions = iRoomService.getRoomById(roomId).getTrainingSession();
+<<<<<<< HEAD
         listSessions = this.filterSessions(listSessions);
 
+=======
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
         return this.convertEntityList(listSessions);
     }
 
@@ -100,11 +144,20 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     public TrainingSessionDTO getTrainingSessionById(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
+<<<<<<< HEAD
         if (trainingSession.isEmpty() || trainingSession.get().isDeleted()) {
             throw new TrainingException("Training session not found", HttpStatus.NOT_FOUND);
         }
 
         TrainingSessionDTO dto = mapper.map(trainingSession, TrainingSessionDTO.class);
+=======
+        if (trainingSession.isEmpty()) {
+            /// exception
+        }
+
+        TrainingSessionDTO dto = mapper.map(trainingSession, TrainingSessionDTO.class);
+
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
         return dto;
     }
 
@@ -113,19 +166,32 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     public TrainingSession getTrainingEntity(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
         if (trainingSession.isEmpty()) {
+<<<<<<< HEAD
             throw new TrainingException("Training session not found", HttpStatus.NOT_FOUND);
+=======
+            /// throw exception
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
         }
 
         return trainingSession.get();
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
     @Override
     @Transactional
     public TrainingSessionDTO updateTrainingSessionById(TrainingSessionDTO updateSession, Long id) {
 
         Optional<TrainingSession> optionalEntity = trainingSessionRepository.findById(id);
+<<<<<<< HEAD
         if (optionalEntity.isEmpty() || optionalEntity.get().isDeleted()) {
             throw new TrainingException("Training session not found", HttpStatus.NOT_FOUND);
+=======
+        if (optionalEntity.isEmpty()) {
+            /// throw exception
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
         }
 
         /// actualizar atributos
@@ -148,6 +214,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
         /// Room
         Room room = iRoomService.getRoomById(updateSession.getRoomId());
+<<<<<<< HEAD
         if (this.verifyRoomAvailable(updateSession)) {
             trainingEntity.setRoom(room);
 
@@ -159,10 +226,19 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
             throw new TrainingException("Room not available at the selected time", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
+=======
+        trainingEntity.setRoom(room);
+
+        trainingEntity = trainingSessionRepository.save(trainingEntity);
+        TrainingSessionDTO dto = mapper.map(trainingEntity, TrainingSessionDTO.class);
+
+        return dto;
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
     }
 
     @Override
     @Transactional
+<<<<<<< HEAD
     public TrainingSessionDTO removeTrainingSessionById(Long id) {
         Optional<TrainingSession> optionalEntity = trainingSessionRepository.findById(id);
         if (optionalEntity.isEmpty() || optionalEntity.get().isDeleted()) {
@@ -188,6 +264,10 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         Map<Long, HashMap<String,ArrayList<String[]>>> unAvailableTimes = new HashMap<>();
 
         return null;
+=======
+    public void removeTrainingSessionById(Long id) {
+
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
     }
 
     private List<TrainingSessionDTO> convertEntityList(List<TrainingSession> entityList) {
@@ -201,6 +281,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         return listDTO;
     }
 
+<<<<<<< HEAD
     private boolean verifyRoomAvailable(TrainingSessionSaveDTO trainingSession) {
         /// verificar si existe Room
         Room room = iRoomService.getRoomById(trainingSession.getRoomId());
@@ -254,4 +335,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         return filteredList;
     }
 
+=======
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
 }

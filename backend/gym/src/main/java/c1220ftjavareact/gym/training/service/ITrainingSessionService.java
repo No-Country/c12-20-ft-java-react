@@ -1,6 +1,9 @@
 package c1220ftjavareact.gym.training.service;
 
+<<<<<<< HEAD
 import c1220ftjavareact.gym.training.dto.AvailableTimesDTO;
+=======
+>>>>>>> c54f09b24c3bd3e341803af2083ddfc8cfa6cb34
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
