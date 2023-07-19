@@ -1,13 +1,14 @@
 package c1220ftjavareact.gym.user.service;
 
 import c1220ftjavareact.gym.user.dto.mapper.ForgotPasswordMapperBean;
+import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.user.exception.UpdatePasswordException;
 import c1220ftjavareact.gym.user.model.ForgotPassword;
 import c1220ftjavareact.gym.user.repository.ForgotPasswordRepository;
 import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.common.ResourceNotFoundException;
-import c1220ftjavareact.gym.user.model.User;
+import c1220ftjavareact.gym.user.repository.UserRepository;
 import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     private final ForgotPasswordRepository passwordRepository;
     private final ForgotPasswordMapperBean passwordMapper;
     private final UserMapperBeans userMapper;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public ForgotPassword generateForgotPassword(String id, String email) {
@@ -35,24 +36,47 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
                 .email(email)
                 .enable(true)
                 .code(UUID.randomUUID().toString())
-                .expirationDate(TimeUtils.gerFormatedLocalDateTime().plusHours(1L))
+                .expirationDate(TimeUtils.gerFormatedLocalDateTime().plusMinutes(5L))
                 .build();
+    }
+
+    @Override
+    public Long findIdByEmail(String email){
+        return this.passwordRepository.findByUserEntityEmail(email).get().getId();
+    }
+
+    @Transactional
+    @Override
+    public Map<String, String> saveForgot(String email) {
+        var user = this.userRepository.findByEmail(email).get();
+
+        var forgot = this.generateForgotPassword(user.getId().toString(), email);
+
+        var entity = this.passwordMapper.modelToEntity().map(forgot);
+        entity.setUserEntity(user);
+
+        this.passwordRepository.save(entity);
+        return Map.of(
+                "id", user.getId().toString(),
+                "fullName", user.fullname(),
+                "code", forgot.code()
+        );
     }
 
     @Transactional
     @Override
     public Map<String, String> saveForgotPassword(String email) {
-        User user = User.builder().build();
+        UserEntity user = UserEntity.builder().build();
         var forgottenModel = ForgotPassword.builder().build();
         try {
-            user = this.userService.findUserByEmail(email);
+            user = this.userRepository.findByEmail(email).get();
 
             //Genera la instancia de Forgot Password
-            forgottenModel = this.generateForgotPassword(user.getId(), email);
-            this.passwordRepository.saveForgotPassword(user.getId(), forgottenModel.code(), forgottenModel.expirationDate());
+            forgottenModel = this.generateForgotPassword(user.getId().toString(), email);
+            this.passwordRepository.saveForgotPassword(user.getId().toString(), forgottenModel.code(), 1, forgottenModel.expirationDate());
         } catch (Exception ex) {
             throw new UpdatePasswordException(
-                    "Error en peticion cambio de contraseña", "Ha ocurrido un error inesperado al guardar el usuario"
+                    "Error in password change request.", "An unexpected error occurred while saving the user."
             );
         }
 
@@ -63,13 +87,31 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         );
     }
 
+    @Transactional
+    @Override
+    public Map<String, String> createOtherPassword(ForgotPassword forgotPassword) {
+        forgotPassword = this.generateForgotPassword(forgotPassword.id(), forgotPassword.email());
+        var entity = this.passwordMapper.modelToEntity().map(forgotPassword);
+
+        var userEntity = this.userRepository.findByEmail(forgotPassword.email()).get();
+
+        entity.setUserEntity(userEntity);
+        this.passwordRepository.save(entity);
+
+        return Map.of(
+                "id", forgotPassword.id().toString(),
+                "fullName", userEntity.fullname(),
+                "code", forgotPassword.code()
+        );
+    }
+
     @Transactional(readOnly = true)
     @Override
     public ForgotPassword findByCode(String code) {
         //Arroja una excepcion si no encuentra la Instacio con el codigo
         var forgotPassword = passwordRepository.findByCode(code)
                 .orElseThrow(() -> new UpdatePasswordException(
-                        "Error en peticion cambio de contraseña", "No se ha encontrado una peticion con ese codigo"
+                        "Error in password change request.", "No request found with that code."
                         )
                 );
 
@@ -80,16 +122,26 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     public void assertKeysEquals(String idModel, String idSaved) {
         if (!idSaved.equals(idModel)) {
             throw new UpdatePasswordException(
-                    "Error en peticion cambio de contraseña", "Esta clave no pertenece al usuario solicitado"
+                    "Error in password change request.", "This key does not belong to the requested user."
             );
         }
     }
 
     @Override
-    public void assertIsNotExpired(LocalDateTime dateTime) {
+    public void assertIsNotExpired(LocalDateTime dateTime, Long id) {
         if (dateTime.isBefore(TimeUtils.getLocalDateTime())) {
+            this.passwordRepository.disable(id.toString());
             throw new UpdatePasswordException(
-                    "Error en peticion cambio de contraseña", "La peticion de contraseña ha caducado, vuelve a crear la peticion de cambio"
+                    "Error in password change request.", "The password change request has already expired."
+            );
+        }
+    }
+
+    @Override
+    public void assertIsExpired(LocalDateTime dateTime) {
+        if (!dateTime.isBefore(TimeUtils.getLocalDateTime())) {
+            throw new UpdatePasswordException(
+                    "Error in password change request.", "You already have an active password change request."
             );
         }
     }
@@ -98,7 +150,16 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     public void assertIsEnable(Boolean enable) {
         if (!enable) {
             throw new UpdatePasswordException(
-                    "Error en peticion cambio de contraseña", "La peticion de contraseña no esta habilitada, vuelva a crear la peticion"
+                    "Error in password change request.", "The password change request has already expired."
+            );
+        }
+    }
+
+    @Override
+    public void assertIsNotEnable(Boolean enable) {
+        if (enable) {
+            throw new UpdatePasswordException(
+                    "Error in password change request.", "You already have an active password change request."
             );
         }
     }
@@ -108,13 +169,13 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         var entity = this.passwordRepository
                 .findById(Long.parseLong(model.id()))
                 .orElseThrow(() -> new ResourceNotFoundException(
-                            "Recurso no encontrado", "El usuario todabia no ha echo una peticion de cambio de contraseña"
+                        "Resource not found.", "The user has not yet requested a password change"
                         )
                 );
         //Comprueba que los datos sean validos antes de actualizar<
         this.assertKeysEquals(model.code(), entity.getCode());
         this.assertIsEnable(entity.isEnable());
-        this.assertIsNotExpired(entity.getExpirationDate());
+        this.assertIsNotExpired(entity.getExpirationDate(), entity.getId());
 
         entity.getUserEntity().setPassword(userMapper.password().map(model.password()));
         entity.disable();
@@ -128,7 +189,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         //Arroja una excepcion si no encuentra la Instancia de Forgot Password con ese email
         var entity = passwordRepository.findByUserEntityEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "Recurso no encontrado", "El usuario todabia no ha echo una peticion de cambio de contraseña"
+                        "Resource not found", "First, you need to create a password change request."
                         )
                 );
         return passwordMapper.entityToModel().map(entity);

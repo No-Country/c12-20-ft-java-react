@@ -5,9 +5,11 @@ import c1220ftjavareact.gym.subscription.dto.SubscriptionDTO;
 public interface SubscriptionService {
     SubscriptionDTO createSubscription(SubscriptionDTO subscriptionDTO);
 
-    SubscriptionDTO updateSubscription(int id, SubscriptionDTO subscriptionDTO);
+    SubscriptionDTO updateSubscription(Long id, SubscriptionDTO subscriptionDTO);
 
-    Boolean deleteSubscription(int id);
+    Boolean deleteSubscription(Long id);
 
-    SubscriptionDTO getSubscriptionById(int id);
+    SubscriptionDTO getSubscriptionById(Long id);
+
+    Integer getCountTrainingSession(Long id);
 }

@@ -4,6 +4,7 @@ import c1220ftjavareact.gym.activity.dto.ActivitySaveDto;
 import c1220ftjavareact.gym.activity.dto.ActivityWithIdDto;
 import c1220ftjavareact.gym.activity.repository.ActivityRepository;
 import c1220ftjavareact.gym.activity.entity.Activity;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,16 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ImpActivityService implements IActivityService {
 
     private final ActivityRepository activityRepository;
     private final ModelMapper modelMapper;
-
-
-    public ImpActivityService(ActivityRepository activityRepository, ModelMapper modelMapper) {
-        this.activityRepository = activityRepository;
-        this.modelMapper = modelMapper;
-    }
 
     @Transactional
     @Override

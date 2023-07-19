@@ -8,8 +8,6 @@ public interface UserProjection {
     String getEmail();
 
     String getFullName();
-
     Role getRole();
-
     String getPicture();
 }

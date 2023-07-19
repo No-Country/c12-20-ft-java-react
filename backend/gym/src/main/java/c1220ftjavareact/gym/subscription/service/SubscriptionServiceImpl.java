@@ -11,43 +11,49 @@ import c1220ftjavareact.gym.training.service.ITrainingSessionService;
 import c1220ftjavareact.gym.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
-    private final SubscriptionMapper subscriptionMapper;
     private final UserMapperBeans userMapper;
     private final UserService userService;
     private final ITrainingSessionService trainingSessionService;
+    private final SubscriptionMapper<SubscriptionDTO, SubscriptionEntity> subscriptionSaveToUserEntityMapper;
+    private final SubscriptionMapper<SubscriptionEntity,SubscriptionDTO> subscriptionSaveToUserDtoMapper;
+
 
     @Override
     public SubscriptionDTO createSubscription(SubscriptionDTO subscriptionDTO) {
-        SubscriptionEntity subscription = subscriptionMapper.convertToEntity(subscriptionDTO);
+
+        SubscriptionEntity subscription = subscriptionSaveToUserEntityMapper.map(subscriptionDTO);
+
         SubscriptionEntity savedSubscription = subscriptionRepository.save(subscription);
-        return subscriptionMapper.convertToDto(savedSubscription);
+        return subscriptionSaveToUserDtoMapper.map(savedSubscription);
     }
 
+
     @Override
-    public SubscriptionDTO updateSubscription(int id, SubscriptionDTO subscriptionDTO) {
+    public SubscriptionDTO updateSubscription(Long id, SubscriptionDTO subscriptionDTO) {
         SubscriptionEntity subscription = subscriptionRepository.findById(id).orElse(null);
-        UserEntity user = userMapper.userToUserEntity().map(userService.findUserById(subscriptionDTO.getIdClient().toString()));
-        TrainingSession trainingSession = trainingSessionService.getTrainingEntity(subscriptionDTO.getIdClass());
+        UserEntity user = userMapper.userToUserEntity().map(userService.findUserById(subscriptionDTO.customerId().toString()));
+        TrainingSession trainingSession = trainingSessionService.getTrainingEntity(subscriptionDTO.idTrainingSession());
 
 
         if (subscription != null) {
             subscription.setIdCustomer(user);
             subscription.setTraining(trainingSession);
-            subscription.setState(subscriptionDTO.getState());
-            subscription.setSubscriptionDay(subscriptionDTO.getSubscriptionDay());
+            subscription.setState(subscriptionDTO.state());
+            subscription.setSubscriptionDay(subscriptionDTO.subscriptionDay());
             SubscriptionEntity updatedSubscription = subscriptionRepository.save(subscription);
-            return subscriptionMapper.convertToDto(updatedSubscription);
+            return subscriptionSaveToUserDtoMapper.map(updatedSubscription);
         }
         return null;
     }
 
     @Override
-    public Boolean deleteSubscription(int id) {
+    public Boolean deleteSubscription(Long id) {
         try {
             subscriptionRepository.deleteById(id);
             return true;
@@ -57,11 +63,18 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDTO getSubscriptionById(int id) {
+    public SubscriptionDTO getSubscriptionById(Long id) {
         SubscriptionEntity subscription = subscriptionRepository.findById(id).orElse(null);
         if (subscription != null) {
-            return subscriptionMapper.convertToDto(subscription);
+            return subscriptionSaveToUserDtoMapper.map(subscription);
         }
         return null;
+    }
+
+    //cuenta todos los traingin session por id que le pasas
+    @Transactional(readOnly = true)
+    @Override
+    public Integer getCountTrainingSession(Long id) {
+        return  subscriptionRepository.countByTrainingSessionId(id);
     }
 }

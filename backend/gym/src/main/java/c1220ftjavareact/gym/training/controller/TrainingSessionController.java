@@ -1,5 +1,7 @@
 package c1220ftjavareact.gym.training.controller;
 
+import c1220ftjavareact.gym.training.model.UnAvailableTimes;
+import lombok.extern.slf4j.Slf4j;
 import c1220ftjavareact.gym.training.service.ITrainingSessionService;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
@@ -17,7 +19,8 @@ import java.util.List;
  * correctamente los horarios disponibles en la vista
  */
 @RestController
-@RequestMapping(value = "api/v1/sessions")
+@RequestMapping(value = "/api/v1/sessions")
+@Slf4j
 public class TrainingSessionController {
 
     private final ITrainingSessionService iTrainingSessionService;
@@ -59,6 +62,11 @@ public class TrainingSessionController {
     @DeleteMapping(value = "/delete/{sessionId}")
     public ResponseEntity<TrainingSessionDTO> deleteTrainingSessionsById( @PathVariable Long sessionId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.removeTrainingSessionById(sessionId));
+    }
+
+    @GetMapping(value = "/unavailabletimes")
+    public ResponseEntity<UnAvailableTimes> getUnAvailableTimes() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getUnavailableTimes());
     }
 
 }

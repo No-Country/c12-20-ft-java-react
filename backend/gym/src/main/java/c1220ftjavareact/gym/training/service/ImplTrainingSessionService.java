@@ -4,17 +4,20 @@ import c1220ftjavareact.gym.activity.entity.Activity;
 import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.activity.service.IActivityService;
 import c1220ftjavareact.gym.room.service.IRoomService;
-import c1220ftjavareact.gym.training.dto.AvailableTimesDTO;
+import c1220ftjavareact.gym.training.model.UnAvailableTimes;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.training.exception.TrainingException;
+import c1220ftjavareact.gym.training.model.RoomTimes;
 import c1220ftjavareact.gym.training.repository.TrainingSessionRepository;
+import c1220ftjavareact.gym.util.TimeFormatter;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,7 +57,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
         /// verificar por dias
         if (this.verifyRoomAvailable(trainingSession)) {
-            System.out.println("Objeto en servicio (ENTRANDO A IF): " + trainingSession);
             TrainingSession savedTraining = mapper.map(trainingSession, TrainingSession.class);
 
             /// Relacion Activity
@@ -100,11 +102,12 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     public TrainingSessionDTO getTrainingSessionById(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
+        TrainingSession aux = trainingSession.get();
         if (trainingSession.isEmpty() || trainingSession.get().isDeleted()) {
             throw new TrainingException("Training session not found", HttpStatus.NOT_FOUND);
         }
 
-        TrainingSessionDTO dto = mapper.map(trainingSession, TrainingSessionDTO.class);
+        TrainingSessionDTO dto = mapper.map(aux, TrainingSessionDTO.class);
         return dto;
     }
 
@@ -162,6 +165,12 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Integer getCapacity(Long id) {
+        return trainingSessionRepository.getReferenceById(id).getCapacity();
+    }
+
+    @Override
     @Transactional
     public TrainingSessionDTO removeTrainingSessionById(Long id) {
         Optional<TrainingSession> optionalEntity = trainingSessionRepository.findById(id);
@@ -179,21 +188,93 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     }
 
     @Override
-    public AvailableTimesDTO getAvailableTimes() {
-        return null;
-    }
+    public UnAvailableTimes getUnavailableTimes() {
+        List<TrainingSession> allTrainingSessions = trainingSessionRepository.findByDeletedFalse();
+        UnAvailableTimes aux = new UnAvailableTimes();
+        boolean flag = false;
 
-    @Override
-    public AvailableTimesDTO getUnavailableTimes() {
-        Map<Long, HashMap<String,ArrayList<String[]>>> unAvailableTimes = new HashMap<>();
+        for(TrainingSession item : allTrainingSessions) {
+            Room roomAux = item.getRoom();
+            /// flag de room existente
+            flag = false;
+            /// Creamos auxTimes, ejemplo: ["10:30","11:30"]
+            String auxString = TimeFormatter.toString(item.getTimeStart());
+            String auxString2 = TimeFormatter.toString(item.getTimeEnd());
+            String[] auxTimes = new String[2];
+            auxTimes[0] = auxString;
+            auxTimes[1] = auxString2;
 
-        return null;
+            /// Buscamos coincidencia dentro de Available Times
+            for(RoomTimes dto : aux.getListRooms()) {
+
+                /// en este if agregamos la informacion a cada  dia dentro de AvaiableTimes
+                if(dto.getRoomId() == roomAux.getId()) {
+
+                    /// Se evalua por dias cuando corresponde agregar auxTimes
+                    if(item.isMonday()) {
+                        aux.addTime(roomAux.getId(),DayOfWeek.MONDAY,auxTimes);
+                    }
+                    if(item.isTuesday()) {
+                        aux.addTime(roomAux.getId(),DayOfWeek.TUESDAY,auxTimes);
+                    }
+                    if(item.isThursday()) {
+                        aux.addTime(roomAux.getId(),DayOfWeek.THURSDAY,auxTimes);
+                    }
+                    if(item.isWednesday()) {
+                        aux.addTime(roomAux.getId(),DayOfWeek.WEDNESDAY,auxTimes);
+                    }
+                    if(item.isFriday()) {
+                        aux.addTime(roomAux.getId(),DayOfWeek.FRIDAY,auxTimes);
+                    }
+                    if(item.isSunday()) {
+                        aux.addTime(roomAux.getId(),DayOfWeek.SUNDAY,auxTimes);
+                    }
+                    if(item.isSaturday()) {
+                        aux.addTime(roomAux.getId(),DayOfWeek.SATURDAY,auxTimes);
+                    }
+
+                    /// En caso de agregar se considera que se encontro coincidencia, seteamos el flag a true asi no creamos un item nuevo
+                    flag = true;
+                    break;
+                }
+
+            }
+
+            /// En caso de no encontrar coincidencia dentro de AvailableTimes se crea un item nuevo
+            if(!flag) {
+                aux.addNewRoom(roomAux.getId(), roomAux.getName());
+                if(item.isMonday()) {
+                    aux.addTime(roomAux.getId(),DayOfWeek.MONDAY,auxTimes);
+                }
+                if(item.isTuesday()) {
+                    aux.addTime(roomAux.getId(),DayOfWeek.TUESDAY,auxTimes);
+                }
+                if(item.isThursday()) {
+                    aux.addTime(roomAux.getId(),DayOfWeek.THURSDAY,auxTimes);
+                }
+                if(item.isWednesday()) {
+                    aux.addTime(roomAux.getId(),DayOfWeek.WEDNESDAY,auxTimes);
+                }
+                if(item.isFriday()) {
+                    aux.addTime(roomAux.getId(),DayOfWeek.FRIDAY,auxTimes);
+                }
+                if(item.isSunday()) {
+                    aux.addTime(roomAux.getId(),DayOfWeek.SUNDAY,auxTimes);
+                }
+                if(item.isSaturday()) {
+                    aux.addTime(roomAux.getId(),DayOfWeek.SATURDAY,auxTimes);
+                }
+            }
+        }
+        System.out.println("TEST AUX: \n" + aux);
+        return aux;
     }
 
     private List<TrainingSessionDTO> convertEntityList(List<TrainingSession> entityList) {
         List<TrainingSessionDTO> listDTO = new ArrayList<>();
 
         for (TrainingSession item : entityList) {
+            System.out.println("PRUEBA:" + item);
             TrainingSessionDTO aux = mapper.map(item, TrainingSessionDTO.class);
             listDTO.add(aux);
         }
