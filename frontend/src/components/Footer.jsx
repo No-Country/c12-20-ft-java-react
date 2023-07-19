@@ -6,27 +6,16 @@ import logo_twitter from '../assets/img/logo_twitter.png'
 import logo_youtube from '../assets/img/logo_youtube.png'
 import { Link } from 'react-router-dom'
 
-
-
-
-const NavBar = () => {
-
+const Footer = () => {
     return (
-        <div className='navBar'>
+        <div className='contFooter'>
             <Link to= {"/"}>
                 <img className='logo' src={logo}/>
             </Link>
             <div  className='navBarTxt'>
-                <a href="#scrollAboutUs">
-                    <h3 className='navBarTittle'>About us</h3>
+                <a>
+                    <h3 className='navBarTittle'>Copyright © 2023 - All right reserved</h3>
                 </a>
-                <a href="#scrollOurClasses">
-                    <h3 className='navBarTittle'>Our clasess</h3>
-                </a>
-                <a href="#scrollContactUs">
-                    <h3 className='navBarTittle'>Contact</h3>
-                </a>
-                
             </div>
             <div className='contIconNavBar'>
                 <a href="https://www.instagram.com/" target="_blank">
@@ -46,4 +35,4 @@ const NavBar = () => {
     )
 }
 
-export default NavBar
+export default Footer

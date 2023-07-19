@@ -10,7 +10,7 @@ import DashboardClass from "./components/DashboardClass";
 import Sidebar from "./components/shared/Sidebar";
 import LandingPage from "./components/LandingPage";
 
-export const App=()=> {
+export const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
