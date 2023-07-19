@@ -26,6 +26,7 @@ public interface ForgotPasswordRepository extends JpaRepository<ForgotPasswordEn
             @Param("expirationDate") LocalDateTime expirationDate
     );
 
-    @Query(value = "UPDATE forgot_password AS p SET p.enable = '0' WHERE p.id = :id", nativeQuery = true)
+    @Modifying
+    @Query(value = "UPDATE forgot_password AS p SET p.enable = '0' WHERE p.id_user = :id", nativeQuery = true)
     void disable(@Param("id") String id);
 }

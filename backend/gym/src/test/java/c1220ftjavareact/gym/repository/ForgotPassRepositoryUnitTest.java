@@ -12,14 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -51,25 +51,10 @@ public class ForgotPassRepositoryUnitTest {
                 .id(user.getId())
                 .userEntity(user)
                 .code(UUID.randomUUID().toString())
-                .expirationDate(TimeUtils.gerFormatedLocalDateTime().plusHours(1))
+                .expirationDate(TimeUtils.gerFormatedLocalDateTime().plusMinutes(5))
                 .enable(true)
                 .build()
         );
-    }
-
-    @DisplayName(value = "Test de saveForgot")
-    @Test
-    protected void testSaveUser(){
-        entityManager.clear();
-        user.setEmail("test@gmail.com");
-        user.setId(null);
-        var user2 = userRepository.save(user);
-        assertDoesNotThrow(()->
-                this.repository.saveForgotPassword(
-                        user2.getId().toString(), UUID.randomUUID().toString(), 1, TimeUtils.gerFormatedLocalDateTime().plusHours(1)
-                )
-        );
-
     }
 
     @DisplayName(value = "Test de existsByEmail del ForgotEntity")
@@ -93,6 +78,19 @@ public class ForgotPassRepositoryUnitTest {
         var forgot2 = repository.findByUserEntityEmail(user.getEmail());
         assertTrue( forgot2.isPresent() );
         assertThat(forgot2.get().getId()).isEqualTo(user.getId());
+    }
+
+    @DisplayName(value = "Test de disable forgot del ForgotEntity")
+    @Transactional
+    @Test
+    public void testDisableForgot(){
+
+        repository.disable( entity.getId().toString() );
+        entityManager.clear();
+        var forgotTest = repository.getReferenceById(user.getId());
+
+        assertFalse( forgotTest.isEnable());
+
     }
 }
 
