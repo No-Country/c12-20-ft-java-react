@@ -47,7 +47,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
             return auth;
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new CredentialException("Error en la autenticacion", "Ha ocurrido un error al autenticar las credenciales del usuario");
+            throw new CredentialException("Authentication error.", "An error occurred while authenticating the user's credentials.");
         }
     }
 
@@ -58,7 +58,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
      */
     private void verifyEnable(Boolean enable) {
         if (!enable)
-            throw new CredentialException("Error en la autenticacion", "El usuario que intenta acceder esta deshabilitado");
+            throw new CredentialException("Authentication error.", "The user trying to access is disabled.");
     }
 
     /**
@@ -69,6 +69,6 @@ public class CustomAuthenticationManager implements AuthenticationManager {
      */
     private void verifyPasswords(String rawPassword, String encodedPassword) {
         if (!this.encoder.matches(rawPassword, encodedPassword))
-            throw new CredentialException("Error en la autenticacion", "La contraseña no pertenece al usuario");
+            throw new CredentialException("Authentication error.", "The password does not belong to the user.");
     }
 }

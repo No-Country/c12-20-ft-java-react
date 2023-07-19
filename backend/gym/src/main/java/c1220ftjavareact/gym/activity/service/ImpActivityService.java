@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,13 +31,13 @@ public class ImpActivityService implements IActivityService {
         Activity activity = modelMapper.map(activitySaveDto, Activity.class);
         activity.setCreateDate(LocalDate.now());
         activity.setDeleted(false);
-        if(activity.getName().isEmpty()) {
+        if(!StringUtils.hasText(activitySaveDto.getName())) {
             throw new ActivityException("The name cannot be empty", HttpStatus.BAD_REQUEST);
         }
-        if (activity.getDescription().isEmpty()) {
+        if (!StringUtils.hasText(activitySaveDto.getDescription())) {
             throw new ActivityException("The description cannot be empty", HttpStatus.BAD_REQUEST);
         }
-        if (activity.getImg().isEmpty()) {
+        if (!StringUtils.hasText(activitySaveDto.getImg())) {
             throw new ActivityException("The picture cannot be empty", HttpStatus.BAD_REQUEST);
         }
         this.activityRepository.save(activity);
@@ -64,15 +65,16 @@ public class ImpActivityService implements IActivityService {
     public ActivitySaveDto updateActivityDto(Long id, ActivitySaveDto activitySaveDto) {
         Activity activity = this.activityRepository.findById(id).orElseThrow(null);
 
-        if (activitySaveDto.getName().isEmpty()) {
+
+        if (!StringUtils.hasText(activitySaveDto.getName())) {
             throw new ActivityException("The name is impty", HttpStatus.BAD_REQUEST);
         }
 
-        if (activitySaveDto.getDescription().isEmpty()) {
+        if (!StringUtils.hasText(activitySaveDto.getDescription())) {
             throw new ActivityException("The description is impty", HttpStatus.BAD_REQUEST);
         }
 
-        if (activitySaveDto.getImg().isEmpty()) {
+        if (!StringUtils.hasText(activitySaveDto.getImg())) {
             throw new ActivityException("The picture is impty", HttpStatus.BAD_REQUEST);
         }
 

@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +25,12 @@ public class ImpRoomService implements IRoomService {
     @Override
     public RoomSaveDto create(RoomSaveDto roomSaveDto) {
         Room room = this.modelMapper.map(roomSaveDto, Room.class);
-        if (roomSaveDto.getName().isEmpty()) {
+        if (!StringUtils.hasText(roomSaveDto.getName())) {
             throw new RoomException("The name is empty", HttpStatus.BAD_REQUEST);
         }
 
-        if (roomSaveDto.getMaxCapacity() == 0) {
-            throw new RoomException("The maximum capacity cannot be 0", HttpStatus.BAD_REQUEST);
+        if (roomSaveDto.getMaxCapacity() <= 0) {
+            throw new RoomException("The maximum capacity must be greater than 0", HttpStatus.BAD_REQUEST);
         }
 
         this.roomRepository.save(room);
@@ -53,7 +54,7 @@ public class ImpRoomService implements IRoomService {
     @Override
     public RoomSaveDto updateRoom(Long id, RoomSaveDto roomSaveDto) {
         Room room = this.roomRepository.findById(id).orElseThrow(null);
-        if (roomSaveDto.getName().isEmpty()) {
+        if (!StringUtils.hasText(roomSaveDto.getName())) {
             throw new RoomException("The name cannot empy", HttpStatus.BAD_REQUEST);
         }
 
@@ -74,7 +75,7 @@ public class ImpRoomService implements IRoomService {
     @Override
     public RoomWithIdDto getRoomDtoById(Long id) {
         Room room = this.roomRepository.findRoomFalse(id);
-        if (room.isDeleted()) {
+        if (room == null) {
             throw new RoomException("The room is not found", HttpStatus.NOT_FOUND);
         }
         return this.modelMapper.map(room, RoomWithIdDto.class);
