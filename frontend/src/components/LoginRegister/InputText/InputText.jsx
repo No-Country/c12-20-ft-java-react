@@ -20,7 +20,9 @@ export const InputText = ({ type }) => {
   return (
     <>
       <div className="flex flex-col text-sm gap-2">
-        <label className="font-semibold text-[#111111a8]">{type}*</label>
+        <label className="font-semibold text-[#111111a8] text-left">
+          {type}*
+        </label>
         <input
           type="text"
           value={
@@ -42,7 +44,7 @@ export const InputText = ({ type }) => {
               : () => {}
           }
           placeholder={`Enter your ${type?.toLowerCase()}`}
-          className={`border h-10 border-[#2e2e2e80] outline-[#000] rounded-md p-3 pr-10 relative w-full ${
+          className={`border h-10 border-[#2e2e2e80] outline-[#000] rounded-md p-3 pr-10 relative w-full text-[#111] ${
             errorMessageRegister ? "border-[red] border-2" : ""
           }${
             errorMessageLogin &&

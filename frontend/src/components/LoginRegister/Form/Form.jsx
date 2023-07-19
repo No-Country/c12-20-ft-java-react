@@ -62,15 +62,15 @@ export const Form = ({ type }) => {
                 />
                 <p className="text-[#111]">Remember me</p>
               </div>
-              <button
+              <Link
+                to="/change-password"
                 onClick={() => {
-                  handleReset;
-                  navigate("/change-password");
+                  handleReset();
                 }}
                 className="text-[#FF0000] hover:underline"
               >
                 Forgot password?
-              </button>
+              </Link>
             </div>
             <ButtonSign>Sign in</ButtonSign>
             <div className="relative">
