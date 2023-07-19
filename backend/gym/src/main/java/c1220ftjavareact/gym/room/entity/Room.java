@@ -33,4 +33,7 @@ public class Room implements Serializable {
     @OneToMany
     private List<TrainingSession> trainingSession;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
 }

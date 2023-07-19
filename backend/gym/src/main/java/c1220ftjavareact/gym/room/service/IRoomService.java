@@ -9,7 +9,7 @@ import java.util.List;
 public interface IRoomService {
     public RoomSaveDto create(RoomSaveDto roomSaveDto);
 
-    public void delete(Long id);
+    public RoomWithIdDto delete(Long id);
 
     public RoomSaveDto updateRoom(Long id, RoomSaveDto roomSaveDto);
 

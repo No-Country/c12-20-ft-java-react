@@ -5,12 +5,13 @@ import c1220ftjavareact.gym.activity.dto.ActivityWithIdDto;
 import c1220ftjavareact.gym.activity.entity.Activity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IActivityService {
 
     public ActivitySaveDto createActivity(ActivitySaveDto activitySaveDto);
 
-    public void deleteActivity(Long id);
+    public ActivityWithIdDto deleteActivity(Long id);
 
     public ActivitySaveDto updateActivityDto(Long id, ActivitySaveDto activitySaveDto);
 
