@@ -5,6 +5,7 @@ import c1220ftjavareact.gym.activity.dto.ActivityWithIdDto;
 import c1220ftjavareact.gym.activity.exception.ActivityException;
 import c1220ftjavareact.gym.activity.repository.ActivityRepository;
 import c1220ftjavareact.gym.activity.entity.Activity;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Getter
 public class ImpActivityService implements IActivityService {
 
     private final ActivityRepository activityRepository;
