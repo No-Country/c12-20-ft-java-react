@@ -32,21 +32,17 @@ public class ForgotPasswordController {
      * @param email Email del usuario que solicita el cambio de contraseña
      * @Authroization No necesita
      */
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping( produces = MediaType.APPLICATION_JSON_VALUE )
     public HttpEntity<Void> createForgotPassword(
             @RequestParam("email") @Email String email
     ) {
-        Map<String, String> values = new HashMap<>();
-        if (this.passwordService.existsByEmail(email)) {
-            var forgotPassword = this.passwordService.findByEmail(email);
-            this.passwordService.assertIsNotEnable(forgotPassword.enable());
-            this.passwordService.assertIsExpired(forgotPassword.expirationDate());
-
-            values =this.passwordService.createOtherPassword(forgotPassword);
-        } else {
-            values = this.passwordService.saveForgotPassword(email);
+        if(this.passwordService.existsByEmail(email)){
+            var forgot = this.passwordService.findByEmail(email);
+            this.passwordService.assertIsNotEnable(forgot.enable());
+            this.passwordService.assertIsNotExpired(forgot.expirationDate(), Long.parseLong(forgot.id()));
         }
 
+        Map<String, String> values = this.passwordService.saveForgotPassword(email);
         this.publisher.publishEvent(new RecoveryPasswordEvent(
                 this,
                 values.get("id"),
@@ -77,7 +73,7 @@ public class ForgotPasswordController {
         this.passwordService.assertKeysEquals(id, forgotPassword.id());
 
         this.passwordService.assertIsEnable(forgotPassword.enable());
-        this.passwordService.assertIsNotExpired(forgotPassword.expirationDate());
+        this.passwordService.assertIsNotExpired(forgotPassword.expirationDate(), Long.parseLong(id));
 
         return ResponseEntity.noContent().build();
     }
@@ -91,9 +87,10 @@ public class ForgotPasswordController {
      */
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> updateForgotenPassword(@RequestBody UserPasswordDTO dto) {
+        log.info("DTO: {}", dto);
         if (!dto.password().equals(dto.repeatedPassword()))
             throw new UpdatePasswordException(
-                    "Error en peticion cambio de contraseña", "Las contraseñas enviadas no coinciden"
+                    "Error in password change request.", "The passwords sent do not match."
             );
 
         this.passwordService.updateForgottenPassword(dto);

@@ -66,7 +66,7 @@ public class AuthController {
 
     /**
      * Endpoint para realizar el registro de un empleado
-     * AGREAR BACK
+     *
      * @param employeeDTO DTO con los datos que se guardaran del empleado
      * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
      */
@@ -74,16 +74,15 @@ public class AuthController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public HttpEntity<Void> employeeSignUp(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
         this.service.assertEmailIsNotRegistered(employeeDTO.email());
-        var userDTO = this.userMapper.employeeSaveToUserSave().map(employeeDTO);
 
-        service.saveUser(userDTO, "EMPLOYEE");
+        var pass = service.saveEmployee(employeeDTO);
 
         publisher.publishEvent(new UserCreatedEvent(
                 this,
-                userDTO.email(),
-                userDTO.name(),
-                userDTO.lastname(),
-                userDTO.password(),
+                employeeDTO.email(),
+                employeeDTO.name(),
+                employeeDTO.lastname(),
+                pass,
                 new UserCreatedStrategy())
         );
 
