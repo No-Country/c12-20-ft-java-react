@@ -24,13 +24,12 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iroomService.create(roomSaveDto));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable("id") long id) {
-        this.iroomService.delete(id);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<RoomWithIdDto> deleteRoom(@PathVariable("id") long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iroomService.delete(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<RoomSaveDto> updateRoom(@PathVariable("id") long id, @RequestBody RoomSaveDto roomSaveDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iroomService.updateRoom(id, roomSaveDto));
     }

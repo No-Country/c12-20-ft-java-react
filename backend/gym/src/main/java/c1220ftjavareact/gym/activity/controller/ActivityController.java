@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,13 +24,12 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iactivityService.createActivity(activitySaveDto));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteActivity(@PathVariable("id") Long id) {
-        this.iactivityService.deleteActivity(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<ActivityWithIdDto> deleteActivity(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.deleteActivity(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ActivitySaveDto> updateActivity(@PathVariable Long id, @RequestBody ActivitySaveDto activity) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.updateActivityDto(id, activity));
     }
