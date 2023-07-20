@@ -1,5 +1,6 @@
 package c1220ftjavareact.gym.user.service;
 
+import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
 import c1220ftjavareact.gym.user.model.User;
 import c1220ftjavareact.gym.user.projection.UserProjection;
 import c1220ftjavareact.gym.user.dto.UserSaveDTO;
@@ -42,6 +43,7 @@ public interface UserService {
      */
     void saveUser(UserSaveDTO model, String role);
 
+    String saveEmployee(EmployeeSaveDTO model);
     /**
      * Guarda un Usuario registrado con google en la base de datos
      *

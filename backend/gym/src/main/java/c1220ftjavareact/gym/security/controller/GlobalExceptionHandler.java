@@ -1,9 +1,11 @@
 package c1220ftjavareact.gym.security.controller;
 
+import c1220ftjavareact.gym.activity.exception.ActivityException;
 import c1220ftjavareact.gym.common.ApiException;
 import c1220ftjavareact.gym.common.ExceptionDTO;
 import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
 import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.room.exception.RoomException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,21 @@ import java.util.Map;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = {ActivityException.class})
+    protected ResponseEntity<Object> handleConflict(
+            ActivityException ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), ex.getHttpStatus(), request);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = {RoomException.class})
+    protected ResponseEntity<Object> handleConflict(
+            RoomException ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), ex.getHttpStatus(), request);
+    }
+
 
     /**
      * Handler de Exception
