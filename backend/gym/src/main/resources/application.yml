@@ -1,22 +1,22 @@
 #Desactivo los detalles de la request
-enableLoggingRequestDetails: false
+#enableLoggingRequestDetails: false
 server:
   error:
     #Al haber un error envia siempre message y los parametros
-    include-message: always
-    include-binding-errors: always
+#    include-message: always
+#    include-binding-errors: always
 #Se asigna los niveles de Logging para mensajes en consola
 logging:
-  level:
-    root: INFO
-    web: DEBUG
-    org:
-      hibernate:
-        SQL: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
+#  level:
+#    root: INFO
+#    web: DEBUG
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
   #Cambio el formato de la hora en consola
   pattern:
     dateformat: HH:mm:ss
@@ -28,15 +28,15 @@ spring:
     # conexion con localhost
     url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
     username: root
-    password: admin
+    password: root
     # conexion con base de datos
 #    password: p7Mw1nO979WOfvW9AXdS
 #    url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
 #    username: uyqaqtoeqwns6g02
 #    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    #Activa el mostrar el SQL ejecutado
-    show-sql: false
+#    #Activa el mostrar el SQL ejecutado
+#    show-sql: false
     #Revoco el manejo de la Transaccion a JPA (Recomendable)
     open-in-view: false
     properties:
