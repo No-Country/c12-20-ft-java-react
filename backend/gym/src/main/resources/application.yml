@@ -34,8 +34,6 @@ spring:
     url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
     username: uyqaqtoeqwns6g02
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-
   jpa:
     #Activa el mostrar el SQL ejecutado
     show-sql: false
