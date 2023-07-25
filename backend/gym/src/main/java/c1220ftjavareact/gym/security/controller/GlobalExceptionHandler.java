@@ -1,12 +1,12 @@
 package c1220ftjavareact.gym.security.controller;
 
 import c1220ftjavareact.gym.activity.exception.ActivityException;
-import c1220ftjavareact.gym.common.ApiException;
-import c1220ftjavareact.gym.common.ExceptionDTO;
-import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
-import c1220ftjavareact.gym.common.ResourceNotFoundException;
 import c1220ftjavareact.gym.payment.exception.PaymentException;
 import c1220ftjavareact.gym.room.exception.RoomException;
+import c1220ftjavareact.gym.security.exception.ApiException;
+import c1220ftjavareact.gym.security.exception.ExceptionDTO;
+import c1220ftjavareact.gym.security.exception.ResourceAlreadyExistsException;
+import c1220ftjavareact.gym.security.exception.ResourceNotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Handler de Exception
      */
 
-    @ExceptionHandler(Exception.class)
+/*    @ExceptionHandler(Exception.class)
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(Exception ex) {
         var errorDetails = ExceptionDTO.builder()
                 .title("Excepcion no manejada")
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
+    }*/
 
 
     @ExceptionHandler(ApiException.class)

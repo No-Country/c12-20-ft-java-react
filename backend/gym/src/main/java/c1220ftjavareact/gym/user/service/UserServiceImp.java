@@ -1,7 +1,8 @@
 package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
-import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.security.exception.ResourceAlreadyExistsException;
+import c1220ftjavareact.gym.security.exception.ResourceNotFoundException;
+import c1220ftjavareact.gym.training.exception.TrainingException;
 import c1220ftjavareact.gym.user.dto.EmployeeDTO;
 import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
 import c1220ftjavareact.gym.user.dto.UserSaveDTO;
@@ -16,14 +17,12 @@ import c1220ftjavareact.gym.user.repository.UserRepository;
 import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -164,5 +163,15 @@ public class UserServiceImp implements UserService {
 
         //Guardo la Entidad y mapeo a un User normal
         return this.userMapper.userEntityToUser().map(this.repository.saveAndFlush(user));
+    }
+
+    @Override
+    public UserEntity getUserEntity(Long id) {
+        Optional<UserEntity> user = repository.findById(id);
+        if(user.isEmpty()) {
+            throw new TrainingException("User not found.", HttpStatus.NOT_FOUND);
+        }
+
+        return user.get();
     }
 }

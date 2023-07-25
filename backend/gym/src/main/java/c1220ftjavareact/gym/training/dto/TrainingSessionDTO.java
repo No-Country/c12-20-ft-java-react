@@ -16,6 +16,7 @@ public class TrainingSessionDTO {
 
     private Long id;
     private Long activityId;
+    private String activityName;
     private Long roomId;
     private String roomName;
     private int capacity;

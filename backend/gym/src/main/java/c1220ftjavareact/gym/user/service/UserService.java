@@ -1,9 +1,11 @@
 package c1220ftjavareact.gym.user.service;
 
+import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.user.dto.EmployeeDTO;
 import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
 import c1220ftjavareact.gym.user.dto.UserSaveDTO;
 import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
+import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.user.model.User;
 import c1220ftjavareact.gym.user.projection.UserProjection;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,4 +85,6 @@ public interface UserService {
      * @param id  ID del usuario que se desea actualizar
      */
     User updateUser(UserUpdateDTO dto, String id);
+
+    UserEntity getUserEntity(Long id);
 }

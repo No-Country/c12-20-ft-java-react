@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.security.exception.ResourceNotFoundException;
 import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.user.dto.mapper.ForgotPasswordMapperBean;
 import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;

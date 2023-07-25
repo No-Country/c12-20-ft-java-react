@@ -1,6 +1,9 @@
-package c1220ftjavareact.gym.subscription.dto;
+package c1220ftjavareact.gym.subscription.other;
 
-public interface SubscribedSession {
+/**
+ * Clases de marcos
+ */
+public interface SubscribedSessionDTO {
 
     Long getId();
 

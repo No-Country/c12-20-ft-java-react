@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.common;
+package c1220ftjavareact.gym.security.exception;
 
 import lombok.Getter;
 

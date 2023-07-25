@@ -2,7 +2,7 @@ package c1220ftjavareact.gym.payment.entity;
 
 
 import c1220ftjavareact.gym.payment.paymentenum.Method;
-import c1220ftjavareact.gym.subscription.entity.SubscriptionEntity;
+import c1220ftjavareact.gym.subscription.entity.Subscription;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class PaymentEntity {
     @ManyToOne
     @JoinColumn(name = "id_subscription", referencedColumnName = "id")
     @NotNull
-    private SubscriptionEntity idSubscription;
+    private Subscription idSubscription;
     @NotNull
     private LocalDate day;
     @NotNull
