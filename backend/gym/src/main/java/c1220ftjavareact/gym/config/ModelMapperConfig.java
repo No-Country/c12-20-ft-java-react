@@ -49,6 +49,7 @@ public class ModelMapperConfig {
         modelMapper.typeMap(TrainingSession.class, TrainingSessionDTO.class)
                 .addMappings(mapper -> {
                     mapper.map(src -> src.getActivity().getId(), TrainingSessionDTO::setActivityId);
+                    mapper.map(src -> src.getActivity().getName(), TrainingSessionDTO::setActivityName);
                     mapper.map(src -> src.getRoom().getId(), TrainingSessionDTO::setRoomId);
                     mapper.map(src -> src.getRoom().getName(), TrainingSessionDTO::setRoomName);
                    /* mapper.using(stringToLocalTimeConverter).map(TrainingSession::getTimeStart, TrainingSessionDTO::setTimeStart);
