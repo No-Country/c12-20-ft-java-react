@@ -1,8 +1,8 @@
 package c1220ftjavareact.gym.subscription.repository;
 
-import c1220ftjavareact.gym.subscription.dto.SubscribedSession;
+import c1220ftjavareact.gym.subscription.dto.SubscribedSessionDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionInfoDTO;
-import c1220ftjavareact.gym.subscription.entity.SubscriptionEntity;
+import c1220ftjavareact.gym.subscription.entity.Subscription;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,11 +11,18 @@ import org.springframework.stereotype.Repository;
 import java.util.Set;
 
 @Repository
-public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity, Long> {
+public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
-    @Query("SELECT COUNT(s) FROM SubscriptionEntity s WHERE s.training.id = :trainingSessionId")
+    @Query("SELECT COUNT(s) FROM Subscription s WHERE s.training.id = :trainingSessionId")
     Integer countByTrainingSessionId(@Param("trainingSessionId") Long trainingSessionId);
 
+
+
+
+
+
+
+    /// MARCOS
     @Query(value = "SELECT " +
             "s.id AS id, " +
             "u.picture, " +
@@ -56,6 +63,6 @@ public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity
             JOIN room r ON ts.room_id = r.id
             WHERE s.customer_id = :id
             """, nativeQuery = true)
-    Set<SubscribedSession> findUserSubscriptions(@Param("id") Long id);
+    Set<SubscribedSessionDTO> findUserSubscriptions(@Param("id") Long id);
 
 }

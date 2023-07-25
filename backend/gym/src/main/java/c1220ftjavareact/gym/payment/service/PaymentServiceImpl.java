@@ -4,8 +4,8 @@ import c1220ftjavareact.gym.payment.dto.PaymentDTO;
 import c1220ftjavareact.gym.payment.entity.PaymentEntity;
 import c1220ftjavareact.gym.payment.exception.PaymentException;
 import c1220ftjavareact.gym.payment.repository.PaymentRepository;
-import c1220ftjavareact.gym.subscription.entity.SubscriptionEntity;
-import c1220ftjavareact.gym.subscription.service.SubscriptionServiceImpl;
+import c1220ftjavareact.gym.subscription.entity.Subscription;
+import c1220ftjavareact.gym.subscription.service.ImplSubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -17,12 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
-    private final SubscriptionServiceImpl subscriptionService;
+    private final ImplSubscriptionService subscriptionService;
 
     @Transactional
     @Override
     public PaymentDTO createPayment(PaymentDTO paymentDTO) {
-        SubscriptionEntity subscription = this.subscriptionService.getSubscriptionById(paymentDTO.getIdSubscription());
+        Subscription subscription = this.subscriptionService.getSubscriptionById(paymentDTO.getIdSubscription());
         if (paymentDTO.getIdSubscription() == null || paymentDTO.getIdSubscription() <= 0) {
             throw new PaymentException("Suscription not found", HttpStatus.NOT_FOUND);
         }

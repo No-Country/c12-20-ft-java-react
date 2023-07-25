@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.subscription.dto;
 
-public interface SubscribedSession {
+public interface SubscribedSessionDTO {
 
     Long getId();
 

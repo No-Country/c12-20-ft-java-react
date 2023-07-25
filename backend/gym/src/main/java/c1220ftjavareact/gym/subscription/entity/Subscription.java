@@ -1,10 +1,9 @@
 package c1220ftjavareact.gym.subscription.entity;
 
-import c1220ftjavareact.gym.subscription.model.State;
+import c1220ftjavareact.gym.subscription.enums.State;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.user.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,13 +17,17 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubscriptionEntity {
-
+public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    private LocalDate createDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "enum('RESERVED', 'ACTIVE', 'INACTIVE', 'CANCELED')")
+    private State state;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "customer_id")
@@ -34,12 +37,4 @@ public class SubscriptionEntity {
     @ToString.Exclude
     @JoinColumn(name = "training_session_id")
     private TrainingSession training;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "state", columnDefinition = "enum('RESERVED', 'ACTIVE', 'INACTIVE', 'CANCELED')")
-    private State state;
-
-    @NotNull
-    @Column(name = "create_date")
-    private LocalDate subscriptionDay;
 }
