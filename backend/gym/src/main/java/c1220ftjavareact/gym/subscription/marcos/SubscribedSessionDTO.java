@@ -1,4 +1,4 @@
-package c1220ftjavareact.gym.subscription.dto;
+package c1220ftjavareact.gym.subscription.marcos;
 
 public interface SubscribedSessionDTO {
 

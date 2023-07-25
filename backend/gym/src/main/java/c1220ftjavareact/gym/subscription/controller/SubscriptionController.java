@@ -1,14 +1,11 @@
 package c1220ftjavareact.gym.subscription.controller;
 
 
-import c1220ftjavareact.gym.subscription.dto.SubscribedSessionDTO;
-import c1220ftjavareact.gym.subscription.dto.SubscriptionInfoDTO;
+import c1220ftjavareact.gym.subscription.marcos.SubscribedSessionDTO;
+import c1220ftjavareact.gym.subscription.marcos.SubscriptionInfoDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionSaveDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionUpdateDTO;
 import c1220ftjavareact.gym.subscription.service.ISubscriptionService;
-import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
-import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +28,7 @@ public class SubscriptionController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Subscription created.");
     }
 
-    @PutMapping(value = "/update/{subscriptionId}")
+    @PutMapping(value = "/update")
     public ResponseEntity<String> updateSubscriptionById(@RequestBody SubscriptionUpdateDTO subscriptionUpdateDTO) {
         this.subscriptionService.updateSubscription(subscriptionUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body("Subscription updated.");

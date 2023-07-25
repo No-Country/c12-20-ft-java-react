@@ -1,7 +1,7 @@
 package c1220ftjavareact.gym.subscription.service;
 
-import c1220ftjavareact.gym.subscription.dto.SubscribedSessionDTO;
-import c1220ftjavareact.gym.subscription.dto.SubscriptionInfoDTO;
+import c1220ftjavareact.gym.subscription.marcos.SubscribedSessionDTO;
+import c1220ftjavareact.gym.subscription.marcos.SubscriptionInfoDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionSaveDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionUpdateDTO;
 import c1220ftjavareact.gym.subscription.entity.Subscription;
@@ -71,13 +71,21 @@ public class ImplSubscriptionService implements ISubscriptionService {
 
     @Override
     public void updateSubscription(SubscriptionUpdateDTO subscriptionUpdateDTO) {
+        Optional<Subscription> optionalSubscription = subscriptionRepository.findById(subscriptionUpdateDTO.getId());
 
+        if (optionalSubscription.isEmpty()) {
+            throw new SubscriptionException("Subscription not found", HttpStatus.NOT_FOUND);
+        } else {
+            Subscription subscription = optionalSubscription.get();
+            subscription.setState(subscriptionUpdateDTO.getUpdatedState());
+            subscriptionRepository.save(subscription);
+        }
     }
 
     @Override
     public Subscription getSubscriptionById(Long id) {
         Optional<Subscription> subscriptionEntity = subscriptionRepository.findById(id);
-        if(subscriptionEntity.isEmpty()) {
+        if (subscriptionEntity.isEmpty()) {
             throw new SubscriptionException("Subscription not found.", HttpStatus.NOT_FOUND);
         }
 

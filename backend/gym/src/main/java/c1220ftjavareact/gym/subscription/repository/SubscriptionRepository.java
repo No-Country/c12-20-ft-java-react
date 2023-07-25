@@ -1,7 +1,7 @@
 package c1220ftjavareact.gym.subscription.repository;
 
-import c1220ftjavareact.gym.subscription.dto.SubscribedSessionDTO;
-import c1220ftjavareact.gym.subscription.dto.SubscriptionInfoDTO;
+import c1220ftjavareact.gym.subscription.marcos.SubscribedSessionDTO;
+import c1220ftjavareact.gym.subscription.marcos.SubscriptionInfoDTO;
 import c1220ftjavareact.gym.subscription.entity.Subscription;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
