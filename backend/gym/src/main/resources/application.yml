@@ -26,14 +26,14 @@ spring:
     banner-mode: off
   datasource:
     # conexion con localhost
-    url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
-    username: root
-    password: root
+    #url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
+    #username: root
+    #password: root
     # conexion con base de datos
-    #password: p7Mw1nO979WOfvW9AXdS
-    #username: uyqaqtoeqwns6g02
-    #url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
-    #driver-class-name: com.mysql.cj.jdbc.Driver
+    password: p7Mw1nO979WOfvW9AXdS
+    username: uyqaqtoeqwns6g02
+    url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     #Activa el mostrar el SQL ejecutado
     #show-sql: false
