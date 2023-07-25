@@ -22,7 +22,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ImplTrainingSessionService implements ITrainingSessionService {
@@ -53,10 +52,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
             throw new TrainingException("Capacity out of room range", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        /// obtener sesiones en un room y conservar no borradas
-        List<TrainingSession> sessionsAtRoom = room.getTrainingSession();
-        sessionsAtRoom = this.filterSessions(sessionsAtRoom);
-
         /// verificar por dias
         if (this.verifyRoomAvailable(trainingSession)) {
             TrainingSession savedTraining = mapper.map(trainingSession, TrainingSession.class);
@@ -69,9 +64,8 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
             /// Persistence
             savedTraining = trainingSessionRepository.save(savedTraining);
-            TrainingSessionDTO dto = mapper.map(savedTraining, TrainingSessionDTO.class);
 
-            return dto;
+            return mapper.map(savedTraining, TrainingSessionDTO.class);
         } else {
             throw new TrainingException("Room not available at the selected time", HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -104,13 +98,13 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     @Override
     public TrainingSessionDTO getTrainingSessionById(Long id) {
         Optional<TrainingSession> trainingSession = trainingSessionRepository.findById(id);
-        TrainingSession aux = trainingSession.get();
+
         if (trainingSession.isEmpty() || trainingSession.get().isDeleted()) {
             throw new TrainingException("Training session not found", HttpStatus.NOT_FOUND);
         }
 
-        TrainingSessionDTO dto = mapper.map(aux, TrainingSessionDTO.class);
-        return dto;
+        TrainingSession aux = trainingSession.get();
+        return mapper.map(aux, TrainingSessionDTO.class);
     }
 
     /// Obtener entidad de training session
@@ -157,9 +151,8 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
             trainingEntity.setRoom(room);
 
             trainingEntity = trainingSessionRepository.save(trainingEntity);
-            TrainingSessionDTO dto = mapper.map(trainingEntity, TrainingSessionDTO.class);
 
-            return dto;
+            return mapper.map(trainingEntity, TrainingSessionDTO.class);
         } else {
             throw new TrainingException("Room not available at the selected time", HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -193,7 +186,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
     public UnAvailableTimes getUnavailableTimes() {
         List<TrainingSession> allTrainingSessions = trainingSessionRepository.findByDeletedFalse();
         UnAvailableTimes aux = new UnAvailableTimes();
-        boolean flag = false;
+        boolean flag;
 
         for (TrainingSession item : allTrainingSessions) {
             Room roomAux = item.getRoom();
@@ -210,7 +203,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
             for (RoomTimes dto : aux.getListRooms()) {
 
                 /// en este if agregamos la informacion a cada  dia dentro de AvaiableTimes
-                if (dto.getRoomId() == roomAux.getId()) {
+                if (dto.getRoomId().equals(roomAux.getId())) {
 
                     /// Se evalua por dias cuando corresponde agregar auxTimes
                     if (item.isMonday()) {
@@ -268,7 +261,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
                 }
             }
         }
-        System.out.println("TEST AUX: \n" + aux);
         return aux;
     }
 
@@ -276,7 +268,6 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         List<TrainingSessionDTO> listDTO = new ArrayList<>();
 
         for (TrainingSession item : entityList) {
-            System.out.println("PRUEBA:" + item);
             TrainingSessionDTO aux = mapper.map(item, TrainingSessionDTO.class);
             listDTO.add(aux);
         }
@@ -290,6 +281,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
 
         /// obtener training sessions de ese room
         List<TrainingSession> sessionsAtRoom = room.getTrainingSession();
+        sessionsAtRoom = this.filterSessions(sessionsAtRoom);
 
         /// filtrar por los dias que nos interesan
         List<TrainingSession> filteredSessionsRoom = sessionsAtRoom.stream()
@@ -300,7 +292,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
                         || session.isFriday() && !session.isDeleted() && trainingSession.isFriday()
                         || session.isSaturday() && !session.isDeleted() && trainingSession.isSaturday()
                         || session.isSunday() && !session.isDeleted() && trainingSession.isSunday())
-                .collect(Collectors.toList());
+                .toList();
 
         /// Evaluar horarios para determinar disponibilidad
         LocalTime newSessionStartTime = LocalTime.parse(trainingSession.getTimeStart());

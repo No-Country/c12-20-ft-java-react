@@ -20,31 +20,31 @@ public class RoomController {
         this.iroomService = iroomService;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    ///@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PostMapping
     public ResponseEntity<RoomSaveDto> create(@RequestBody RoomSaveDto roomSaveDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iroomService.create(roomSaveDto));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    ///@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PutMapping("/{id}")
     public ResponseEntity<RoomWithIdDto> deleteRoom(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iroomService.delete(id));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    ///@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PutMapping("/update/{id}")
     public ResponseEntity<RoomSaveDto> updateRoom(@PathVariable("id") long id, @RequestBody RoomSaveDto roomSaveDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iroomService.updateRoom(id, roomSaveDto));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    ///@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping
     public ResponseEntity<List<RoomWithIdDto>> getAllDtoRoom() {
         return ResponseEntity.status(HttpStatus.OK).body(this.iroomService.getAllRooms());
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    ///@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping("/{id}")
     public ResponseEntity<RoomWithIdDto> getRoomDto(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iroomService.getRoomDtoById(id));
