@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/payments")
 @RequiredArgsConstructor
@@ -15,10 +17,6 @@ public class PaymentController {
 
     @PostMapping
     public PaymentDTO createPayment(@RequestBody PaymentDTO paymentDTO) {
-        /*
-            Revisa el DTO de Payment, estas recibiendo un DTO entero para la subscripcion solo deberias revisar el ID
-                y recuperar el resto de ser necesario (Borra este msg xd)
-         */
         return paymentService.createPayment(paymentDTO);
     }
 
@@ -30,7 +28,6 @@ public class PaymentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePayment(@PathVariable int id) {
         boolean success = paymentService.deletePayment(id);
-
         if (success) {
             return ResponseEntity.ok("Payment deleted successfully.");
         } else {
@@ -39,7 +36,12 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable int id) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.getPaymentById(id));
+    public ResponseEntity<PaymentDTO> getPaymentDtoById(@PathVariable int id) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.getPaymentDtoById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PaymentDTO>> getAllPaymentsDto() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.getAllPaymentsDto());
     }
 }

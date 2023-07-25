@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.payment.service;
 
 import c1220ftjavareact.gym.payment.dto.PaymentDTO;
+import c1220ftjavareact.gym.payment.dto.PaymentDtoComplete;
 import c1220ftjavareact.gym.payment.entity.PaymentEntity;
 import c1220ftjavareact.gym.payment.exception.PaymentException;
 import c1220ftjavareact.gym.payment.repository.PaymentRepository;
@@ -11,6 +12,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -62,12 +66,13 @@ public class PaymentServiceImpl implements PaymentService {
         if (payment == null) {
             throw new PaymentException("Suscription not found", HttpStatus.NOT_FOUND);
         } else {
-            this.modelMapper.map(paymentDTO, PaymentEntity.class);
-
+            this.modelMapper.map(paymentDTO, payment);
+            PaymentEntity updatePayment = this.paymentRepository.save(payment);
+            return this.modelMapper.map(updatePayment, PaymentDTO.class);
         }
-        return null;
     }
 
+    @Transactional
     @Override
     public Boolean deletePayment(int id) {
         try {
@@ -78,11 +83,30 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public PaymentDTO getPaymentById(int id) {
+    public PaymentDTO getPaymentDtoById(int id) {
         PaymentEntity payment = paymentRepository.findById(id).orElse(null);
         if (payment != null) {
+            throw new PaymentException("Payment not found", HttpStatus.NOT_FOUND);
+        } else {
+            return this.modelMapper.map(payment, PaymentDTO.class);
         }
-        return null;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<PaymentDTO> getAllPaymentsDto() {
+        List<PaymentEntity> paymentList = this.paymentRepository.findAll();
+        List<PaymentDTO> paymentDtoList = new ArrayList<>();
+
+        if (paymentList.size() <= 0) {
+            throw new PaymentException("The list of payments is empty", HttpStatus.BAD_REQUEST);
+        }
+        for (PaymentEntity payment: paymentList) {
+            PaymentDTO paymentDto = this.modelMapper.map(payment, PaymentDTO.class);
+            paymentDtoList.add(paymentDto);
+        }
+        return paymentDtoList;
     }
 }
