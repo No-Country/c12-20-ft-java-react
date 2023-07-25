@@ -13,7 +13,7 @@ import java.util.Set;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
-    @Query("SELECT COUNT(s) FROM Subscription s WHERE s.training.id = :trainingSessionId")
+    @Query("SELECT COUNT(s) FROM Subscription s WHERE s.trainingSession.id = :trainingSessionId")
     Integer countByTrainingSessionId(@Param("trainingSessionId") Long trainingSessionId);
 
 

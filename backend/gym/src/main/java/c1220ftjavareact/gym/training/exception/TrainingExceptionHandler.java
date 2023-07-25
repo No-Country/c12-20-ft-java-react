@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * Clase temporal (se va a eliminar proximamente)
  */
 @RestControllerAdvice
-public class ExceptionHandler extends ResponseEntityExceptionHandler {
+public class TrainingExceptionHandler extends ResponseEntityExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(value = {TrainingException.class})
     protected ResponseEntity<Object> handleConflict(
