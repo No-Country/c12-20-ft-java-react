@@ -1,11 +1,12 @@
 package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
-import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
-import c1220ftjavareact.gym.user.dto.UserSaveDTO;
-import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
 import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
 import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.user.dto.EmployeeDTO;
+import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
+import c1220ftjavareact.gym.user.dto.UserSaveDTO;
+import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
+import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.user.enums.Role;
 import c1220ftjavareact.gym.user.exception.UserSaveException;
@@ -19,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -87,8 +91,10 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public String saveEmployee(EmployeeSaveDTO model) {
+    public Map<String, String> saveEmployee(EmployeeSaveDTO model) {
+        var values = new HashMap<String, String>();
         var pass = UUID.randomUUID().toString().substring(0, 6);
+        values.put("pass", pass);
         try {
             var entity = new UserEntity();
 
@@ -99,14 +105,15 @@ public class UserServiceImp implements UserService {
             entity.setLastname(model.lastname());
             entity.setPicture(model.picture());
             entity.setPassword(userMapper.password().map(pass));
-            entity.setCreateAt( TimeUtils.getLocalDate() );
+            entity.setCreateAt(TimeUtils.getLocalDate());
 
-            repository.save(entity);
+            var user = repository.save(entity);
+            values.put("Id", user.getId().toString());
         } catch (Exception ex) {
             throw new UserSaveException("Error while saving the user.", "An unexpected error occurred while saving the user.");
         }
 
-        return pass;
+        return values;
     }
 
     @Override
@@ -125,24 +132,32 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public void changeDeletedStateUser(String id, String role, Boolean state) {
+    public void changeDeletedStateUser(Set<Long> employeeIds) {
         //Cuanta la cantidad de usuarios que existe con ese ID y Rol
-        if (this.repository.countUsersBy(id, role) < 1) {
-            throw new ResourceNotFoundException(
-                    "Resource not found.", "The user with IDsa "+id+" nis not an employee."
-            );
-        }
         //Cambia el estado del usuario
-        this.repository.changeStateUser(id, role, state.equals(true) ? "1" : "0");
+        this.repository.toggleDeletedStatusForEmployees(employeeIds);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Set<EmployeeDTO> findAllEmployees() {
+        return this.repository.findAllEmployee();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Set<String> findActiveActivity(String id) {
+        return this.repository.findActiveActivity(id);
+    }
+
 
     @Override
     public User updateUser(UserUpdateDTO dto, String id) {
         //Busca el Usuario
         var user = this.repository.findById(Long.parseLong(id))
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Resource not found.", "The user was not found."
-                    )
+                                "Resource not found.", "The user was not found."
+                        )
                 );
         //Actualizo las propiedades solicitadas
         user.update(dto, encoder);

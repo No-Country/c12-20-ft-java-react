@@ -1,6 +1,5 @@
 package c1220ftjavareact.gym.room.repository;
 
-import c1220ftjavareact.gym.room.dto.RoomSaveDto;
 import c1220ftjavareact.gym.room.entity.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

@@ -8,6 +8,6 @@ public record ExceptionDTO(
         String detail,
         String type,
         Integer status
-){
+) {
 
 }

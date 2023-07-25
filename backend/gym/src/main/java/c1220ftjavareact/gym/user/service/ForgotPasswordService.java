@@ -1,7 +1,7 @@
 package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.user.model.ForgotPassword;
 import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
+import c1220ftjavareact.gym.user.model.ForgotPassword;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;

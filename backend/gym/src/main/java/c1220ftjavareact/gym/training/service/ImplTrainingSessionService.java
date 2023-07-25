@@ -1,15 +1,15 @@
 package c1220ftjavareact.gym.training.service;
 
 import c1220ftjavareact.gym.activity.entity.Activity;
-import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.activity.service.IActivityService;
+import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.room.service.IRoomService;
-import c1220ftjavareact.gym.training.model.UnAvailableTimes;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.training.exception.TrainingException;
 import c1220ftjavareact.gym.training.model.RoomTimes;
+import c1220ftjavareact.gym.training.model.UnAvailableTimes;
 import c1220ftjavareact.gym.training.repository.TrainingSessionRepository;
 import c1220ftjavareact.gym.util.TimeFormatter;
 import org.modelmapper.ModelMapper;
@@ -19,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -193,7 +195,7 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
         UnAvailableTimes aux = new UnAvailableTimes();
         boolean flag = false;
 
-        for(TrainingSession item : allTrainingSessions) {
+        for (TrainingSession item : allTrainingSessions) {
             Room roomAux = item.getRoom();
             /// flag de room existente
             flag = false;
@@ -205,32 +207,32 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
             auxTimes[1] = auxString2;
 
             /// Buscamos coincidencia dentro de Available Times
-            for(RoomTimes dto : aux.getListRooms()) {
+            for (RoomTimes dto : aux.getListRooms()) {
 
                 /// en este if agregamos la informacion a cada  dia dentro de AvaiableTimes
-                if(dto.getRoomId() == roomAux.getId()) {
+                if (dto.getRoomId() == roomAux.getId()) {
 
                     /// Se evalua por dias cuando corresponde agregar auxTimes
-                    if(item.isMonday()) {
-                        aux.addTime(roomAux.getId(),DayOfWeek.MONDAY,auxTimes);
+                    if (item.isMonday()) {
+                        aux.addTime(roomAux.getId(), DayOfWeek.MONDAY, auxTimes);
                     }
-                    if(item.isTuesday()) {
-                        aux.addTime(roomAux.getId(),DayOfWeek.TUESDAY,auxTimes);
+                    if (item.isTuesday()) {
+                        aux.addTime(roomAux.getId(), DayOfWeek.TUESDAY, auxTimes);
                     }
-                    if(item.isThursday()) {
-                        aux.addTime(roomAux.getId(),DayOfWeek.THURSDAY,auxTimes);
+                    if (item.isThursday()) {
+                        aux.addTime(roomAux.getId(), DayOfWeek.THURSDAY, auxTimes);
                     }
-                    if(item.isWednesday()) {
-                        aux.addTime(roomAux.getId(),DayOfWeek.WEDNESDAY,auxTimes);
+                    if (item.isWednesday()) {
+                        aux.addTime(roomAux.getId(), DayOfWeek.WEDNESDAY, auxTimes);
                     }
-                    if(item.isFriday()) {
-                        aux.addTime(roomAux.getId(),DayOfWeek.FRIDAY,auxTimes);
+                    if (item.isFriday()) {
+                        aux.addTime(roomAux.getId(), DayOfWeek.FRIDAY, auxTimes);
                     }
-                    if(item.isSunday()) {
-                        aux.addTime(roomAux.getId(),DayOfWeek.SUNDAY,auxTimes);
+                    if (item.isSunday()) {
+                        aux.addTime(roomAux.getId(), DayOfWeek.SUNDAY, auxTimes);
                     }
-                    if(item.isSaturday()) {
-                        aux.addTime(roomAux.getId(),DayOfWeek.SATURDAY,auxTimes);
+                    if (item.isSaturday()) {
+                        aux.addTime(roomAux.getId(), DayOfWeek.SATURDAY, auxTimes);
                     }
 
                     /// En caso de agregar se considera que se encontro coincidencia, seteamos el flag a true asi no creamos un item nuevo
@@ -241,28 +243,28 @@ public class ImplTrainingSessionService implements ITrainingSessionService {
             }
 
             /// En caso de no encontrar coincidencia dentro de AvailableTimes se crea un item nuevo
-            if(!flag) {
+            if (!flag) {
                 aux.addNewRoom(roomAux.getId(), roomAux.getName());
-                if(item.isMonday()) {
-                    aux.addTime(roomAux.getId(),DayOfWeek.MONDAY,auxTimes);
+                if (item.isMonday()) {
+                    aux.addTime(roomAux.getId(), DayOfWeek.MONDAY, auxTimes);
                 }
-                if(item.isTuesday()) {
-                    aux.addTime(roomAux.getId(),DayOfWeek.TUESDAY,auxTimes);
+                if (item.isTuesday()) {
+                    aux.addTime(roomAux.getId(), DayOfWeek.TUESDAY, auxTimes);
                 }
-                if(item.isThursday()) {
-                    aux.addTime(roomAux.getId(),DayOfWeek.THURSDAY,auxTimes);
+                if (item.isThursday()) {
+                    aux.addTime(roomAux.getId(), DayOfWeek.THURSDAY, auxTimes);
                 }
-                if(item.isWednesday()) {
-                    aux.addTime(roomAux.getId(),DayOfWeek.WEDNESDAY,auxTimes);
+                if (item.isWednesday()) {
+                    aux.addTime(roomAux.getId(), DayOfWeek.WEDNESDAY, auxTimes);
                 }
-                if(item.isFriday()) {
-                    aux.addTime(roomAux.getId(),DayOfWeek.FRIDAY,auxTimes);
+                if (item.isFriday()) {
+                    aux.addTime(roomAux.getId(), DayOfWeek.FRIDAY, auxTimes);
                 }
-                if(item.isSunday()) {
-                    aux.addTime(roomAux.getId(),DayOfWeek.SUNDAY,auxTimes);
+                if (item.isSunday()) {
+                    aux.addTime(roomAux.getId(), DayOfWeek.SUNDAY, auxTimes);
                 }
-                if(item.isSaturday()) {
-                    aux.addTime(roomAux.getId(),DayOfWeek.SATURDAY,auxTimes);
+                if (item.isSaturday()) {
+                    aux.addTime(roomAux.getId(), DayOfWeek.SATURDAY, auxTimes);
                 }
             }
         }

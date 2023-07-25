@@ -2,10 +2,11 @@ package c1220ftjavareact.gym.subscription.dto;
 
 
 import c1220ftjavareact.gym.subscription.model.State;
+import lombok.Builder;
+
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import lombok.Builder;
-import javax.validation.constraints.NotNull;
 
 @Builder
 public record SubscriptionDTO(
@@ -14,4 +15,5 @@ public record SubscriptionDTO(
         @NotNull State state,
         @NotNull LocalDate subscriptionDay,
         @NotNull @Size(min = 1, max = 45) Long idTrainingSession
-) {}
+) {
+}

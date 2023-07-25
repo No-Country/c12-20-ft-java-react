@@ -5,7 +5,6 @@ import c1220ftjavareact.gym.activity.dto.ActivityWithIdDto;
 import c1220ftjavareact.gym.activity.entity.Activity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IActivityService {
 

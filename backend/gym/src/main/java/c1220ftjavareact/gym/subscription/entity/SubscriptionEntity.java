@@ -5,7 +5,10 @@ import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.user.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;

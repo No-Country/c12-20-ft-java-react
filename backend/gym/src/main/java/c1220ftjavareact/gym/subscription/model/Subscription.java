@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.subscription.model;
 
 
-import c1220ftjavareact.gym.subscription.model.State;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

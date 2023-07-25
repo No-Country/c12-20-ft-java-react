@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 
 @Data
-public class ActivityException extends RuntimeException{
+public class ActivityException extends RuntimeException {
     private String message;
     private HttpStatus httpStatus;
 

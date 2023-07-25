@@ -53,7 +53,8 @@ public class ModelMapperConfig {
                     mapper.map(src -> src.getRoom().getName(), TrainingSessionDTO::setRoomName);
                    /* mapper.using(stringToLocalTimeConverter).map(TrainingSession::getTimeStart, TrainingSessionDTO::setTimeStart);
                     mapper.using(stringToLocalTimeConverter).map(TrainingSession::getTimeEnd, TrainingSessionDTO::setTimeEnd);
-               */ });
+               */
+                });
 
         return modelMapper;
     }

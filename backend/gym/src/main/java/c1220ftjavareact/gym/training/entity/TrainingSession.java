@@ -3,7 +3,6 @@ package c1220ftjavareact.gym.training.entity;
 import c1220ftjavareact.gym.activity.entity.Activity;
 import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.subscription.entity.SubscriptionEntity;
-import c1220ftjavareact.gym.subscription.model.Subscription;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;

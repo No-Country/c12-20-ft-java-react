@@ -1,13 +1,13 @@
 package c1220ftjavareact.gym.user.service;
 
+import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.user.dto.mapper.ForgotPasswordMapperBean;
+import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.user.exception.UpdatePasswordException;
 import c1220ftjavareact.gym.user.model.ForgotPassword;
 import c1220ftjavareact.gym.user.repository.ForgotPasswordRepository;
-import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
-import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
-import c1220ftjavareact.gym.common.ResourceNotFoundException;
 import c1220ftjavareact.gym.user.repository.UserRepository;
 import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
     }
 
     @Override
-    public Long findIdByEmail(String email){
+    public Long findIdByEmail(String email) {
         return this.passwordRepository.findByUserEntityEmail(email).get().getId();
     }
 
@@ -111,7 +111,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         //Arroja una excepcion si no encuentra la Instacio con el codigo
         var forgotPassword = passwordRepository.findByCode(code)
                 .orElseThrow(() -> new UpdatePasswordException(
-                        "Error in password change request.", "No request found with that code."
+                                "Error in password change request.", "No request found with that code."
                         )
                 );
 
@@ -169,7 +169,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         var entity = this.passwordRepository
                 .findById(Long.parseLong(model.id()))
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Resource not found.", "The user has not yet requested a password change"
+                                "Resource not found.", "The user has not yet requested a password change"
                         )
                 );
         //Comprueba que los datos sean validos antes de actualizar<
@@ -189,7 +189,7 @@ public class ForgotPasswordServiceImp implements ForgotPasswordService {
         //Arroja una excepcion si no encuentra la Instancia de Forgot Password con ese email
         var entity = passwordRepository.findByUserEntityEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Resource not found", "First, you need to create a password change request."
+                                "Resource not found", "First, you need to create a password change request."
                         )
                 );
         return passwordMapper.entityToModel().map(entity);

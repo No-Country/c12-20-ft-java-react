@@ -2,9 +2,9 @@ package c1220ftjavareact.gym.activity.service;
 
 import c1220ftjavareact.gym.activity.dto.ActivitySaveDto;
 import c1220ftjavareact.gym.activity.dto.ActivityWithIdDto;
+import c1220ftjavareact.gym.activity.entity.Activity;
 import c1220ftjavareact.gym.activity.exception.ActivityException;
 import c1220ftjavareact.gym.activity.repository.ActivityRepository;
-import c1220ftjavareact.gym.activity.entity.Activity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -33,7 +33,7 @@ public class ImpActivityService implements IActivityService {
         Activity activity = modelMapper.map(activitySaveDto, Activity.class);
         activity.setCreateDate(LocalDate.now());
         activity.setDeleted(false);
-        if(!StringUtils.hasText(activitySaveDto.getName())) {
+        if (!StringUtils.hasText(activitySaveDto.getName())) {
             throw new ActivityException("The name cannot be empty", HttpStatus.BAD_REQUEST);
         }
         if (!StringUtils.hasText(activitySaveDto.getDescription())) {
@@ -50,7 +50,7 @@ public class ImpActivityService implements IActivityService {
     @Override
     public ActivityWithIdDto deleteActivity(Long id) {
         Optional<Activity> activity = this.activityRepository.findById(id);
-        if(activity.isEmpty() || activity.get().isDeleted()) {
+        if (activity.isEmpty() || activity.get().isDeleted()) {
             throw new ActivityException("Activity not found", HttpStatus.NOT_FOUND);
         }
 
@@ -59,7 +59,6 @@ public class ImpActivityService implements IActivityService {
         ActivityWithIdDto activityWithIdDto = modelMapper.map(activity.get(), ActivityWithIdDto.class);
         return activityWithIdDto;
     }
-
 
 
     @Transactional
@@ -106,7 +105,7 @@ public class ImpActivityService implements IActivityService {
         List<Activity> activities = this.activityRepository.findAllActivityByDeletedFalse();
         List<ActivityWithIdDto> activityWithIdDtos = new ArrayList();
 
-        for(Activity activity : activities) {
+        for (Activity activity : activities) {
             ActivityWithIdDto activityWithIdDto = this.modelMapper.map(activity, ActivityWithIdDto.class);
             activityWithIdDtos.add(activityWithIdDto);
         }

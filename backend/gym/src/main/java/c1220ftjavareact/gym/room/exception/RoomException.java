@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
-public class RoomException extends RuntimeException{
+public class RoomException extends RuntimeException {
     private String message;
     private HttpStatus httpStatus;
 

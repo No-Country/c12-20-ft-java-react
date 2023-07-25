@@ -1,10 +1,10 @@
 package c1220ftjavareact.gym.user.controller;
 
+import c1220ftjavareact.gym.email.RecoveryPassStrategy;
+import c1220ftjavareact.gym.events.event.RecoveryPasswordEvent;
+import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.user.exception.UpdatePasswordException;
 import c1220ftjavareact.gym.user.service.ForgotPasswordService;
-import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
-import c1220ftjavareact.gym.events.event.RecoveryPasswordEvent;
-import c1220ftjavareact.gym.email.RecoveryPassStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Email;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -32,11 +31,11 @@ public class ForgotPasswordController {
      * @param email Email del usuario que solicita el cambio de contraseña
      * @Authroization No necesita
      */
-    @PostMapping( produces = MediaType.APPLICATION_JSON_VALUE )
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> createForgotPassword(
             @RequestParam("email") @Email String email
     ) {
-        if(this.passwordService.existsByEmail(email)){
+        if (this.passwordService.existsByEmail(email)) {
             var forgot = this.passwordService.findByEmail(email);
             this.passwordService.assertIsNotEnable(forgot.enable());
             this.passwordService.assertIsNotExpired(forgot.expirationDate(), Long.parseLong(forgot.id()));

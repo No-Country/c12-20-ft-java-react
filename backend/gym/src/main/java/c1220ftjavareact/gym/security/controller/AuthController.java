@@ -1,22 +1,21 @@
 package c1220ftjavareact.gym.security.controller;
 
-import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
+import c1220ftjavareact.gym.email.UserCreatedStrategy;
+import c1220ftjavareact.gym.events.event.UserCreatedEvent;
 import c1220ftjavareact.gym.security.dto.UserAuthDTO;
 import c1220ftjavareact.gym.security.dto.UserGoogleTokenDTO;
-import c1220ftjavareact.gym.user.dto.UserSaveDTO;
-import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
-import c1220ftjavareact.gym.events.event.UserCreatedEvent;
-import c1220ftjavareact.gym.security.service.GoogleOauth2Service;
 import c1220ftjavareact.gym.security.jwt.JwtService;
 import c1220ftjavareact.gym.security.service.AuthService;
-import c1220ftjavareact.gym.email.UserCreatedStrategy;
+import c1220ftjavareact.gym.security.service.GoogleOauth2Service;
+import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
+import c1220ftjavareact.gym.user.dto.UserSaveDTO;
+import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
 import c1220ftjavareact.gym.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -71,22 +70,22 @@ public class AuthController {
      * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
      */
     @PostMapping("/employees")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public HttpEntity<Void> employeeSignUp(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public HttpEntity<Long> employeeSignUp(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
         this.service.assertEmailIsNotRegistered(employeeDTO.email());
 
-        var pass = service.saveEmployee(employeeDTO);
+        var values = service.saveEmployee(employeeDTO);
 
         publisher.publishEvent(new UserCreatedEvent(
                 this,
                 employeeDTO.email(),
                 employeeDTO.name(),
                 employeeDTO.lastname(),
-                pass,
+                values.get("pass"),
                 new UserCreatedStrategy())
         );
 
-        return ResponseEntity.created(URI.create("/api/v1/users/employees")).build();
+        return ResponseEntity.created(URI.create("/api/v1/users/employees")).body(Long.parseLong(values.get("Id")));
     }
 
     /**

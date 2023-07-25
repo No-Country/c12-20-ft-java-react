@@ -1,10 +1,8 @@
 package c1220ftjavareact.gym.training.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.Array;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +23,7 @@ public class RoomTimes {
         /// obtengo los datos del arraylist
         ArrayList<String[]> aux = timesArray.get(day);
         /// inicializar en caso de ser nulo
-        if(aux == null) {
+        if (aux == null) {
             aux = new ArrayList();
         }
         /// agrego un time nuevo

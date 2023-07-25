@@ -2,9 +2,9 @@ package c1220ftjavareact.gym.room.service;
 
 import c1220ftjavareact.gym.room.dto.RoomSaveDto;
 import c1220ftjavareact.gym.room.dto.RoomWithIdDto;
+import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.room.exception.RoomException;
 import c1220ftjavareact.gym.room.repository.RoomRepository;
-import c1220ftjavareact.gym.room.entity.Room;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;

@@ -27,11 +27,11 @@ public class UnAvailableTimes {
     }
 
     public boolean addTime(Long roomId, DayOfWeek day, String[] saveTime) {
-        for(RoomTimes item : listRooms) {
-             if(item.getRoomId() == roomId) {
-                 item.add(day, saveTime);
-                 return true;
-             }
+        for (RoomTimes item : listRooms) {
+            if (item.getRoomId() == roomId) {
+                item.add(day, saveTime);
+                return true;
+            }
         }
         return false;
     }

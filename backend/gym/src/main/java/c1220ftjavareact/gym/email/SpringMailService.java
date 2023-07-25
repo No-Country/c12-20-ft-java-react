@@ -54,8 +54,8 @@ public class SpringMailService implements MailService {
     @Override
     public Boolean send(final String to, final String subject, final String textMessage, File... attachments) {
         var send = false;
-        Assert.hasLength(to, () ->  "Verifica que los valores no sean nulos, to is: "+to );
-        Assert.hasLength(subject, () -> "Verifica que los valores no sean nulos, subject is: "+subject );
+        Assert.hasLength(to, () -> "Verifica que los valores no sean nulos, to is: " + to);
+        Assert.hasLength(subject, () -> "Verifica que los valores no sean nulos, subject is: " + subject);
         Assert.hasLength(textMessage, () -> "Verifica que los valores no sean nulos");
 
         final MimeMessage message = sender.createMimeMessage();

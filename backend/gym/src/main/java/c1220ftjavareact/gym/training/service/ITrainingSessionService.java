@@ -1,9 +1,9 @@
 package c1220ftjavareact.gym.training.service;
 
-import c1220ftjavareact.gym.training.model.UnAvailableTimes;
-import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.training.entity.TrainingSession;
+import c1220ftjavareact.gym.training.model.UnAvailableTimes;
 
 import java.util.List;
 
