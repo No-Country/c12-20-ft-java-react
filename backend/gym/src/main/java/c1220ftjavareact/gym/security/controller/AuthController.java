@@ -71,22 +71,22 @@ public class AuthController {
      * @Authorization Si necesita Token y que el rol del usuario sea ADMIN
      */
     @PostMapping("/employees")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public HttpEntity<Void> employeeSignUp(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public HttpEntity<Long> employeeSignUp(@Valid @RequestBody EmployeeSaveDTO employeeDTO) {
         this.service.assertEmailIsNotRegistered(employeeDTO.email());
 
-        var pass = service.saveEmployee(employeeDTO);
+        var values = service.saveEmployee(employeeDTO);
 
         publisher.publishEvent(new UserCreatedEvent(
                 this,
                 employeeDTO.email(),
                 employeeDTO.name(),
                 employeeDTO.lastname(),
-                pass,
+                values.get("pass"),
                 new UserCreatedStrategy())
         );
 
-        return ResponseEntity.created(URI.create("/api/v1/users/employees")).build();
+        return ResponseEntity.created(URI.create("/api/v1/users/employees")).body( Long.parseLong(values.get("Id")) );
     }
 
     /**

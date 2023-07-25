@@ -1,10 +1,15 @@
 package c1220ftjavareact.gym.user.service;
 
+import c1220ftjavareact.gym.user.dto.EmployeeDTO;
 import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
 import c1220ftjavareact.gym.user.model.User;
 import c1220ftjavareact.gym.user.projection.UserProjection;
 import c1220ftjavareact.gym.user.dto.UserSaveDTO;
 import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
+import java.util.Set;
 
 public interface UserService {
     /**
@@ -43,7 +48,13 @@ public interface UserService {
      */
     void saveUser(UserSaveDTO model, String role);
 
-    String saveEmployee(EmployeeSaveDTO model);
+    /**
+     * Guarda un empleado
+     * @param model Modelo con los datos del empleado
+     *
+     * @return Contiene la contraseña y el ID del empleado
+     */
+    Map<String, String> saveEmployee(EmployeeSaveDTO model);
     /**
      * Guarda un Usuario registrado con google en la base de datos
      *
@@ -54,11 +65,15 @@ public interface UserService {
     /**
      * Cambia el estado de eliminacion de un Usuario
      *
-     * @param id    ID del usuario que se desea guardar
-     * @param role  Rol del usuario
-     * @param state Estado al que se desea cambiar
+     * employeeIds Son los ID de los usuarios que se desea cambiar el estado
      */
-    void changeDeletedStateUser(String id, String role, Boolean state);
+    void changeDeletedStateUser(Set<Long> employeeIds);
+
+    @Transactional(readOnly = true)
+    Set<EmployeeDTO> findAllEmployees();
+
+    @Transactional(readOnly = true)
+    Set<String> findActiveActivity(String id);
 
     /**
      * Actualiza el Usuario con nuevos datos

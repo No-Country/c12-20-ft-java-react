@@ -31,7 +31,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
         http.cors().configurationSource(new CorsConfig().corsConfigurationSource());
+
         http.exceptionHandling().authenticationEntryPoint(entryPoint);
 
         http.authorizeRequests(configurer -> configurer
@@ -42,11 +44,12 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/v1/users/authentication/google").permitAll()
                 .antMatchers("/api/v1/passwords/**").permitAll()
                 //esto es para que mi enpoind poder usarlo sin necesida de usar token ni logearme
-                .antMatchers("/subscriptions/**").permitAll()
+                .antMatchers("/api/v1/subscriptions/**").permitAll()
                 .antMatchers("/api/v1/activities/**").permitAll()
                 .antMatchers("/api/v1/sessions/**").permitAll()
                 .antMatchers("/api/v1/rooms/**").permitAll()
                 .antMatchers("/api/v1/payments/**").permitAll()
+                .antMatchers("/api/v1/users/employees/**").permitAll()
 
                 .anyRequest().authenticated()
         );

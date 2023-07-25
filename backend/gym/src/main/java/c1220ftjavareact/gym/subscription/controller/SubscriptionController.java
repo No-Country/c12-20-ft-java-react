@@ -1,18 +1,23 @@
 package c1220ftjavareact.gym.subscription.controller;
 
 
+import c1220ftjavareact.gym.subscription.dto.SubscribedSession;
+import c1220ftjavareact.gym.subscription.dto.SubscriptionInfoDTO;
 import c1220ftjavareact.gym.training.service.ITrainingSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionDTO;
 import c1220ftjavareact.gym.subscription.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
-@RequestMapping("/subscriptions")
+@RequestMapping("api/v1/subscriptions")
 @Slf4j
 @RequiredArgsConstructor
 public class SubscriptionController {
@@ -68,5 +73,16 @@ public class SubscriptionController {
     @GetMapping("/{id}")
     public ResponseEntity<SubscriptionDTO> getSubscriptionById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.getSubscriptionById(id));
+    }
+
+
+    @GetMapping()
+    public HttpEntity<Set<SubscriptionInfoDTO>> findAllSubscriptionByFormat(){
+        return ResponseEntity.ok(this.subscriptionService.findAllSubscription());
+    }
+
+    @GetMapping("/users/{id}")
+    public HttpEntity<Set<SubscribedSession>> findSubscribedSession(@PathVariable Long id){
+        return ResponseEntity.ok(this.subscriptionService.findSubscribedSession(id));
     }
 }

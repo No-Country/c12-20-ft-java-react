@@ -1,6 +1,8 @@
 package c1220ftjavareact.gym.subscription.service;
 
+import c1220ftjavareact.gym.subscription.dto.SubscribedSession;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionDTO;
+import c1220ftjavareact.gym.subscription.dto.SubscriptionInfoDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionMapper;
 import c1220ftjavareact.gym.subscription.entity.SubscriptionEntity;
 import c1220ftjavareact.gym.subscription.repository.SubscriptionRepository;
@@ -12,6 +14,8 @@ import c1220ftjavareact.gym.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -76,5 +80,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public Integer getCountTrainingSession(Long id) {
         return  subscriptionRepository.countByTrainingSessionId(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Set<SubscriptionInfoDTO> findAllSubscription(){
+        return this.subscriptionRepository.listSubscriptions();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Set<SubscribedSession> findSubscribedSession(Long id){
+        return this.subscriptionRepository.findUserSubscriptions(id);
     }
 }
