@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.payment.service;
 
 import c1220ftjavareact.gym.payment.dto.PaymentDTO;
-import c1220ftjavareact.gym.payment.dto.PaymentDtoComplete;
 import c1220ftjavareact.gym.payment.entity.PaymentEntity;
 import c1220ftjavareact.gym.payment.exception.PaymentException;
 import c1220ftjavareact.gym.payment.repository.PaymentRepository;
