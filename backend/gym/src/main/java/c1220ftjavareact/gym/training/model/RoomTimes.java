@@ -24,7 +24,7 @@ public class RoomTimes {
         ArrayList<String[]> aux = timesArray.get(day);
         /// inicializar en caso de ser nulo
         if (aux == null) {
-            aux = new ArrayList();
+            aux = new ArrayList<>();
         }
         /// agrego un time nuevo
         String[] auxTimes = new String[2];

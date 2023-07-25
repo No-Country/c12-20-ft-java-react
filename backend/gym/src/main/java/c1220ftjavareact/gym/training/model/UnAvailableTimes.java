@@ -6,9 +6,6 @@ import lombok.Setter;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 
-/**
- * Los horarios podrian gestionarse en intervalos de 30m para tener la mayor personalizacion posible
- */
 @Getter
 @Setter
 public class UnAvailableTimes {
@@ -26,13 +23,12 @@ public class UnAvailableTimes {
 
     }
 
-    public boolean addTime(Long roomId, DayOfWeek day, String[] saveTime) {
+    public void addTime(Long roomId, DayOfWeek day, String[] saveTime) {
         for (RoomTimes item : listRooms) {
-            if (item.getRoomId() == roomId) {
+            if (item.getRoomId().equals(roomId)) {
                 item.add(day, saveTime);
-                return true;
+                return;
             }
         }
-        return false;
     }
 }

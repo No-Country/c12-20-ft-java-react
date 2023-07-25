@@ -1,8 +1,8 @@
 package c1220ftjavareact.gym.subscription.controller;
 
 
-import c1220ftjavareact.gym.subscription.marcos.SubscribedSessionDTO;
-import c1220ftjavareact.gym.subscription.marcos.SubscriptionInfoDTO;
+import c1220ftjavareact.gym.subscription.other.SubscribedSessionDTO;
+import c1220ftjavareact.gym.subscription.other.SubscriptionInfoDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionSaveDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionUpdateDTO;
 import c1220ftjavareact.gym.subscription.service.ISubscriptionService;

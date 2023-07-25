@@ -1,7 +1,7 @@
 package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
-import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.security.exception.ResourceAlreadyExistsException;
+import c1220ftjavareact.gym.security.exception.ResourceNotFoundException;
 import c1220ftjavareact.gym.training.exception.TrainingException;
 import c1220ftjavareact.gym.user.dto.EmployeeDTO;
 import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;

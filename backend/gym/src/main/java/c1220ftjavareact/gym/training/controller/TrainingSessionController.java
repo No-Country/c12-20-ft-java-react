@@ -4,23 +4,14 @@ import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
 import c1220ftjavareact.gym.training.model.UnAvailableTimes;
 import c1220ftjavareact.gym.training.service.ITrainingSessionService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Necesito un endpoint para consultar la disponibilidad de
- * Hay que ver el tema de como tratar los horarios, si con un objeto tipo enum o con un date picker por minutos,
- * si se puede hacer con periodos de 30m personalizables seria lo mejor asi se pueden hacer activades de 1h, 1h 30m y 2h
- * si tratara los horarios como minutos no podria seleccionar facilmente un horario adecuado porque no podriamos expresar
- * correctamente los horarios disponibles en la vista
- */
 @RestController
 @RequestMapping(value = "/api/v1/sessions")
-@Slf4j
 public class TrainingSessionController {
 
     private final ITrainingSessionService iTrainingSessionService;
