@@ -28,6 +28,7 @@ CREATE TABLE `activity` (
                             `id` int NOT NULL AUTO_INCREMENT,
                             `name` varchar(45) NOT NULL,
                             `create_day` date NOT NULL DEFAULT (now()),
+                            `deleted` tinyint(1) NOT NULL DEFAULT '0',
                             `description` varchar(255) NOT NULL DEFAULT 'default',
                             `img` varchar(255) NOT NULL DEFAULT 'default',
                             PRIMARY KEY (`id`)
@@ -109,6 +110,7 @@ CREATE TABLE `room` (
                         `id` int NOT NULL AUTO_INCREMENT,
                         `name` varchar(45) NOT NULL,
                         `max_capacity` int NOT NULL,
+						`deleted` tinyint(1) NOT NULL DEFAULT '0',
                         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

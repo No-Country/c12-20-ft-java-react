@@ -25,17 +25,18 @@ spring:
     #Desactivo el Banner de Spring Booy de consola
     banner-mode: off
   datasource:
+
     # conexion con localhost DEV
 #    url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
 #    username: root
 #    password: admin
     # conexion con base de datos PRODUCTION
     password: p7Mw1nO979WOfvW9AXdS
-    url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
     username: uyqaqtoeqwns6g02
+    url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    #Activa el mostrar el SQL ejecutado
+#    #Activa el mostrar el SQL ejecutado
     show-sql: false
     #Revoco el manejo de la Transaccion a JPA (Recomendable)
     open-in-view: false

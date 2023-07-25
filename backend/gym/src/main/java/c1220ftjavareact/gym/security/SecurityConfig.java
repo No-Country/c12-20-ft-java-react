@@ -45,9 +45,8 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/passwords/**").permitAll()
                 //esto es para que mi enpoind poder usarlo sin necesida de usar token ni logearme
                 .antMatchers("/api/v1/subscriptions/**").permitAll()
-                .antMatchers("/api/v1/activities/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/activities/**").permitAll()
                 .antMatchers("/api/v1/sessions/**").permitAll()
-                .antMatchers("/api/v1/rooms/**").permitAll()
                 .antMatchers("/api/v1/payments/**").permitAll()
                 .antMatchers("/api/v1/users/employees/**").permitAll()
 
