@@ -1,7 +1,6 @@
 package c1220ftjavareact.gym.subscription.service;
 
 import c1220ftjavareact.gym.subscription.dto.SubscriptionDTO;
-import c1220ftjavareact.gym.subscription.dto.SubscriptionMapper;
 import c1220ftjavareact.gym.subscription.entity.SubscriptionEntity;
 import c1220ftjavareact.gym.subscription.repository.SubscriptionRepository;
 import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
@@ -20,8 +19,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private final UserMapperBeans userMapper;
     private final UserService userService;
     private final ITrainingSessionService trainingSessionService;
-    private final SubscriptionMapper<SubscriptionDTO, SubscriptionEntity> subscriptionSaveToUserEntityMapper;
-    private final SubscriptionMapper<SubscriptionEntity,SubscriptionDTO> subscriptionSaveToUserDtoMapper;
+
 
 
     @Override
@@ -63,11 +61,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDTO getSubscriptionById(Long id) {
+    public SubscriptionDTO getSubscriptionDtoById(Long id) {
         SubscriptionEntity subscription = subscriptionRepository.findById(id).orElse(null);
-        if (subscription != null) {
-            return subscriptionSaveToUserDtoMapper.map(subscription);
-        }
         return null;
     }
 
@@ -76,5 +71,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public Integer getCountTrainingSession(Long id) {
         return  subscriptionRepository.countByTrainingSessionId(id);
+    }
+
+    @Transactional(readOnly = true)
+    public SubscriptionEntity getSubscriptionById(Long id) {
+        SubscriptionEntity subscriptionEntity = this.subscriptionRepository.findById(id).orElse(null);
+
+        return subscriptionEntity;
     }
 }

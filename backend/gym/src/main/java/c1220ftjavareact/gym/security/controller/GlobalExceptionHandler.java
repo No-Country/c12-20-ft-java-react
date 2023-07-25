@@ -5,6 +5,7 @@ import c1220ftjavareact.gym.common.ApiException;
 import c1220ftjavareact.gym.common.ExceptionDTO;
 import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
 import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.payment.exception.PaymentException;
 import c1220ftjavareact.gym.room.exception.RoomException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,16 +27,23 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = {ActivityException.class})
+    @ExceptionHandler(value = {ActivityException.class})
     protected ResponseEntity<Object> handleConflict(
             ActivityException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), ex.getHttpStatus(), request);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = {RoomException.class})
+    @ExceptionHandler(value = {RoomException.class})
     protected ResponseEntity<Object> handleConflict(
             RoomException ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), ex.getHttpStatus(), request);
+    }
+
+    @ExceptionHandler(value = {PaymentException.class})
+    protected ResponseEntity<Object> handleConflict(
+            PaymentException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), ex.getHttpStatus(), request);
     }
@@ -44,7 +52,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handler de Exception
      */
-/*
+
     @ExceptionHandler(Exception.class)
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(Exception ex) {
         var errorDetails = ExceptionDTO.builder()
@@ -56,7 +64,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
-*/
+
 
     @ExceptionHandler(ApiException.class)
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ApiException ex) {

@@ -67,6 +67,7 @@ public class SubscriptionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SubscriptionDTO> getSubscriptionById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.getSubscriptionById(id));
+        //return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.getSubscriptionById(id));
+        return null;
     }
 }

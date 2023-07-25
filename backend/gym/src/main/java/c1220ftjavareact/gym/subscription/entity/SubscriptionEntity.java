@@ -1,6 +1,5 @@
 package c1220ftjavareact.gym.subscription.entity;
 
-import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.subscription.model.State;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.user.entity.UserEntity;
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "subscription")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubscriptionEntity {
