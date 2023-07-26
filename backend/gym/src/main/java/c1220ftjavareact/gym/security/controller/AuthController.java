@@ -1,5 +1,7 @@
 package c1220ftjavareact.gym.security.controller;
 
+import c1220ftjavareact.gym.active.dto.ActiveUserDTO;
+import c1220ftjavareact.gym.active.service.IActiveUserService;
 import c1220ftjavareact.gym.email.UserCreatedStrategy;
 import c1220ftjavareact.gym.events.event.UserCreatedEvent;
 import c1220ftjavareact.gym.security.dto.UserAuthDTO;
@@ -33,6 +35,7 @@ public class AuthController {
     private final UserMapperBeans userMapper;
     private final GoogleOauth2Service googleOauth2Service;
     private final ApplicationEventPublisher publisher;
+    private final IActiveUserService iActiveUserService;
 
     /**
      * Endpoint para realizar el registro deL ADMIN (solo se crea una vez, datos por default)
@@ -136,6 +139,16 @@ public class AuthController {
 
         //Se crea el token con la Info
         var token = this.jwtService.generateToken(userMapper.userProjectionToUserEntity().map(user));
+
+        ActiveUserDTO active = new ActiveUserDTO();
+        active.setRole(user.getRole());
+        active.setPicture(user.getPicture());
+        active.setEmail(user.getEmail());
+        active.setId(Long.valueOf(user.getId()));
+        active.setFullName(user.getFullName());
+        active.setToken(token);
+
+        iActiveUserService.sendActiveUser(active);
 
         //Se envia el token
         return ResponseEntity.ok(Map.of(
