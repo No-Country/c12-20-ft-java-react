@@ -2,9 +2,15 @@
 enableLoggingRequestDetails: false
 server:
   error:
+<<<<<<< HEAD
      #Al haber un error envia siempre message y los parametros
      include-message: always
      include-binding-errors: always
+=======
+    #Al haber un error envia siempre message y los parametros
+    include-message: always
+    include-binding-errors: always
+>>>>>>> 8b61a0ff3f31e3103857299f99397b5a00054e69
 #Se asigna los niveles de Logging para mensajes en consola
 logging:
   level:
@@ -24,6 +30,7 @@ spring:
   main:
     #Desactivo el Banner de Spring Booy de consola
     banner-mode: off
+  #Configuracion de conexion con MySQL
   datasource:
     # conexion con localhost
 #    url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
@@ -34,6 +41,7 @@ spring:
     username: uyqaqtoeqwns6g02
     url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
     driver-class-name: com.mysql.cj.jdbc.Driver
+  #Configuracion de JPA
   jpa:
     #Activa el mostrar el SQL ejecutado
     #show-sql: false
