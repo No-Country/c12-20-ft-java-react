@@ -11,13 +11,7 @@ html {
 @tailwind components;
 @tailwind utilities;
 
-.navBar {
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  background-color: #1e1e1e;
-}
+
 
 /* NAV BAR */
 
@@ -70,6 +64,11 @@ html {
   color: #FF0000;
   }
 
+.btn {
+    color: #ffffff ;
+    background-color: #FF0000;
+}
+
 /* HEADER */
 
 .contHeader{
@@ -85,6 +84,7 @@ html {
   flex-wrap: wrap;
 }
 .contHeaderTxt{
+  font-family: "Poppins", sans-serif;
   width: 55%;
   height: auto;
   padding-left: 150px;
@@ -106,8 +106,9 @@ html {
 }
 
 .btnHeader{
+  display: block;
   text-decoration: none;
-  margin-top: 15px;
+  margin-top: 2rem;
   padding: 10px;
   font-weight: bold;
   font-size: 15px;
@@ -245,7 +246,16 @@ color: #FF0000;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+}
+.contClasses2{
   
+  padding-bottom: 40px;
+  width: 100%;
+  height: auto;
+  background-color: #111111;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 .classes{
   width: 340px;
@@ -343,6 +353,7 @@ color: #FF0000;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
 }
 .pricingInfoMo{
   padding: 30px;
@@ -355,6 +366,7 @@ color: #FF0000;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
 }
 .pricingInfoYear{
   padding: 30px;
@@ -367,6 +379,7 @@ color: #FF0000;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
 }
 .listPricing{
   padding-top: 20px;
@@ -420,6 +433,7 @@ color: #FF0000;
   justify-content: space-evenly;
   align-items: center;
   padding-top: 50px;
+  flex-wrap: wrap;
 }
 .contactUsTxt{
   width: 400px;
@@ -488,7 +502,6 @@ color: #FF0000;
 }
 
 /* FOOTER */
-
 .contFooter{
   height: 100%;
   width: auto;
@@ -496,6 +509,45 @@ color: #FF0000;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-top: 50px;
+  margin-top: 70px;
   margin-bottom: 20px;
 }
+
+.contIconFooter{
+  display: flex;
+  align-items: center;
+
+}
+
+.footerTittle{
+  font-size: 16px;
+  color: #FFFFF5;
+  padding-inline-start: 20px;
+  font-weight: 200;
+}
+
+/* SCHEDULER */
+
+.cont{
+  width: 100%;
+  height: auto;
+  margin-bottom: 30px;
+  padding: 10%;
+  background-image: url(../src/assets/img/Background_Scheduler.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.schTT{
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+

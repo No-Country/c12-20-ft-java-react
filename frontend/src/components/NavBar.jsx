@@ -42,6 +42,20 @@ const NavBar = () => {
                     <img className='iconNavBar' src={logo_facebook}/>
                 </a>
             </div>
+            <div className="dropdown dropdown-bottom">
+                <label tabIndex={0} className="btn m-1">MENU</label>
+                    <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                        <a href="#scrollAboutUs">
+                            <h3 className='navBarTittle'>About us</h3>
+                        </a>
+                        <a href="#scrollOurClasses">
+                            <h3 className='navBarTittle'>Our clasess</h3>
+                        </a>
+                        <a href="#scrollContactUs">
+                            <h3 className='navBarTittle'>Contact</h3>
+                        </a>
+                    </ul>
+            </div>
         </div>
     )
 }
