@@ -17,11 +17,16 @@ public interface ForgotPasswordRepository extends JpaRepository<ForgotPasswordEn
     Boolean existsByUserEntityEmail(String email);
 
     @Modifying
-    @Query(value = "INSERT INTO forgot_password (id_user, code, expiration_date) VALUES " +
-            "(:id, :code, :expirationDate)", nativeQuery = true)
+    @Query(value = "INSERT INTO forgot_password (id_user, code, enable, expiration_date) VALUES " +
+            "(:id, :code, :enable, :expirationDate)", nativeQuery = true)
     void saveForgotPassword(
             @Param("id") String id,
             @Param("code") String code,
+            @Param("enable") Integer enable,
             @Param("expirationDate") LocalDateTime expirationDate
     );
+
+    @Modifying
+    @Query(value = "UPDATE forgot_password AS p SET p.enable = '0' WHERE p.id_user = :id", nativeQuery = true)
+    void disable(@Param("id") String id);
 }

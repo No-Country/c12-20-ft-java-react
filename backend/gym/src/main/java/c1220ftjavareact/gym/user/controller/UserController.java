@@ -1,5 +1,6 @@
 package c1220ftjavareact.gym.user.controller;
 
+import c1220ftjavareact.gym.user.dto.EmployeeDTO;
 import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
 import c1220ftjavareact.gym.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -22,13 +24,13 @@ public class UserController {
     /**
      * Cambiar el estado de deleted de un Empleado
      *
-     * @param id ID del usuario
      * @Authorization Si necesita
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping(value = "/employees/{id}")
-    public HttpEntity<Void> changeStateUser(@PathVariable("id") String id, @RequestParam(value = "deleted") Boolean deleted) {
-        this.service.changeDeletedStateUser(id, "EMPLOYEE", deleted);
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping(value = "/employees/state")
+    public HttpEntity<Void> changeStateUser(@RequestBody Set<Long> employeeIds) {
+
+        this.service.changeDeletedStateUser(employeeIds);
         return ResponseEntity.noContent().build();
     }
 
@@ -48,5 +50,19 @@ public class UserController {
         this.service.updateUser(updateUser, id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/employees")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public HttpEntity<Set<EmployeeDTO>> finddEmployees() {
+
+        return ResponseEntity.ok(this.service.findAllEmployees());
+    }
+
+    @GetMapping("/{id}/subscriptions")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public HttpEntity<Set<String>> findActiveSubscriptions(@PathVariable("id") String id) {
+
+        return ResponseEntity.ok(this.service.findActiveActivity(id));
     }
 }

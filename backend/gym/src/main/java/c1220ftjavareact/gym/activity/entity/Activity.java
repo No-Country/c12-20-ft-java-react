@@ -30,7 +30,7 @@ public class Activity implements Serializable {
     private LocalDate createDate;
 
     @JoinColumn(name = "activity_id", referencedColumnName = "id")
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<TrainingSession> trainingSession;
 
     @Column(name = "description", nullable = false)
@@ -39,5 +39,7 @@ public class Activity implements Serializable {
     @Column(name = "img", nullable = false)
     private String img;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
 
 }

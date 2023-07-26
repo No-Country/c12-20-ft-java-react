@@ -1,8 +1,8 @@
 package c1220ftjavareact.gym.user.entity;
 
+import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
 import c1220ftjavareact.gym.user.enums.Role;
 import c1220ftjavareact.gym.user.exception.UserSaveException;
-import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

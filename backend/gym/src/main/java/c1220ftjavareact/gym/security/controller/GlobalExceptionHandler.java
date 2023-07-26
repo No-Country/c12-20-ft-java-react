@@ -1,9 +1,12 @@
 package c1220ftjavareact.gym.security.controller;
 
-import c1220ftjavareact.gym.common.ApiException;
-import c1220ftjavareact.gym.common.ExceptionDTO;
-import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
-import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.activity.exception.ActivityException;
+import c1220ftjavareact.gym.payment.exception.PaymentException;
+import c1220ftjavareact.gym.room.exception.RoomException;
+import c1220ftjavareact.gym.security.exception.ApiException;
+import c1220ftjavareact.gym.security.exception.ExceptionDTO;
+import c1220ftjavareact.gym.security.exception.ResourceAlreadyExistsException;
+import c1220ftjavareact.gym.security.exception.ResourceNotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,10 +27,33 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(value = {ActivityException.class})
+    protected ResponseEntity<Object> handleConflict(
+            ActivityException ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), ex.getHttpStatus(), request);
+    }
+
+    @ExceptionHandler(value = {RoomException.class})
+    protected ResponseEntity<Object> handleConflict(
+            RoomException ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), ex.getHttpStatus(), request);
+    }
+
+    @ExceptionHandler(value = {PaymentException.class})
+    protected ResponseEntity<Object> handleConflict(
+            PaymentException ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), ex.getHttpStatus(), request);
+    }
+
+
     /**
      * Handler de Exception
      */
-    @ExceptionHandler(Exception.class)
+
+/*    @ExceptionHandler(Exception.class)
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(Exception ex) {
         var errorDetails = ExceptionDTO.builder()
                 .title("Excepcion no manejada")
@@ -37,7 +63,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
+    }*/
+
 
     @ExceptionHandler(ApiException.class)
     public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ApiException ex) {
@@ -55,7 +82,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Handler de ResourceAlreadyExistsException
      */
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public HttpEntity<ExceptionDTO> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, WebRequest webRequest) {
+    public HttpEntity<ExceptionDTO> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
         var errorDetails = ExceptionDTO.builder()
                 .title(ex.getTitle())
                 .detail(ex.getMessage())
@@ -69,7 +96,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Handler de ResourceNotFoundException
      */
     @ExceptionHandler(ResourceNotFoundException.class)
-    public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest webRequest) {
+    public HttpEntity<ExceptionDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
         var errorDetails = ExceptionDTO.builder()
                 .title(ex.getTitle())
                 .detail(ex.getMessage())

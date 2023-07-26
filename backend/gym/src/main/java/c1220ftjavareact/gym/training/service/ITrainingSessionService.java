@@ -1,8 +1,9 @@
 package c1220ftjavareact.gym.training.service;
 
-import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
+import c1220ftjavareact.gym.training.entity.TrainingSession;
+import c1220ftjavareact.gym.training.model.UnAvailableTimes;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * JOIN training_session ts ON r.id = ts.id_room
  * /// Obtengo horarios disponibles de cada sala por dia (utilizando por los valores de dia de las sesiones)
  */
+
 public interface ITrainingSessionService {
 
     /// crear una sesion nueva
@@ -39,5 +41,11 @@ public interface ITrainingSessionService {
     TrainingSessionDTO updateTrainingSessionById(TrainingSessionDTO trainingSession, Long id);
 
     /// eliminar una sesion disponible
-    void removeTrainingSessionById(Long id);
+    Integer getCapacity(Long id);
+
+    /// eliminar una sesion
+    TrainingSessionDTO removeTrainingSessionById(Long id);
+
+    /// obtener turnos ocupados
+    UnAvailableTimes getUnavailableTimes();
 }

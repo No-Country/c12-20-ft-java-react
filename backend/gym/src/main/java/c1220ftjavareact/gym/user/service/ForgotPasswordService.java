@@ -1,12 +1,18 @@
 package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.user.model.ForgotPassword;
 import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
+import c1220ftjavareact.gym.user.model.ForgotPassword;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 public interface ForgotPasswordService {
+
+    Long findIdByEmail(String email);
+
+    @Transactional
+    Map<String, String> saveForgot(String email);
 
     /**
      * Crea una nueva instancia de ForgotPassword
@@ -22,6 +28,9 @@ public interface ForgotPasswordService {
      * @param email Email del usuario que crea la instancia
      */
     ForgotPassword generateForgotPassword(String id, String email);
+
+    @Transactional
+    Map<String, String> createOtherPassword(ForgotPassword forgotPassword);
 
     /**
      * Busca una instancia del ForgotPassword por el codigo
@@ -43,7 +52,9 @@ public interface ForgotPasswordService {
      *
      * @param dateTime Fecha a comprobar
      */
-    void assertIsNotExpired(LocalDateTime dateTime);
+    void assertIsNotExpired(LocalDateTime dateTime, Long id);
+
+    void assertIsExpired(LocalDateTime dateTime);
 
     /**
      * Arroja una excepcion si Enable es False
@@ -52,6 +63,8 @@ public interface ForgotPasswordService {
      */
     void assertIsEnable(Boolean enable);
 
+    void assertIsNotEnable(Boolean enable);
+
     /**
      * Actualiza el Forggot Password
      *
@@ -59,11 +72,6 @@ public interface ForgotPasswordService {
      */
     void updateForgottenPassword(UserPasswordDTO model);
 
-    /**
-     * Busca un instancia de ForgotPassword por el Email
-     *
-     * @param email Email a comprobar
-     */
     ForgotPassword findByEmail(String email);
 
     /**

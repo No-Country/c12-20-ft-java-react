@@ -26,14 +26,19 @@ spring:
     banner-mode: off
   #Configuracion de conexion con MySQL
   datasource:
-    password: admin
-    url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
-    username: root
+    # conexion con localhost
+    #url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
+    #username: root
+    #password: root
+    # conexion con base de datos
+    password: p7Mw1nO979WOfvW9AXdS
+    username: uyqaqtoeqwns6g02
+    url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
     driver-class-name: com.mysql.cj.jdbc.Driver
   #Configuracion de JPA
   jpa:
     #Activa el mostrar el SQL ejecutado
-    show-sql: true
+    #show-sql: false
     #Revoco el manejo de la Transaccion a JPA (Recomendable)
     open-in-view: false
     properties:
@@ -41,9 +46,9 @@ spring:
         #Dialecto que usa Hibernate para las querys
         dialect: org.hibernate.dialect.MySQL8Dialect
         #Muestra el SQL ejecutado en consola en Columna
-        format_sql: true
+        format_sql: false
   mail:
-    username: marcoslopezdev18@gmail.com
+    username: gymprimefitnes@gmail.com
   security:
     oauth2:
       client:

@@ -1,12 +1,16 @@
 package c1220ftjavareact.gym.training.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Formato de horarios: "hh:mm" para transferencia de datos
  * Los ids de activity y room en este caso se necesitan para crear las relaciones
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TrainingSessionSaveDTO {
 
     private Long activityId;

@@ -42,12 +42,14 @@ public class ModelMapperConfig {
                     mapper.map(TrainingSessionDTO::getId, TrainingSession::setId);
                     mapper.using(stringToLocalTimeConverter).map(TrainingSessionDTO::getTimeStart, TrainingSession::setTimeStart);
                     mapper.using(stringToLocalTimeConverter).map(TrainingSessionDTO::getTimeEnd, TrainingSession::setTimeEnd);
+                    mapper.map(src -> false, TrainingSession::setDeleted);
                 });
 
         // Configure the custom mapping from TrainingSession to TrainingSessionDTO
         modelMapper.typeMap(TrainingSession.class, TrainingSessionDTO.class)
                 .addMappings(mapper -> {
                     mapper.map(src -> src.getActivity().getId(), TrainingSessionDTO::setActivityId);
+                    mapper.map(src -> src.getActivity().getName(), TrainingSessionDTO::setActivityName);
                     mapper.map(src -> src.getRoom().getId(), TrainingSessionDTO::setRoomId);
                     mapper.map(src -> src.getRoom().getName(), TrainingSessionDTO::setRoomName);
                 });

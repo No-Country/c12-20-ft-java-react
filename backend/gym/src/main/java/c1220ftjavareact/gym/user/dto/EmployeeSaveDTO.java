@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 public record EmployeeSaveDTO(
         @NotEmpty @Size(min = 3, max = 45) String name,
         @NotEmpty @Size(min = 3, max = 45) String lastname,
+        @NotEmpty String picture,
         @Email @NotEmpty @Size(max = 128) String email
 ) {
 }

@@ -2,6 +2,8 @@ package c1220ftjavareact.gym.payment.service;
 
 import c1220ftjavareact.gym.payment.dto.PaymentDTO;
 
+import java.util.List;
+
 public interface PaymentService {
     PaymentDTO createPayment(PaymentDTO paymentDTO);
 
@@ -9,5 +11,7 @@ public interface PaymentService {
 
     Boolean deletePayment(int id);
 
-    PaymentDTO getPaymentById(int id);
+    PaymentDTO getPaymentDtoById(int id);
+
+    List<PaymentDTO> getAllPaymentsDto();
 }

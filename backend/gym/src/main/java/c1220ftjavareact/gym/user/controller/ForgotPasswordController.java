@@ -1,10 +1,10 @@
 package c1220ftjavareact.gym.user.controller;
 
+import c1220ftjavareact.gym.email.RecoveryPassStrategy;
+import c1220ftjavareact.gym.events.event.RecoveryPasswordEvent;
+import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
 import c1220ftjavareact.gym.user.exception.UpdatePasswordException;
 import c1220ftjavareact.gym.user.service.ForgotPasswordService;
-import c1220ftjavareact.gym.user.dto.UserPasswordDTO;
-import c1220ftjavareact.gym.events.event.RecoveryPasswordEvent;
-import c1220ftjavareact.gym.email.RecoveryPassStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Email;
+import java.util.Map;
 
 
 @RestController
@@ -35,12 +36,12 @@ public class ForgotPasswordController {
             @RequestParam("email") @Email String email
     ) {
         if (this.passwordService.existsByEmail(email)) {
-            var forgotPassword = this.passwordService.findByEmail(email);
-            this.passwordService.assertIsEnable(forgotPassword.enable());
-            this.passwordService.assertIsNotExpired(forgotPassword.expirationDate());
+            var forgot = this.passwordService.findByEmail(email);
+            this.passwordService.assertIsNotEnable(forgot.enable());
+            this.passwordService.assertIsNotExpired(forgot.expirationDate(), Long.parseLong(forgot.id()));
         }
 
-        var values = this.passwordService.saveForgotPassword(email);
+        Map<String, String> values = this.passwordService.saveForgotPassword(email);
         this.publisher.publishEvent(new RecoveryPasswordEvent(
                 this,
                 values.get("id"),
@@ -49,6 +50,7 @@ public class ForgotPasswordController {
                 values.get("code"),
                 new RecoveryPassStrategy()
         ));
+
         return ResponseEntity.noContent().build();
     }
 
@@ -68,8 +70,9 @@ public class ForgotPasswordController {
     ) {
         var forgotPassword = this.passwordService.findByCode(code);
         this.passwordService.assertKeysEquals(id, forgotPassword.id());
+
         this.passwordService.assertIsEnable(forgotPassword.enable());
-        this.passwordService.assertIsNotExpired(forgotPassword.expirationDate());
+        this.passwordService.assertIsNotExpired(forgotPassword.expirationDate(), Long.parseLong(id));
 
         return ResponseEntity.noContent().build();
     }
@@ -83,9 +86,10 @@ public class ForgotPasswordController {
      */
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> updateForgotenPassword(@RequestBody UserPasswordDTO dto) {
+        log.info("DTO: {}", dto);
         if (!dto.password().equals(dto.repeatedPassword()))
             throw new UpdatePasswordException(
-                    "Error en peticion cambio de contraseña", "Las contraseñas enviadas no coinciden"
+                    "Error in password change request.", "The passwords sent do not match."
             );
 
         this.passwordService.updateForgottenPassword(dto);
