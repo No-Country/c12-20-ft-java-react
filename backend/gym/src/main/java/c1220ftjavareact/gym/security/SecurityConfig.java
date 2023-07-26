@@ -48,12 +48,11 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/activities/**").permitAll()
                 .antMatchers("/api/v1/sessions/**").permitAll()
                 .antMatchers("/api/v1/subscriptions/**").permitAll()
-                .antMatchers("/api/v1/subscriptions/**").permitAll()
                 .antMatchers("/api/v1/payments/**").permitAll()
                 /// <------------------------------------------------------>
                 .antMatchers(HttpMethod.GET, "/api/v1/activities/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/sessions/**").permitAll()
-                .antMatchers("/api/v1/users/employees/**").permitAll()
+                .antMatchers("/api/v1/users/**").permitAll()
 
                 .anyRequest().authenticated()
         );
