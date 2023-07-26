@@ -72,16 +72,15 @@ export const AuthProvider = ({ children }) => {
           } else {
             const responseData = await response.json();
             const responseDataString = JSON.stringify(responseData);
-            console.log(responseDataString);
             setError(null);
             if (
               responseData.user.role === "ADMIN" ||
               responseData.user.role === "EMPLOYEE"
             ) {
               localStorage.setItem("user", responseDataString);
-              window.location.href = 'http://localhost:4200/dashboard';
+              window.location.href = 'http://localhost:4200/dashboard/'+responseData.id;
             } else {
-              navigate("/");
+              window.location.href = 'http://localhost:4200/user/'+responseData.id;
               if (checked === true) {
                 localStorage.setItem("user", responseDataString);
               } else {
