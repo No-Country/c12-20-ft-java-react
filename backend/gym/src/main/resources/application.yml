@@ -1,22 +1,22 @@
 #Desactivo los detalles de la request
 enableLoggingRequestDetails: false
 server:
-#  error:
-    #Al haber un error envia siempre message y los parametros
-    #include-message: always
-    #include-binding-errors: always
+  error:
+     #Al haber un error envia siempre message y los parametros
+     include-message: always
+     include-binding-errors: always
 #Se asigna los niveles de Logging para mensajes en consola
-#logging:
-#  level:
-#    root: INFO
-#    web: DEBUG
-#    org:
-#      hibernate:
-#        SQL: DEBUG
-#        type:
-#          descriptor:
-#            sql:
-#              BasicBinder: TRACE
+logging:
+  level:
+    root: INFO
+    web: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
   #Cambio el formato de la hora en consola
   pattern:
     dateformat: HH:mm:ss
@@ -26,9 +26,9 @@ spring:
     banner-mode: off
   datasource:
     # conexion con localhost
-    #url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
-    #username: root
-    #password: root
+#    url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
+#    username: root
+#    password: root
     # conexion con base de datos
     password: p7Mw1nO979WOfvW9AXdS
     username: uyqaqtoeqwns6g02

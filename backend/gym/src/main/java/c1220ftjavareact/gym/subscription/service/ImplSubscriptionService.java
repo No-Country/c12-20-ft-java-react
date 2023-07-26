@@ -82,6 +82,7 @@ public class ImplSubscriptionService implements ISubscriptionService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Subscription getSubscriptionById(Long id) {
         Optional<Subscription> subscriptionEntity = subscriptionRepository.findById(id);
