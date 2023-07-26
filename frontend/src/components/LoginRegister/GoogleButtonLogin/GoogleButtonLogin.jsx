@@ -1,16 +1,23 @@
-import React from "react"
+import { useEffect } from 'react';
 import googleIcon from "../../../assets/google-icon.png";
 import { useNavigate } from "react-router-dom";
+
 export const GoogleButtonLogin = () => {
+  //Redireccion a otra ruta
   const navigate = useNavigate();
+
   const googleLoginCallback = (res) => {
     console.log(
       `Se inició sesión correctamente. Aquí esta el token: ${res.credential}`
     );
     console.log(res);
-    console.log("iniciao con google");
+    //Redirije a "/" (Landig, pero deberia ir a panel de usuario)
     navigate("/");
   };
+  
+  useEffect(() => {
+    initializeGoogleId();
+  }, []);
 
   const initializeGoogleId = () => {
     window.google.accounts.id.initialize({
@@ -48,8 +55,6 @@ export const GoogleButtonLogin = () => {
     const googleButtonWrapper = createFakeGoogleWrapper();
     googleButtonWrapper.click();
   };
-
-  initializeGoogleId();
 
   return (
     <button

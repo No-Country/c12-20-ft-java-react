@@ -63,7 +63,12 @@
     .txtOurClasses{
         padding: 0px 100px 0px 100px ;
     }
-
+    .cont{
+        padding: 20px;
+    }
+    .schTT{
+        font-size: 20px;
+    }  
 
 }
 @media screen and (max-width: 540px) {

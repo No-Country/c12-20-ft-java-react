@@ -532,9 +532,9 @@ color: #FF0000;
 
 .cont{
   width: 100%;
-  height: auto;
+  height: 600px;
   margin-bottom: 30px;
-  padding: 10%;
+  
   background-image: url(../src/assets/img/Background_Scheduler.png);
   background-position: center;
   background-repeat: no-repeat;
@@ -546,6 +546,12 @@ color: #FF0000;
   flex-direction: column;
 }
 
+.overflow-x-auto{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+}
 .schTT{
   font-size: 32px;
   font-weight: bold;
@@ -553,3 +559,12 @@ color: #FF0000;
   text-align: center;
 }
 
+/* LOGIN */
+
+.contLogin{
+  background-image: url(../src/assets/img/Background_Login.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}

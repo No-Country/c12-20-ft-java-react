@@ -11,7 +11,7 @@ const Scheduler = () => {
                         <h1 className='schTT'>Meet The Complete Schedule Here</h1>
                     </div>
                     <div className="overflow-x-auto">
-                        <table className="table table-zebra">
+                        <table className="table-sm">
                         {/* head */}
                         <thead>
                             <tr>

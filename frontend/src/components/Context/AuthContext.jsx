@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
               },
             }
           );
-
+            
           if (response.status === 400) {
             const errorInfo = await response.json();
             setError(errorInfo);
@@ -77,9 +77,10 @@ export const AuthProvider = ({ children }) => {
               responseData.user.role === "ADMIN" ||
               responseData.user.role === "EMPLOYEE"
             ) {
-              navigate("/dashboard-users");
+              localStorage.setItem("user", responseDataString);
+              window.location.href = 'http://localhost:4200/dashboard/'+responseData.id;
             } else {
-              navigate("/");
+              window.location.href = 'http://localhost:4200/user/'+responseData.id;
               if (checked === true) {
                 localStorage.setItem("user", responseDataString);
               } else {
