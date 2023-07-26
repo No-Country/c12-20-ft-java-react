@@ -2,6 +2,8 @@ package c1220ftjavareact.gym.config;
 
 import c1220ftjavareact.gym.active.dto.ActiveUserDTO;
 import c1220ftjavareact.gym.active.entity.ActiveUser;
+import c1220ftjavareact.gym.payment.dto.PaymentDTO;
+import c1220ftjavareact.gym.payment.entity.PaymentEntity;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
@@ -67,6 +69,10 @@ public class ModelMapperConfig {
                 .addMappings(mapper -> {
                     mapper.map(ActiveUser::getUserId, ActiveUserDTO::setId);
                 });
+
+        // Configure the custom mapping from PaymentEntity to PaymentDTO
+        modelMapper.typeMap(PaymentEntity.class, PaymentDTO.class)
+                .addMapping(src -> src.getSubscriptionId().getId(), PaymentDTO::setSubscriptionId);
 
         return modelMapper;
     }
