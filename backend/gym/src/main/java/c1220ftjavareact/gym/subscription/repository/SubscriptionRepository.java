@@ -8,19 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Set;
 
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
-
-    @Query("SELECT COUNT(s) FROM Subscription s WHERE s.trainingSession.id = :trainingSessionId")
-    Integer countByTrainingSessionId(@Param("trainingSessionId") Long trainingSessionId);
-
-
-
-
-
-
 
     /// MARCOS
     @Query(value = "SELECT " +

@@ -1,5 +1,7 @@
 package c1220ftjavareact.gym.config;
 
+import c1220ftjavareact.gym.active.dto.ActiveUserDTO;
+import c1220ftjavareact.gym.active.entity.ActiveUser;
 import c1220ftjavareact.gym.training.dto.TrainingSessionDTO;
 import c1220ftjavareact.gym.training.dto.TrainingSessionSaveDTO;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
@@ -52,6 +54,18 @@ public class ModelMapperConfig {
                     mapper.map(src -> src.getActivity().getName(), TrainingSessionDTO::setActivityName);
                     mapper.map(src -> src.getRoom().getId(), TrainingSessionDTO::setRoomId);
                     mapper.map(src -> src.getRoom().getName(), TrainingSessionDTO::setRoomName);
+                });
+
+        // Configure the custom mapping from ActiveUserDTO to ActiveUser
+        modelMapper.typeMap(ActiveUserDTO.class, ActiveUser.class)
+                .addMappings(mapper -> {
+                    mapper.map(ActiveUserDTO::getId, ActiveUser::setUserId);
+                });
+
+        // Configure the custom mapping from ActiveUser to ActiveUserDTO
+        modelMapper.typeMap(ActiveUser.class, ActiveUserDTO.class)
+                .addMappings(mapper -> {
+                    mapper.map(ActiveUser::getUserId, ActiveUserDTO::setId);
                 });
 
         return modelMapper;
