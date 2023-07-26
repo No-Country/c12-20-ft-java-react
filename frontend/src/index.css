@@ -125,7 +125,7 @@ html {
 }
 
 .btnHeader:hover{
-background: #111111;
+background: #2a2a2a;
 color: #FF0000;
 }
 
@@ -316,8 +316,10 @@ color: #FF0000;
 }
 
 .btnClasses:hover{
-  background: #111111;
+  background: #2a2a2a;
   color: #FF0000;
+  
+  
 }
 
 /* PLANS & PRICING */
@@ -411,7 +413,7 @@ color: #FF0000;
   transition: all 0.3s ease;
 }
 .btnPricing:hover{
-background: #111111;
+background: #2a2a2a;
 color: #FF0000;
 }
 .graphicPricing{
@@ -469,7 +471,7 @@ color: #FF0000;
   transition: all 0.3s ease;
 }
 .btnQuestion:hover{
-background: #111111;
+background: #2a2a2a;
 color: #FF0000;
 }
 .ttContactUs{
