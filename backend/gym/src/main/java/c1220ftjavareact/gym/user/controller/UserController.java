@@ -40,7 +40,7 @@ public class UserController {
      * @param updateUser Token JWT del usuario
      * @Authroization No necesita
      */
-    @PreAuthorize("hasAnyAuthority('ADMIN','CUSTOMER','EMPLOYEE')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN','CUSTOMER','EMPLOYEE')")
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Map<String, String>> updateUser(
             @PathVariable("id") String id,
