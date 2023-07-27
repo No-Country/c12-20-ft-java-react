@@ -19,13 +19,13 @@ public class ActivityController {
         this.iactivityService = iactivityService;
     }
 
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PostMapping()
     public ResponseEntity<ActivitySaveDto> createActivity(@RequestBody ActivitySaveDto activitySaveDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iactivityService.createActivity(activitySaveDto));
     }
 
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PutMapping("/{id}")
     public ResponseEntity<ActivityWithIdDto> deleteActivity(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iactivityService.deleteActivity(id));

@@ -24,7 +24,6 @@ public class StartUpService {
     public void executeOncePerDayOnStartup() {
         LocalDateTime now = LocalDateTime.now();
         ScheduledTaskLog lastExecutionLog = scheduledTaskLogRepository.findTopByOrderByLastExecutionDesc();
-
         if (lastExecutionLog == null || lastExecutionLog.getLastExecution().isBefore(now.minusDays(1))) {
             iSubscriptionService.updateSubscriptionsStatus();
 

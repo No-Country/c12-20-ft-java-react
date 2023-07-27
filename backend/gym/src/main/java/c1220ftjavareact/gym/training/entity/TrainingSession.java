@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.training.entity;
 
 import c1220ftjavareact.gym.activity.entity.Activity;
+import c1220ftjavareact.gym.payment.entity.PaymentEntity;
 import c1220ftjavareact.gym.room.entity.Room;
 import c1220ftjavareact.gym.subscription.entity.Subscription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,6 +51,4 @@ public class TrainingSession {
     @JoinColumn(name = "training_session_id", referencedColumnName = "id")
     @OneToMany(fetch = FetchType.EAGER)
     private List<Subscription> subscriptions;
-
-
 }

@@ -1,5 +1,6 @@
 package c1220ftjavareact.gym.subscription.service;
 
+import c1220ftjavareact.gym.payment.entity.PaymentEntity;
 import c1220ftjavareact.gym.subscription.other.SubscribedSessionDTO;
 import c1220ftjavareact.gym.subscription.other.SubscriptionInfoDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionSaveDTO;
@@ -114,9 +115,15 @@ public class ImplSubscriptionService implements ISubscriptionService {
 
        for(Subscription item : subscriptions) {
            /// Actualizar estado de subscripciones activas a inactivas
-           if( item.getState() == State.ACTIVE /*&& condicion de fechas con payment*/) {
-               item.setState(State.INACTIVE);
+           if(item.getState() == State.ACTIVE) {
+               List<PaymentEntity> listPayment = item.getPayments();
+               PaymentEntity paymentEntity = listPayment.get(listPayment.size()-1);
+               LocalDate expiredDate = paymentEntity.getExpiredAt();
+               if(expiredDate.isBefore(LocalDate.now())) {
+                   item.setState(State.INACTIVE);
+               }
            }
+
            /// Actualizar estados de reservas
            if(item.getState() == State.RESERVED) {
                long dayDifference = item.getCreateDate().toEpochDay() - LocalDate.now().toEpochDay();

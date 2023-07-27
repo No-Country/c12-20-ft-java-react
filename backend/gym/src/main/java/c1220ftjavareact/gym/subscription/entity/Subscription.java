@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.subscription.entity;
 
 import c1220ftjavareact.gym.activity.entity.Activity;
+import c1220ftjavareact.gym.payment.entity.PaymentEntity;
 import c1220ftjavareact.gym.subscription.enums.State;
 import c1220ftjavareact.gym.training.entity.TrainingSession;
 import c1220ftjavareact.gym.user.entity.UserEntity;
@@ -9,6 +10,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "subscription")
@@ -39,4 +41,8 @@ public class Subscription {
     @JsonIgnore
     @JoinColumn(name = "training_session_id")
     private TrainingSession trainingSession;
+
+    @JoinColumn(name = "subscription_id", referencedColumnName = "id")
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<PaymentEntity> payments;
 }
