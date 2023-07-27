@@ -77,10 +77,11 @@ export const AuthProvider = ({ children }) => {
               responseData.user.role === "ADMIN" ||
               responseData.user.role === "EMPLOYEE"
             ) {
-              localStorage.setItem("user", responseDataString);
-              window.location.href = 'http://localhost:4200/dashboard/'+responseData.id;
+              localStorage.setItem("user", responseData);
+             
+              window.location.href = 'http://localhost:4200/dashboard/'+responseData.user.id;
             } else {
-              window.location.href = 'http://localhost:4200/user/'+responseData.id;
+              window.location.href = 'http://localhost:4200/user/'+responseData.user.id;
               if (checked === true) {
                 localStorage.setItem("user", responseDataString);
               } else {

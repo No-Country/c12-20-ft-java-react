@@ -10,11 +10,17 @@ import java.util.Set;
 
 public interface ISubscriptionService {
 
+    /// Crear una subscripcion
     void saveSubscription(SubscriptionSaveDTO subscriptionSaveDTO);
 
+    /// Actualiza el estado de una subscripcion
     void updateSubscription(SubscriptionUpdateDTO subscriptionUpdateDTO);
 
+    /// Obtener la entidad de la subscripcion
     Subscription getSubscriptionById(Long id);
+
+    /// Actualiza todas las subscripciones (Funcion que se ejecuta automaticamente cuando el sistema se inicia o una vez al dia)
+    void updateSubscriptionsStatus();
 
     /// MARCOS
     Set<SubscriptionInfoDTO> findAllSubscription();

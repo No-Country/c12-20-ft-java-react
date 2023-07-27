@@ -3,12 +3,14 @@ package c1220ftjavareact.gym.payment.controller;
 import c1220ftjavareact.gym.payment.dto.PaymentDTO;
 import c1220ftjavareact.gym.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/payments")
 @RequiredArgsConstructor
@@ -21,22 +23,18 @@ public class PaymentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PaymentDTO> updatePayment(@PathVariable int id, @RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<PaymentDTO> updatePayment(@PathVariable Long id, @RequestBody PaymentDTO paymentDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.updatePayment(id, paymentDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePayment(@PathVariable int id) {
-        boolean success = paymentService.deletePayment(id);
-        if (success) {
-            return ResponseEntity.ok("Payment deleted successfully.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Payment not found.");
-        }
+    public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
+        paymentService.deletePayment(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaymentDTO> getPaymentDtoById(@PathVariable int id) {
+    public ResponseEntity<PaymentDTO> getPaymentDtoById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.getPaymentDtoById(id));
     }
 

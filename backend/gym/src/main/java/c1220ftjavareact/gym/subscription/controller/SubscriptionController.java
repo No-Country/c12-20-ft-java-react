@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -21,13 +22,14 @@ public class SubscriptionController {
     private final ISubscriptionService subscriptionService;
 
     @PostMapping(value = "/create")
-    public HttpEntity<String> saveSubscription(@RequestBody SubscriptionSaveDTO subscriptionSaveDTO) {
+    public ResponseEntity<String> saveSubscription(@RequestBody SubscriptionSaveDTO subscriptionSaveDTO) {
         this.subscriptionService.saveSubscription(subscriptionSaveDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("Subscription created.");
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PutMapping(value = "/update")
-    public HttpEntity<String> updateSubscriptionById(@RequestBody SubscriptionUpdateDTO subscriptionUpdateDTO) {
+    public ResponseEntity<String> updateSubscriptionById(@RequestBody SubscriptionUpdateDTO subscriptionUpdateDTO) {
         this.subscriptionService.updateSubscription(subscriptionUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body("Subscription updated.");
     }

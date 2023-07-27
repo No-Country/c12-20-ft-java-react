@@ -12,12 +12,12 @@ const Footer = () => {
             <Link to= {"/"}>
                 <img className='logo' src={logo}/>
             </Link>
-            <div  className='navBarTxt'>
+            <div  className='footerTxt'>
                 <a>
-                    <h3 className='navBarTittle'>Copyright © 2023 - All right reserved</h3>
+                    <h3 className='footerTittle'>Copyright © 2023 - All right reserved</h3>
                 </a>
             </div>
-            <div className='contIconNavBar'>
+            <div className='contIconFooter'>
                 <a href="https://www.instagram.com/" target="_blank">
                     <img className='iconNavBar' src={logo_instagram}/>
                 </a>

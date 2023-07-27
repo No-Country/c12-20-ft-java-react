@@ -6,6 +6,7 @@ import c1220ftjavareact.gym.training.model.UnAvailableTimes;
 import c1220ftjavareact.gym.training.service.ITrainingSessionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class TrainingSessionController {
         this.iTrainingSessionService = iTrainingSessionService;
     }
 
-    ///@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PostMapping(value = "/create")
     public ResponseEntity<TrainingSessionDTO> saveTrainingSession(@RequestBody TrainingSessionSaveDTO trainingSessionSaveDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iTrainingSessionService.saveTrainingSession(trainingSessionSaveDTO));
@@ -46,19 +47,19 @@ public class TrainingSessionController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByRoomId(roomId));
     }
 
-    ///@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PutMapping(value = "/update/{sessionId}")
     public ResponseEntity<TrainingSessionDTO> updateTrainingSessionById(@RequestBody TrainingSessionDTO updatedTraining, @PathVariable Long sessionId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.updateTrainingSessionById(updatedTraining, sessionId));
     }
 
-    ///@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @DeleteMapping(value = "/delete/{sessionId}")
     public ResponseEntity<TrainingSessionDTO> deleteTrainingSessionsById(@PathVariable Long sessionId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.removeTrainingSessionById(sessionId));
     }
 
-    ///@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping(value = "/unavailabletimes")
     public ResponseEntity<UnAvailableTimes> getUnAvailableTimes() {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getUnavailableTimes());

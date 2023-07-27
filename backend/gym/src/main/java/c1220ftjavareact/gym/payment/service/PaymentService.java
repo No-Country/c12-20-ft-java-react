@@ -7,11 +7,11 @@ import java.util.List;
 public interface PaymentService {
     PaymentDTO createPayment(PaymentDTO paymentDTO);
 
-    PaymentDTO updatePayment(int id, PaymentDTO paymentDTO);
+    PaymentDTO updatePayment(Long id, PaymentDTO paymentDTO);
 
-    Boolean deletePayment(int id);
+    void deletePayment(Long id);
 
-    PaymentDTO getPaymentDtoById(int id);
+    PaymentDTO getPaymentDtoById(Long id);
 
     List<PaymentDTO> getAllPaymentsDto();
 }

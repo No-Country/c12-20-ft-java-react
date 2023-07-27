@@ -9,6 +9,8 @@ import DashboardAdmin from "./components/DashboardAdmin";
 import DashboardClass from "./components/DashboardClass";
 import Sidebar from "./components/shared/Sidebar";
 import LandingPage from "./components/LandingPage";
+import Scheduler from "./components/Scheduler";
+
 
 export const App = () => {
   return (
@@ -16,12 +18,11 @@ export const App = () => {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/schedule" element={<Scheduler/>}/>
           <Route path="/login" element={<Form type="login" />} />
           <Route path="/register" element={<Form type="register" />} />
           <Route
-            path="/change-password"
-            element={<PasswordResetEmailInput />}
-          />
+            path="/change-password"element={<PasswordResetEmailInput />}/>
 
           <Route
             path={`/change-password/:token`}

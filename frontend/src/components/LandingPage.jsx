@@ -13,9 +13,10 @@ import Weight from '../assets/img/Weight.png'
 import Spinning from '../assets/img/Spinning.png'
 import Crossfit from '../assets/img/Crossfit.png'
 import Functional from '../assets/img/Functional.png'
-import Stretching from '../assets/img/Stretching.png'
-import { useRef } from 'react'
+import Stretching from '../assets/img/Stretching.png' 
 import NavBar from "../components/NavBar"
+import ContactUs from './ContactUs'
+import Footer from './Footer'
 import { Link } from 'react-router-dom'
 
 
@@ -104,7 +105,7 @@ const LandingPage = () => {
                         </div>
                     </div>
                 </section>
-                <section className='contClasses'>
+                <section className='contClasses2'>
                     <div className='classes'>
                         <figure className='contImgClasses'>
                             <img src={Crossfit} alt="Yoga" className='imgClasses'/>
@@ -135,7 +136,7 @@ const LandingPage = () => {
                 </section>
                 <section>
                     <div className='contBtnClasses'>
-                        <button className='btnClasses'>Meet the complete schedule here</button>
+                        <Link to="/schedule" className='btnClasses'> Meet the complete schedule here</Link>
                     </div>
                 </section>
                 <section className='contPlansPricing'>
@@ -188,7 +189,9 @@ const LandingPage = () => {
                         </div>
                     </section>
                 </section>
+                <ContactUs/>
             </main>
+        <Footer/>
         </>
     )
 }

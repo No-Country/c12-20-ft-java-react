@@ -13,9 +13,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PaymentDTO {
 
-    private Long idSubscription;
-    private LocalDate day;
-    private LocalDate expired;
+    private Long subscriptionId;
+    private LocalDate paymentAt;
+    private LocalDate expiredAt;
     private Method method;
 
 }
