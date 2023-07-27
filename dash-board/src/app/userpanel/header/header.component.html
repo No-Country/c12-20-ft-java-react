@@ -1,0 +1,33 @@
+<header class="bg-zinc-900 text-white">
+    <div class="mx-auto px-4 py-4 sm:px-6 lg:px-8">
+    <div class="flex items-center sm:justify-between sm:gap-4">
+      <div class="relative hidden sm:block">
+        <a 
+        href="https://marvelous-fairy-2dbca1.netlify.app/"
+        > 
+          <h1 class="text-2xl font-bold pr-4 mb-4 flex items-center pt-2 gap-4 cursor-pointer"> 
+            <div class="logo h-8 w-8"></div>PrimeFit 
+          </h1>
+        </a>
+      </div>
+
+      <nav class="text-xl flex-col flex-grow hidden md:flex md:justify-end md:flex-row">
+        <ul class="space-y-1 gap-4 list-none lg:space-y-0 lg:items-center lg:inline-flex">
+            <li *ngIf="user.role !== 'USER'">
+                <a [routerLink]="'/dashboard/'+user.id"
+                class="px-2 mx-2 lg:px-6 py-2  border-b-2 border-transparent hover:border-red-400 leading-[22px] md:px-3 hover:text-red-400"> 
+                  <span class="hidden lg:inline"> Panel </span>
+                </a>
+            </li>
+            <li>
+                <a href="#" 
+                class="px-2 mx-2 lg:px-6 py-2 border-b-2 border-transparent hover:border-red-400 leading-[22px] md:px-3
+                hover:text-red-400"> 
+                  <span class="hidden lg:inline"> Logout </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    </div>
+  </div>
+</header>

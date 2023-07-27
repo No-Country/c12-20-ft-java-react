@@ -1,0 +1,71 @@
+<section class="m-auto px-6 text-3xl text-white">
+  <history-modal></history-modal>
+  <h1 class="ml-2">Subscriptions</h1>
+
+    <div class="py-3 sm:py-12 text-white w-full">
+      <div class="container p-6 mx-auto space-y-8">
+          <ul class="flex flex-wrap gap-5 m-2">
+
+            <li *ngFor="let session of sessions">
+              <article 
+              (click)="manager.openHistoryModal(session.id)"
+              class="group relative block bg-black rounded-3xl cursor-pointer group-hover:shadow-xl" style="min-height: 450px; min-width: 350px;">
+                <img
+                  alt="activity"
+                  (click)="manager.openHistoryModal(session.id)"
+                  [src]="session.img"
+                  class="rounded-3xl border-green-400 border-4 absolute inset-0 h-full w-full object-cover opacity-75 transition-opacity group-hover:opacity-50"
+                />
+              
+                <div class="relative p-4 grid grid-col-2 sm:p-6 group-hover:shadow-xl">
+                  <p class="text-2xl font-bold leading-7 tracking-widest text-red-600 col-span-2 text-center">
+                    Training
+                  </p>
+              
+                  <div class="col-span-1 mt-1 text-xl gap-1 justify-start items-start">
+                    <p class="text-xl font-semibold text-white p-1">{{session.activity}} - {{session.room}}</p>
+
+                    <p class="text-xsm font-semibold text-white leading-5 p-1">
+                      Payment At <span class="text-gray-100 text-sm block">{{session.paymentAt}}</span>
+                    </p>
+                    
+                    <p class="text-xsm font-semibold text-white leading-5 p-1">
+                      Expired <span class="text-gray-100 text-sm block">{{session.expiredAt}}</span>
+                    </p>
+                    
+                    <p class="text-xsm font-semibold text-white leading-5 p-1">
+                      Class time <span class="text-gray-100 text-sm block">{{session.classTime}}</span>
+                    </p>
+
+                  </div>
+
+                  <div class="col-span-1 mt-1 gap-1 flex flex-col justify-center items-end text-justify">
+                    <p class="text-xl font-bold text-justify mr-6">Days</p>
+                    <ul class="text-xs gap-3 ">
+                      <li class="p-1" *ngIf="session.monday">Monday</li>
+                      <li class="p-1" *ngIf="session.tuesday">Tuesday</li>
+                      <li class="p-1" *ngIf="session.wednesday">Wednesday</li>
+                      <li class="p-1" *ngIf="session.thursday">Thursday</li>
+                      <li class="p-1" *ngIf="session.friday">Friday</li>
+                      <li class="p-1" *ngIf="session.saturday">Saturday</li>
+                      <li class="p-1" *ngIf="session.sunday">Sunday</li>
+                    </ul>
+                  </div>
+                  <div class="mt-14 col-span-2">
+                    <div
+                      class="translate-y-7 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100"
+                    >
+                      <p class="text-sm text-white">
+                        {{session.description}}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+          </ul>
+      </div>
+    </div>
+
+  </section>
