@@ -78,9 +78,9 @@ export const AuthProvider = ({ children }) => {
               responseData.user.role === "EMPLOYEE"
             ) {
               localStorage.setItem("user", responseDataString);
-              window.location.href = 'http://localhost:4200/dashboard/'+responseData.id;
+              window.location.href = 'https://luminous-lily-7192ff.netlify.app/dashboard/'+responseData.id;
             } else {
-              window.location.href = 'http://localhost:4200/user/'+responseData.id;
+              window.location.href = 'https://luminous-lily-7192ff.netlify.app/user/'+responseData.id;
               if (checked === true) {
                 localStorage.setItem("user", responseDataString);
               } else {
