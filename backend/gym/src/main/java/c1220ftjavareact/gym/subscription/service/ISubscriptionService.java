@@ -1,5 +1,6 @@
 package c1220ftjavareact.gym.subscription.service;
 
+import c1220ftjavareact.gym.subscription.enums.State;
 import c1220ftjavareact.gym.subscription.other.SubscribedSessionDTO;
 import c1220ftjavareact.gym.subscription.other.SubscriptionInfoDTO;
 import c1220ftjavareact.gym.subscription.dto.SubscriptionSaveDTO;
@@ -13,6 +14,8 @@ public interface ISubscriptionService {
     void saveSubscription(SubscriptionSaveDTO subscriptionSaveDTO);
 
     void updateSubscription(SubscriptionUpdateDTO subscriptionUpdateDTO);
+
+    void updateSubscription(Long subscriptionId, State updateState);
 
     Subscription getSubscriptionById(Long id);
 

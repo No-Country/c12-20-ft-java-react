@@ -82,6 +82,19 @@ public class ImplSubscriptionService implements ISubscriptionService {
         }
     }
 
+    @Override
+    public void updateSubscription(Long subscriptionId, State updateState) {
+        Optional<Subscription> optionalSubscription = subscriptionRepository.findById(subscriptionId);
+
+        if (optionalSubscription.isEmpty()) {
+            throw new SubscriptionException("Subscription not found", HttpStatus.NOT_FOUND);
+        } else {
+            Subscription subscription = optionalSubscription.get();
+            subscription.setState(updateState);
+            subscriptionRepository.save(subscription);
+        }
+    }
+
     @Transactional(readOnly = true)
     @Override
     public Subscription getSubscriptionById(Long id) {

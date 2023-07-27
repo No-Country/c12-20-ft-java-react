@@ -5,6 +5,7 @@ import c1220ftjavareact.gym.payment.entity.PaymentEntity;
 import c1220ftjavareact.gym.payment.exception.PaymentException;
 import c1220ftjavareact.gym.payment.repository.PaymentRepository;
 import c1220ftjavareact.gym.subscription.entity.Subscription;
+import c1220ftjavareact.gym.subscription.enums.State;
 import c1220ftjavareact.gym.subscription.service.ImplSubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static c1220ftjavareact.gym.subscription.enums.State.ACTIVE;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +47,9 @@ public class PaymentServiceImpl implements PaymentService {
             payment.setSubscriptionId(subscription);
             payment = this.paymentRepository.save(payment);
             PaymentDTO updatedPaymentDTO = this.modelMapper.map(payment, PaymentDTO.class);;
+
+            this.subscriptionService.updateSubscription(subscription.getId(), ACTIVE);
+
             return updatedPaymentDTO;
         }
         return null;
@@ -109,4 +115,5 @@ public class PaymentServiceImpl implements PaymentService {
         }
         return paymentDtoList;
     }
+
 }
