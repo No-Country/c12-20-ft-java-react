@@ -57,6 +57,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "JOIN subscription s ON  u.id = s.customer_id " +
             "JOIN training_session ts ON s.training_session_id = ts.id " +
             "JOIN activity a ON ts.activity_id = a.id " +
-            "WHERE u.id = :id AND s.state = 'ACTIVE'", nativeQuery = true)
+            "WHERE u.id = :id AND (s.state = 'ACTIVE' OR s.state = 'RESERVED')", nativeQuery = true)
     Set<String> findActiveActivity(@Param("id") String id);
 }
