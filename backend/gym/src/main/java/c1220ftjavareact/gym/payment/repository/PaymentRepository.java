@@ -8,8 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
     @Query(value = "SELECT p.subscription_id AS subscriptionId, p.method, p.payment_at AS paymentAt, p.expired_at AS expiredAt FROM payment AS p WHERE p.subscription_id = :id",nativeQuery = true)
-    public PaymentProjectionDto getPaymentWithSubscription(@Param("id") Long id);
+    public List<PaymentProjectionDto> getPaymentWithSubscription(@Param("id") Long id);
 }

@@ -16,5 +16,5 @@ public interface PaymentService {
 
     List<PaymentDTO> getAllPaymentsDto();
 
-    PaymentProjectionDto getPaymentWithSubscription(Long id);
+    List<PaymentProjectionDto> getPaymentWithSubscription(Long id);
 }

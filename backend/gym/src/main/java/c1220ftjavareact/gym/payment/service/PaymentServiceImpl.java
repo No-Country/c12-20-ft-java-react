@@ -118,8 +118,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Transactional(readOnly = true)
     @Override
-    public PaymentProjectionDto getPaymentWithSubscription(Long id) {
-        PaymentProjectionDto paymentDTO = this.paymentRepository.getPaymentWithSubscription(id);
+    public List<PaymentProjectionDto> getPaymentWithSubscription(Long id) {
+        List<PaymentProjectionDto> paymentDTO = this.paymentRepository.getPaymentWithSubscription(id);
 
         if (paymentDTO == null) {
             throw new PaymentException("Payment not found", HttpStatus.NOT_FOUND);
