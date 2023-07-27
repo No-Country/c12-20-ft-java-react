@@ -33,4 +33,6 @@ public interface SubscribedSessionDTO {
 
     Boolean getSaturday();
 
+    String getImg();
+
 }

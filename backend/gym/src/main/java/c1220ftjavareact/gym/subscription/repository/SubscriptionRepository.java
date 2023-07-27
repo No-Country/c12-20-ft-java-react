@@ -33,12 +33,13 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     @Query(value = """
             SELECT
-                s.id AS subscriptionId,
+                s.id,
                 p.payment_at AS paymentAt,
                 p.expired_at AS expiredAt,
                 s.state,
                 a.name AS activity,
                 a.description,
+                a.img,
                 r.name AS room,
                 CONCAT(ts.time_start, ' - ', ts.time_end) AS classTime,
                 ts.monday,
