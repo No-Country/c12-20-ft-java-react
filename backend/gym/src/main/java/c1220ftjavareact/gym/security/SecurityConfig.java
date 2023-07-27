@@ -51,7 +51,6 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/payments/**").permitAll()
                 .antMatchers("/api/v1/active/**").permitAll()
                 /// <------------------------------------------------------>
-                .antMatchers(HttpMethod.GET, "/api/v1/activities/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/sessions/**").permitAll()
                 .antMatchers("/api/v1/active/**").permitAll()
                 .antMatchers("/api/v1/users/employees/**").permitAll()
