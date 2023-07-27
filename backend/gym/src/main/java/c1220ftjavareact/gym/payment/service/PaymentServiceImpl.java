@@ -1,11 +1,11 @@
 package c1220ftjavareact.gym.payment.service;
 
 import c1220ftjavareact.gym.payment.dto.PaymentDTO;
+import c1220ftjavareact.gym.payment.dto.PaymentProjectionDto;
 import c1220ftjavareact.gym.payment.entity.PaymentEntity;
 import c1220ftjavareact.gym.payment.exception.PaymentException;
 import c1220ftjavareact.gym.payment.repository.PaymentRepository;
 import c1220ftjavareact.gym.subscription.entity.Subscription;
-import c1220ftjavareact.gym.subscription.enums.State;
 import c1220ftjavareact.gym.subscription.service.ImplSubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -115,5 +115,20 @@ public class PaymentServiceImpl implements PaymentService {
         }
         return paymentDtoList;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaymentProjectionDto getPaymentWithSubscription(Long id) {
+        PaymentProjectionDto paymentDTO = this.paymentRepository.getPaymentWithSubscription(id);
+
+        if (paymentDTO == null) {
+            throw new PaymentException("Payment not found", HttpStatus.NOT_FOUND);
+        } else {
+            return paymentDTO;
+        }
+    }
+
+
+
 
 }

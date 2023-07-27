@@ -1,6 +1,7 @@
 package c1220ftjavareact.gym.payment.controller;
 
 import c1220ftjavareact.gym.payment.dto.PaymentDTO;
+import c1220ftjavareact.gym.payment.dto.PaymentProjectionDto;
 import c1220ftjavareact.gym.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,5 +42,10 @@ public class PaymentController {
     @GetMapping
     public ResponseEntity<List<PaymentDTO>> getAllPaymentsDto() {
         return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.getAllPaymentsDto());
+    }
+
+    @GetMapping("/findPaymentComplete/{id}")
+    public ResponseEntity<PaymentProjectionDto> getPaymentWithSubscription(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.getPaymentWithSubscription(id));
     }
 }
