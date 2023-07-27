@@ -17,6 +17,22 @@ USE `gym`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE TABLE `scheduled_task_log` (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    last_execution DATETIME
+);
+
+CREATE TABLE active_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT,
+    role VARCHAR(255),
+    full_name VARCHAR(255),
+    email VARCHAR(255) NOT NULL,
+    picture VARCHAR(255),
+    token VARCHAR(255)
+);
+
+ALTER TABLE active_user MODIFY COLUMN token VARCHAR(500);
 --
 -- Table structure for table `activity`
 --
