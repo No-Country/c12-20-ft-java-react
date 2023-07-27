@@ -45,7 +45,7 @@ public class PaymentController {
     }
 
     @GetMapping("/findPaymentComplete/{id}")
-    public ResponseEntity<PaymentProjectionDto> getPaymentWithSubscription(@PathVariable("id") Long id) {
+    public ResponseEntity<List<PaymentProjectionDto>> getPaymentWithSubscription(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.paymentService.getPaymentWithSubscription(id));
     }
 }
