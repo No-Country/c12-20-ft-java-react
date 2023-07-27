@@ -49,7 +49,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
                 ts.saturday,
                 ts.sunday
             FROM subscription s
-            JOIN payment AS p ON s.id = p.subscription_id
+            LEFT JOIN payment AS p ON s.id = p.subscription_id
             JOIN training_session ts ON s.training_session_id = ts.id
             JOIN activity a ON ts.activity_id = a.id
             JOIN room r ON ts.room_id = r.id
