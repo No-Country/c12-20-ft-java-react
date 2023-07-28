@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByEmail(String email);
 
+    //Guardar un usuario con datos por defecto de la base de datos
     @Modifying
     @Query(value = "INSERT INTO user (name, email, lastname, password, role) VALUES " +
             "(:name, :email, :lastname, :password, :role)", nativeQuery = true)
@@ -29,6 +30,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             @Param("role") String role
     );
 
+    //Recupero los datos exactos que necesito para el login
     @Query(value = "SELECT u.id, u.email, concat(u.name,' ',u.lastname) AS fullName, u.role, u.picture FROM user AS u WHERE u.email = :email", nativeQuery = true)
     UserProjection findUserForLogin(@Param("email") String email);
 
@@ -36,6 +38,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "DELETE FROM user AS u WHERE u.id = :id AND u.role = :role", nativeQuery = true)
     void deleteUsersBy(@Param("id") String id, @Param("role") String role);
 
+    //Cambio el estado del usuario
     @Modifying
     @Query(value = "UPDATE user AS u SET u.deleted = :state WHERE u.id = :id AND u.role = :role", nativeQuery = true)
     void changeStateUser(@Param("id") String id, @Param("role") String role, @Param("state") String state);
@@ -44,19 +47,23 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("UPDATE UserEntity u SET u.deleted = CASE WHEN u.deleted = true THEN false ELSE true END WHERE u.id IN :userIds AND u.role = 'EMPLOYEE'")
     void toggleDeletedStatusForEmployees(Set<Long> userIds);
 
+    //Cuanta los usuario con un ID y un Rol
     @Query(value = "SELECT count(*) FROM user WHERE user.id = :id AND user.role = :role", nativeQuery = true)
     Integer countUsersBy(@Param("id") String id, @Param("role") String role);
 
+    //Cuanta los Admins
     @Query(value = "SELECT count(*) FROM user WHERE user.role = 'ADMIN'", nativeQuery = true)
     Integer countAdmins();
 
-    @Query(value = "SELECT u.id, concat(u.name,' ',u.lastname) AS fullName, u.email, u.role, u.picture, u.deleted FROM user AS u WHERE u.role = 'EMPLOYEE'", nativeQuery = true)
+    @Query(value = "SELECT u.id, concat(u.name,' ',u.lastname) AS fullName, u.email, u.role, u.picture, u.deleted FROM user AS u WHERE u.role = 'EMPLOYEE' AND u.deleted = 0", nativeQuery = true)
     Set<EmployeeDTO> findAllEmployee();
 
-    @Query(value = "SELECT a.name AS activity FROM user AS u " +
-            "JOIN subscription s ON  u.id = s.customer_id " +
-            "JOIN training_session ts ON s.training_session_id = ts.id " +
-            "JOIN activity a ON ts.activity_id = a.id " +
-            "WHERE u.id = :id AND (s.state = 'ACTIVE' OR s.state = 'RESERVED')", nativeQuery = true)
+    @Query(value = """
+            SELECT a.name AS activity FROM user AS u 
+            JOIN subscription s ON  u.id = s.customer_id 
+            JOIN training_session ts ON s.training_session_id = ts.id 
+            JOIN activity a ON ts.activity_id = a.id 
+            WHERE u.id = :id AND (s.state = 'ACTIVE' OR s.state = 'RESERVED')
+            """, nativeQuery = true)
     Set<String> findActiveActivity(@Param("id") String id);
 }

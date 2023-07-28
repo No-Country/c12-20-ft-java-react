@@ -158,6 +158,9 @@ public class UserServiceImp implements UserService {
                                 "Resource not found.", "The user was not found."
                         )
                 );
+        if(!user.getEmail().equals(dto.email())){
+            this.assertEmailIsNotRegistered(dto.email());
+        }
         //Actualizo las propiedades solicitadas
         user.update(dto, encoder);
 
