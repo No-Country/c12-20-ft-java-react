@@ -47,19 +47,19 @@ public class TrainingSessionController {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getAllByRoomId(roomId));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PutMapping(value = "/update/{sessionId}")
     public ResponseEntity<TrainingSessionDTO> updateTrainingSessionById(@RequestBody TrainingSessionDTO updatedTraining, @PathVariable Long sessionId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.updateTrainingSessionById(updatedTraining, sessionId));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @DeleteMapping(value = "/delete/{sessionId}")
     public ResponseEntity<TrainingSessionDTO> deleteTrainingSessionsById(@PathVariable Long sessionId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.removeTrainingSessionById(sessionId));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @GetMapping(value = "/unavailabletimes")
     public ResponseEntity<UnAvailableTimes> getUnAvailableTimes() {
         return ResponseEntity.status(HttpStatus.OK).body(this.iTrainingSessionService.getUnavailableTimes());
