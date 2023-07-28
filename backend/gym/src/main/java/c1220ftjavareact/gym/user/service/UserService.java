@@ -10,6 +10,7 @@ import c1220ftjavareact.gym.user.model.User;
 import c1220ftjavareact.gym.user.projection.UserProjection;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -87,4 +88,6 @@ public interface UserService {
     User updateUser(UserUpdateDTO dto, String id);
 
     UserEntity getUserEntity(Long id);
+
+    List<UserEntity> findAllUsers();
 }

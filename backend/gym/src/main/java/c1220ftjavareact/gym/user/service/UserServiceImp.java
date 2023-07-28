@@ -177,4 +177,8 @@ public class UserServiceImp implements UserService {
 
         return user.get();
     }
+    @Override
+    public List<UserEntity> findAllUsers(){
+        return this.repository.findAll();
+    }
 }

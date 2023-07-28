@@ -2,6 +2,8 @@ package c1220ftjavareact.gym.user.controller;
 
 import c1220ftjavareact.gym.user.dto.EmployeeDTO;
 import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
+import c1220ftjavareact.gym.user.entity.UserEntity;
+import c1220ftjavareact.gym.user.model.User;
 import c1220ftjavareact.gym.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,5 +67,10 @@ public class UserController {
     public HttpEntity<Set<String>> findActiveSubscriptions(@PathVariable("id") String id) {
 
         return ResponseEntity.ok(this.service.findActiveActivity(id));
+    }
+
+    @GetMapping
+    public List<UserEntity> findAllUsers(){
+        return this.service.findAllUsers();
     }
 }
