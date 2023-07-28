@@ -21,7 +21,7 @@ public class TrainingSessionController {
         this.iTrainingSessionService = iTrainingSessionService;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     @PostMapping(value = "/create")
     public ResponseEntity<TrainingSessionDTO> saveTrainingSession(@RequestBody TrainingSessionSaveDTO trainingSessionSaveDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.iTrainingSessionService.saveTrainingSession(trainingSessionSaveDTO));
