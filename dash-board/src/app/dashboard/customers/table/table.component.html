@@ -1,0 +1,76 @@
+<section class="container p-2">
+  <div class="flex justify-between">
+    <h2 class="mb-4 text-2xl font-semibold leadi">Customers</h2>
+    <div class="form-icon flex justify-normal">
+
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1 self-center">
+        <path stroke-linecap="round" stroke-linejoin="round" 
+        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      </svg>
+      
+      <input [(ngModel)]="searchTerm"
+      class="bg-transparent border-0 form-input outline-none"
+      placeholder="Search in table..."
+    />
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table
+      class="max-w-2xl rounded-md divide-gray-500 bg-zinc-800 py-6 text-sm text-left"
+    >
+      <thead class="text-center border-b-2">
+        <tr>
+          <th class="px-4 py-2"></th>
+          <th class="px-6 py-4">Name</th>
+          <th class="px-6 py-4">Email</th>
+          <th class="px-6 py-4">Activity</th>
+          <th class="px-6 py-4">Room</th>
+          <th class="px-6 py-4">Class Time</th>
+          <th class="px-6 py-4">State</th>
+        </tr>
+      </thead>
+
+      <tbody class="text-gray-300">        
+        <tr class="my-4 gap-4 hover:bg-zinc-750" *ngFor="let customer of manager.customers | filter: searchTerm" >
+          <td>
+            <img
+              alt="Profile" width="4rem" height="4rem" 
+              src="{{customer.subscriberPicture}}" 
+              class="rounded-full object-cover ml-4 w-8 h-8"
+            />
+          </td>
+          <td class="px-6 py-4">{{ customer.subscriberName }}</td>
+          <td class="px-6 py-4">{{ customer.subscriberEmail }}</td>
+          <td class="px-6 py-4 text-center">{{ customer.activity }}</td>
+          <td class="px-6 py-4 text-center">{{ customer.roomName }}</td>
+          <td class="px-6 py-4 text-center">{{ customer.classTime }}</td>
+
+          <td class="p-3 text-right">
+            <span
+              class="px-2 py-1 font-semibold rounded-md text-white leading-5 flex items-center text-center w-[80px]"
+              [ngClass]="{'bg-red-500': customer.state === 'CANCEL', 
+              'bg-green-500': customer.state === 'ACTIVE',
+              'bg-amber-500': customer.state === 'INACTIVE',
+              'bg-slate-800': customer.state === 'RESERVED'
+            }"
+            >
+              <span class="w-full text-center"> {{ customer.state }} </span>
+            </span>
+          </td>
+
+          <td class="px-8 py-4">
+            <button
+              class="button w-full disabled:bg-red-500"
+              [disabled]="customer.state === 'ACTIVE' ? true : false"
+              (click)="this.paymentEvent(customer.subscriptionId)"
+            >
+              Pay
+            </button>
+          </td>
+        </tr>
+     
+      </tbody>
+    </table>
+  </div>
+</section>
+

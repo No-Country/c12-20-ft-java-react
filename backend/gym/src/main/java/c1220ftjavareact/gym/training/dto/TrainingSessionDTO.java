@@ -1,6 +1,8 @@
 package c1220ftjavareact.gym.training.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Formato de horarios: "hh:mm" para transferencia de datos
@@ -8,10 +10,13 @@ import lombok.Data;
  * El administrador debe poder modificar la sala a la que esta asociada una sesion pero no la actividad a la que pertenece
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TrainingSessionDTO {
 
     private Long id;
     private Long activityId;
+    private String activityName;
     private Long roomId;
     private String roomName;
     private int capacity;

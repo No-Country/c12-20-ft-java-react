@@ -1,0 +1,96 @@
+<aside class="flex h-screen flex-col justify-between bg-zinc-800">
+  <div class="mb-14 px-3">
+    <header
+      class="h-14 text-white pb-3 ml-1"
+    >
+      <a (click)="rediret()"> 
+        <h1 class="text-2xl font-bold pr-4 mb-4 flex items-center pt-2 gap-4 cursor-pointer"> 
+          <div class="logo h-8 w-8"></div><span>PrimeFit </span>
+        </h1>
+      </a>
+    </header>
+
+    <main class="ml-2 mr-4 p-1">
+      <section class="text-white mb-3">
+        <div class="sticky inset-x-0 bottom-0 border-none">
+          <a [routerLink]="'/user/'+service.userActive.id"
+          class="flex items-center flex-col justify-center gap-2">
+            <img
+              alt="Man"
+              [src]="service.userActive.picture"
+              class="rounded-full object-cover w-20 h-20"
+            />
+          
+            <div>
+    
+              <p class="text-xs text-center">
+                <strong class="block font-medium text-xl">{{service.userActive.fullName}}</strong>
+                <span> {{service.userActive.email}} </span>
+              </p>
+
+            </div>
+          </a>
+        </div>
+      </section>
+      <span class="text-xs text-zinc-500 font-bold">Navigation</span>
+    <ul class="mt-1 space-y-1 text-zinc-400">
+      <li>
+        <a
+        [routerLink]="'/dashboard/'+service.userActive.id"
+        routerLinkActive="active-link"
+        [ngClass]="{'bg-zinc-700': isLinkActive('/dashboard') || isLinkActive('/') || isLinkActive('/dashboard/customers')}"
+          class="block rounded-xl px-4 py-1 text-sm font-medium hover:text-zinc-600 active:text-gray-600"
+        >
+          Customers
+        </a>
+      </li>
+
+      <li>
+        <a
+          [routerLink]="'/dashboard/'+service.userActive.id+'/employees'"
+          routerLinkActive="active-link"
+          [ngClass]="{'bg-zinc-700': isLinkActive('/dashboard/employees') }"
+          class="block rounded-lg px-4 py-1 text-sm font-medium hover:text-zinc-600 active:text-gray-600"
+        >
+          Employees
+        </a>
+      </li>
+
+      <li>
+        <a
+        routerLink="'/dashboard/'+service.userActive.id+'/training'"
+        routerLinkActive="active-link"
+        [ngClass]="{'bg-zinc-700': isLinkActive('/training') }"
+          class="block rounded-lg px-4 py-1 text-sm font-medium  hover:text-zinc-600 active:text-gray-600"
+        >
+          Training Session
+        </a>
+      </li>
+
+      <li>
+        <a
+        [routerLink]="'/dashboard/'+service.userActive.id+'/activity-rooms'"  routerLinkActive="active-link"
+        [ngClass]="{'bg-zinc-700': isLinkActive('/dashboard/employees') }"
+          class="block rounded-lg px-4 py-1 text-sm font-medium  hover:text-zinc-600 active:text-gray-600"
+        >
+          Activities & Room
+        </a>
+      </li>
+
+      <li>
+        <a
+        (click)="rediret()"
+          class="block rounded-lg px-4 py-1 text-sm font-medium hover:text-zinc-600 active:text-gray-600"
+        >
+          <div class="flex">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+            </svg> Log-out 
+          </div>
+          
+        </a>
+      </li>
+    </ul>
+  </main>
+  </div>
+</aside>

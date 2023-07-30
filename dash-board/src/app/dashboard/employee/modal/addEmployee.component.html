@@ -1,0 +1,56 @@
+<div
+  *ngIf="manager.showEmployeeModal"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-white text-xsm"
+>
+  <div class="relative w-full max-w-xl mx-auto">
+    <div
+      class="p-5 overflow-hidden transition-all transform bg-zinc-800 rounded-lg shadow-2xl lg:p-16"
+    >
+        <header>
+            <button class="absolute top-2 right-2" (click)="manager.finishEmployeEvent()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="flex-shrink-0 w-6 h-6 ">
+                <polygon points="427.314 107.313 404.686 84.687 256 233.373 107.314 84.687 84.686 107.313 233.373 256 84.686 404.687 107.314 427.313 256 278.627 404.686 427.313 427.314 404.687 278.627 256 427.314 107.313"></polygon>
+                </svg>
+            </button>
+        </header>
+    
+        <main class="form p-4 gap-5">
+    
+                <p class="title text-2xl mb-1">Register Employee</p>
+                
+                <div class="flex my-1">
+                    <div class="form__group field">
+                        <input type="text" [(ngModel)]="manager.registerEmployee.name"
+                        class="form__field font-normal" required="">
+                        <label for="name" class="form__label font-semibold">Firstname</label>
+                      </div>
+            
+                    <div class="form__group field">
+                        <input type="text" [(ngModel)]="manager.registerEmployee.lastname"
+                        class="form__field font-normal" required="">
+                        <label for="name" class="form__label font-semibold">Lastname</label>
+                      </div>
+                </div>  
+                        
+                <div class="form__group field my-2">
+                    <input type="email" [(ngModel)]="manager.registerEmployee.email"
+                    class="form__field font-normal" required="">
+                    <label for="name" class="form__label font-semibold">Email</label>
+                  </div>
+                    
+                  <div class="form__group field my-2">
+                    <input type="text" [(ngModel)]="manager.registerEmployee.picture"
+                    class="form__field font-normal" required="">
+                    <label for="name" class="form__label font-semibold">URL Image</label>
+                  </div>
+
+                <button (click)="manager.sendRegisterEmployee()"
+                class="button w-full mt-2">
+                    Submit
+                </button>
+          
+        </main>
+
+    </div>
+  </div>
+</div>

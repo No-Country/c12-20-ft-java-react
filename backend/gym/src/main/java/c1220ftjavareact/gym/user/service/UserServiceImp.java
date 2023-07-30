@@ -1,10 +1,15 @@
 package c1220ftjavareact.gym.user.service;
 
-import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
+import c1220ftjavareact.gym.security.exception.ResourceAlreadyExistsException;
+import c1220ftjavareact.gym.security.exception.ResourceNotFoundException;
+import c1220ftjavareact.gym.training.exception.TrainingException;
+import c1220ftjavareact.gym.user.dto.EmployeeDTO;
+import c1220ftjavareact.gym.user.dto.EmployeeSaveDTO;
 import c1220ftjavareact.gym.user.dto.UserSaveDTO;
 import c1220ftjavareact.gym.user.dto.UserUpdateDTO;
-import c1220ftjavareact.gym.common.ResourceAlreadyExistsException;
-import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.user.dto.mapper.UserMapperBeans;
+import c1220ftjavareact.gym.user.entity.UserEntity;
+import c1220ftjavareact.gym.user.enums.Role;
 import c1220ftjavareact.gym.user.exception.UserSaveException;
 import c1220ftjavareact.gym.user.model.User;
 import c1220ftjavareact.gym.user.projection.UserProjection;
@@ -12,9 +17,12 @@ import c1220ftjavareact.gym.user.repository.UserRepository;
 import c1220ftjavareact.gym.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +38,7 @@ public class UserServiceImp implements UserService {
         //Si el email esta registrado arroja la excepcion "ResourceAlreadyExistsException"
         if (repository.existsByEmail(email)) {
             throw new ResourceAlreadyExistsException(
-                    "Recurso ya esta registrado", "El email ya se encuentra en uso"
+                    "Resource is already registered.", "The email is already in use."
             );
         }
     }
@@ -40,7 +48,7 @@ public class UserServiceImp implements UserService {
     public User findUserById(String id) {
         var user = repository.findById(Long.parseLong(id))
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "Recurso no encontrado", "El usuario no fue encontrado para actualizarlo"
+                                "Resource not found.", "The user was not found."
                         )
                 );
         //Mapeo el User de Jpa a un User normal
@@ -59,7 +67,7 @@ public class UserServiceImp implements UserService {
     public User findUserByEmail(String email) {
         var user = repository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "Recurso no encontrado", "El usuario no fue encontrado para actualizarlo"
+                                "Resource not found.", "The user was not found."
                         )
                 );
         //Mapeo el User de Jpa a un User normal
@@ -72,12 +80,39 @@ public class UserServiceImp implements UserService {
         try {
             //Si el Usuario es ADMIN y ya hay una instancia guardada arroja un error
             if (role.equals("ADMIN") && repository.countAdmins() == 1) {
-                throw new UserSaveException("Error al guardar usuario", "Ya hay un admin registrado, no es posible crear dos admins");
+                throw new UserSaveException("Error while saving the user.", "An admin is already registered, it's not possible to create two admins.");
             }
             repository.saveUser(model.name(), model.email(), model.lastname(), userMapper.password().map(model.password()), role);
         } catch (Exception ex) {
-            throw new UserSaveException("Error al guardar usuario", "Ocurrio un error inesperado en el guardado del usuario");
+            throw new UserSaveException("Error while saving the user.", "An unexpected error occurred while saving the user.");
         }
+    }
+
+    @Transactional
+    @Override
+    public Map<String, String> saveEmployee(EmployeeSaveDTO model) {
+        var values = new HashMap<String, String>();
+        var pass = UUID.randomUUID().toString().substring(0, 6);
+        values.put("pass", pass);
+        try {
+            var entity = new UserEntity();
+
+            entity.setDeleted(false);
+            entity.setName(model.name());
+            entity.setEmail(model.email());
+            entity.setRole(Role.EMPLOYEE);
+            entity.setLastname(model.lastname());
+            entity.setPicture(model.picture());
+            entity.setPassword(userMapper.password().map(pass));
+            entity.setCreateAt(TimeUtils.getLocalDate());
+
+            var user = repository.save(entity);
+            values.put("Id", user.getId().toString());
+        } catch (Exception ex) {
+            throw new UserSaveException("Error while saving the user.", "An unexpected error occurred while saving the user.");
+        }
+
+        return values;
     }
 
     @Override
@@ -90,35 +125,53 @@ public class UserServiceImp implements UserService {
             entity.setPassword(userMapper.password().map(model.getPassword()));
             this.repository.save(entity);
         } catch (Exception ex) {
-            throw new UserSaveException("Error al guardar usuario", "Ocurrio un error inesperado en el guardado del usuario");
+            throw new UserSaveException("Error while saving the user.", "An unexpected error occurred while saving the user.");
         }
     }
 
     @Transactional
     @Override
-    public void changeDeletedStateUser(String id, String role, Boolean state) {
+    public void changeDeletedStateUser(Set<Long> employeeIds) {
         //Cuanta la cantidad de usuarios que existe con ese ID y Rol
-        if (this.repository.countUsersBy(id, role) < 1) {
-            throw new ResourceNotFoundException(
-                    "Recurso no encontrado", "El usuario no es un empleado"
-            );
-        }
         //Cambia el estado del usuario
-        this.repository.changeStateUser(id, role, state.equals(true) ? "1" : "0");
+        this.repository.toggleDeletedStatusForEmployees(employeeIds);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Set<EmployeeDTO> findAllEmployees() {
+        return this.repository.findAllEmployee();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Set<String> findActiveActivity(String id) {
+        return this.repository.findActiveActivity(id);
+    }
+
 
     @Override
     public User updateUser(UserUpdateDTO dto, String id) {
         //Busca el Usuario
         var user = this.repository.findById(Long.parseLong(id))
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Recurso no encontrado", "El usuario no fue encontrado para actualizarlo"
-                    )
+                                "Resource not found.", "The user was not found."
+                        )
                 );
         //Actualizo las propiedades solicitadas
         user.update(dto, encoder);
 
         //Guardo la Entidad y mapeo a un User normal
         return this.userMapper.userEntityToUser().map(this.repository.saveAndFlush(user));
+    }
+
+    @Override
+    public UserEntity getUserEntity(Long id) {
+        Optional<UserEntity> user = repository.findById(id);
+        if(user.isEmpty()) {
+            throw new TrainingException("User not found.", HttpStatus.NOT_FOUND);
+        }
+
+        return user.get();
     }
 }

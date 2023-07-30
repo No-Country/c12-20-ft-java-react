@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ActivitySaveDto {
+
     private String name;
+
     private String description;
+
+    private String img;
 }

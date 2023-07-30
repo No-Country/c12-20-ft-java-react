@@ -1,0 +1,119 @@
+
+@media screen and (max-width: 1077px) {
+    .contHeaderTxt{
+        width: 60%;
+        height: auto;
+        padding-left: 100px;
+        padding-top: 230px;
+    }
+
+}
+
+@media screen and (max-width: 1020px) {
+    .classes{
+        margin-top: 30px;
+    }
+    .contClasses{
+    padding-bottom: 10px;
+    }
+}
+
+@media screen and (max-width: 970px) {
+    .contHeaderTxt{
+        width: 80%;
+        height: auto;
+        padding-left: 100px;
+        padding-top: 230px;
+    }
+    
+}
+
+@media screen and (max-width: 830px) {
+    .btnClasses{
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .navBarTxt {
+        display: none;
+    }
+    .contIconNavBar {
+        display: none;
+    }
+    .contHeaderTxt{
+        padding: 60px;
+        
+    }
+    .contHeader{
+        width: 100%;
+        height: auto;
+        justify-content: center;
+        background-image: none;
+    }
+    .headerTittle{
+        font-size: 30px;
+    }
+    .btnHeader{
+        width: 35%;
+        height: auto;
+    }
+
+    .txtOurClasses{
+        padding: 0px 100px 0px 100px ;
+    }
+    .cont{
+        padding: 20px;
+    }
+    .schTT{
+        font-size: 20px;
+    }  
+
+}
+@media screen and (max-width: 540px) {
+    .contHeaderTxt{
+        width: 100%;
+        height: auto;
+        padding: 50px;
+    }
+    .btnHeader{
+        width: 60%;
+        height: auto;
+    }
+    .btnClasses{
+        width: 60%;
+    }
+}
+@media screen and (max-width: 470px){
+    .headerTittle{
+        font-size: 26px;
+    }
+    .pText{
+        font-size: 18px;
+    }
+    .txtOurClasses{
+        padding: 0px 60px 0px 60px ;
+    }
+}
+
+@media screen and (max-width: 400px){
+    .txtOurClasses{
+        font-size: 18px;
+        padding: 0px 40px 0px 40px ;
+    }
+    .contactUsTxt{
+        margin: 20px;
+    }
+}
+
+
+@media screen and (min-width: 769px){
+    .dropdown  {
+        display: none;
+    }
+    .btnHeader{
+        width: 25%;
+        height: auto;
+    }
+}

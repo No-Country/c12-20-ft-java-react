@@ -1,0 +1,115 @@
+<section class="container p-2">
+    <header class="flex justify-between">
+      <h2 class="mb-4 text-2xl font-semibold">Employees</h2>
+      <div class="form-icon flex justify-normal">
+  
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1 self-center">
+          <path stroke-linecap="round" stroke-linejoin="round" 
+          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        
+        <input [(ngModel)]="searchTerm"
+        class="bg-transparent border-0 form-input outline-none"
+        placeholder="Search in table..."
+      />
+      </div>
+    </header>
+    <main class="overflow-x-auto">
+      <table
+        class="min-w-full divide-gray-500 bg-zinc-800 py-6 px-4 text-xsm text-left"
+      >
+        <thead class="text-center border-b-2">
+          <tr>
+       
+            <th class="px-4 py-2">Picture</th>
+            <th class="px-8 py-4">Name</th>
+            <th class="px-8 py-4">Email</th>
+            <th class="px-8 py-4">Role</th>
+            <th class="px-8 py-4">Active</th>
+          </tr>
+        </thead>
+  
+        <tbody class="text-gray-300">        
+          <tr class="my-4 gap-5 hover:bg-zinc-750" 
+          *ngFor="let employee of manager.employees | filter: searchTerm; let i = index " >
+    
+            <td>
+              <img
+                alt="Profile" width="4rem" height="4rem" 
+                src="{{employee.picture}}" 
+                class="rounded-full object-cover ml-4 w-8 h-8"
+              />
+            </td>
+            <td class="px-8 py-4">
+              {{ employee.fullname }}
+            </td>
+            <td class="px-8 py-4">
+              {{ employee.email }}
+            </td>
+            <td class="px-8 py-4 text-center">
+              {{ employee.role }}
+            </td>
+        
+            <td class="text-right flex p-3 justify-center">
+              <label [for]="'AcceptConditions_'+i" class="relative h-8 w-14 cursor-pointer">
+                <input
+                  type="checkbox"
+                  [checked]="employee.checked" (change)="checkedControl(employee)"
+                  [id]="'AcceptConditions_'+i"
+                  class="peer sr-only [&:checked_+_span_svg[data-checked-icon]]:block [&:checked_+_span_svg[data-unchecked-icon]]:hidden"
+                />
+              
+                <span
+                  class="absolute inset-y-0 start-0 z-10 m-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-500 peer-checked:bg-green-500 text-white transition-all peer-checked:start-6"
+                >
+                  <svg
+                    data-unchecked-icon
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+              
+                  <svg
+                    data-checked-icon
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="hidden h-4 w-4"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              
+                <span
+                  class="absolute inset-0 rounded-full bg-red-400 transition peer-checked:bg-green-400"
+                ></span>
+              </label>
+            </td>
+          </tr>
+       
+        </tbody>
+      </table>
+    </main>
+    <footer class="w-full flex justify-end items-end gap-5">
+      <button (click)="manager.addEmployeeEvent()"
+      class="button2 mt-3 add-button font-semibold" style="max-width: 200px;"> 
+        Add Employee
+      </button>
+      <button (click)="manager.updateStateEvent()" [disabled]="disabledButton"
+      class="button2 mt-3 state-button font-semibold" style="max-width: 200px;"> 
+        Change State
+      </button>
+    </footer>
+  </section>
+  

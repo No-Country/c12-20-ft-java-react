@@ -10,7 +10,7 @@ public interface IActivityService {
 
     public ActivitySaveDto createActivity(ActivitySaveDto activitySaveDto);
 
-    public void deleteActivity(Long id);
+    public ActivityWithIdDto deleteActivity(Long id);
 
     public ActivitySaveDto updateActivityDto(Long id, ActivitySaveDto activitySaveDto);
 

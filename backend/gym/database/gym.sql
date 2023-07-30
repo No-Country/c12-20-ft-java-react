@@ -17,6 +17,22 @@ USE `gym`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE TABLE `scheduled_task_log` (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    last_execution DATETIME
+);
+
+CREATE TABLE active_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT,
+    role VARCHAR(255),
+    full_name VARCHAR(255),
+    email VARCHAR(255) NOT NULL,
+    picture VARCHAR(255),
+    token VARCHAR(255)
+);
+
+ALTER TABLE active_user MODIFY COLUMN token VARCHAR(500);
 --
 -- Table structure for table `activity`
 --
@@ -28,6 +44,7 @@ CREATE TABLE `activity` (
                             `id` int NOT NULL AUTO_INCREMENT,
                             `name` varchar(45) NOT NULL,
                             `create_day` date NOT NULL DEFAULT (now()),
+                            `deleted` tinyint(1) NOT NULL DEFAULT '0',
                             `description` varchar(255) NOT NULL DEFAULT 'default',
                             `img` varchar(255) NOT NULL DEFAULT 'default',
                             PRIMARY KEY (`id`)
@@ -109,6 +126,7 @@ CREATE TABLE `room` (
                         `id` int NOT NULL AUTO_INCREMENT,
                         `name` varchar(45) NOT NULL,
                         `max_capacity` int NOT NULL,
+						`deleted` tinyint(1) NOT NULL DEFAULT '0',
                         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

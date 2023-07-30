@@ -12,6 +12,6 @@ public interface TrainingSessionRepository extends JpaRepository<TrainingSession
     List<TrainingSession> findByDeletedFalse();
 
     @Modifying
-    @Query(value = "UPDATE training_session SET deleted=true WHERE ID=:id", nativeQuery = true)
+    @Query(value = "UPDATE training_session SET deleted=true WHERE id=:id", nativeQuery = true)
     public void deleteSession(@Param("id") Long id);
 }

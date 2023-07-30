@@ -4,7 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d73e618f-bd62-4641-b903-9daf1854a1ed" name="Changes" comment="" />
+    <list default="true" id="d73e618f-bd62-4641-b903-9daf1854a1ed" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/c/3ce2e7170417d171f260b7532b159d2e1050286b" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/1/41b43adc1209630711ece28fe43a1ad75a31653b" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/3/c/3ce2e7170417d171f260b7532b159d2e1050286b" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/4/1/41b43adc1209630711ece28fe43a1ad75a31653b" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/database/gym.sql" beforeDir="false" afterPath="$PROJECT_DIR$/gym/database/gym.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/GymApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/GymApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/activity/controller/ActivityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/activity/controller/ActivityController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/config/ModelMapperConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/config/ModelMapperConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/controller/PaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/dto/PaymentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/dto/PaymentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/entity/PaymentEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/entity/PaymentEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/repository/PaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/repository/PaymentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/service/PaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/service/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/payment/service/PaymentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/security/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/security/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/controller/SubscriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/controller/SubscriptionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/entity/Subscription.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/entity/Subscription.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/repository/SubscriptionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/repository/SubscriptionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/service/ISubscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/service/ISubscriptionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/service/ImplSubscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/subscription/service/ImplSubscriptionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/training/controller/TrainingSessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/training/controller/TrainingSessionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/user/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/java/c1220ftjavareact/gym/user/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gym/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dash-board" beforeDir="false" afterPath="$PROJECT_DIR$/../dash-board" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/Context/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/Context/AuthContext.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,10 +71,31 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "develop",
     "last_opened_file_path": "C:/Users/Nahuel/Desktop/NoCountry/c12-20-ft-java-react",
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="GymApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="c1220ftjavareact.gym.GymApplication" />
+      <module name="gym" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="c1220ftjavareact.gym.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.GymApplication" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

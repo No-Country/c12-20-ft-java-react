@@ -3,7 +3,8 @@ package c1220ftjavareact.gym;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/*plan = ENUM('YEARLY', 'MONTHLY', 'WEEKLY') */
+import java.time.LocalDate;
+
 @SpringBootApplication
 public class GymApplication {
 

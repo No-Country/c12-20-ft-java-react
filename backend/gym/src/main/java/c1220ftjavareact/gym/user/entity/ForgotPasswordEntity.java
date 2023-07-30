@@ -1,6 +1,5 @@
 package c1220ftjavareact.gym.user.entity;
 
-import c1220ftjavareact.gym.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

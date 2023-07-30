@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.config;
 
-import c1220ftjavareact.gym.common.ResourceNotFoundException;
+import c1220ftjavareact.gym.security.exception.ResourceNotFoundException;
 import c1220ftjavareact.gym.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,9 +59,9 @@ public class ApplicationBeansConfig {
         var sender = new JavaMailSenderImpl();
         sender.setHost("smtp.gmail.com");
         sender.setPort(587);
-
-        sender.setUsername("marcoslopezdev18@gmail.com");
-        sender.setPassword("hwlaqmmmdvfabysp");
+        //Pass: Primefit1234
+        sender.setUsername("gymprimefitnes@gmail.com");
+        sender.setPassword("pgwltsgzkgbonmmr");
 
         var props = sender.getJavaMailProperties();
 

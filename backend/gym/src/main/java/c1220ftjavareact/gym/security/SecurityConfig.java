@@ -32,9 +32,8 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        http.cors().configurationSource(new CorsConfig().corsConfigurationSource());
 
-        http.cors()
-                .configurationSource(new CorsConfig().corsConfigurationSource());
         http.exceptionHandling().authenticationEntryPoint(entryPoint);
 
         http.authorizeRequests(configurer -> configurer
@@ -44,9 +43,19 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/v1/users/authentication").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/users/authentication/google").permitAll()
                 .antMatchers("/api/v1/passwords/**").permitAll()
-                .antMatchers("/api/v1/activities/**").permitAll()
+                /// <-------------Testear sin pasar por login------------->
                 .antMatchers("/api/v1/rooms/**").permitAll()
+                .antMatchers("/api/v1/activities/**").permitAll()
                 .antMatchers("/api/v1/sessions/**").permitAll()
+                .antMatchers("/api/v1/subscriptions/**").permitAll()
+                .antMatchers("/api/v1/payments/**").permitAll()
+                .antMatchers("/api/v1/active/**").permitAll()
+                /// <------------------------------------------------------>
+                .antMatchers(HttpMethod.GET, "/api/v1/activities/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/sessions/**").permitAll()
+                .antMatchers("/api/v1/active/**").permitAll()
+                .antMatchers("/api/v1/users/employees/**").permitAll()
+                .antMatchers("/api/v1/users/**").permitAll()
                 .anyRequest().authenticated()
         );
 

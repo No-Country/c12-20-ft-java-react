@@ -1,6 +1,6 @@
 package c1220ftjavareact.gym.user.exception;
 
-import c1220ftjavareact.gym.common.ApiException;
+import c1220ftjavareact.gym.security.exception.ApiException;
 import lombok.Getter;
 
 @Getter

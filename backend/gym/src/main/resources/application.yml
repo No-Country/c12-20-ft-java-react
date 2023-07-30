@@ -2,9 +2,9 @@
 enableLoggingRequestDetails: false
 server:
   error:
-    #Al haber un error envia siempre message y los parametros
-    include-message: always
-    include-binding-errors: always
+     #Al haber un error envia siempre message y los parametros
+     include-message: always
+     include-binding-errors: always
 #Se asigna los niveles de Logging para mensajes en consola
 logging:
   level:
@@ -24,19 +24,21 @@ spring:
   main:
     #Desactivo el Banner de Spring Booy de consola
     banner-mode: off
+  #Configuracion de conexion con MySQL
   datasource:
     # conexion con localhost
-    password: root
-    url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
-    username: root
+     url: jdbc:mysql://localhost:3306/gym?useSSL=true&useTimezone=true&serverTimezone=UTC
+     username: root
+     password: admin
     # conexion con base de datos
-#    password: p7Mw1nO979WOfvW9AXdS
-#    url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
-#    username: uyqaqtoeqwns6g02
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+    #password: p7Mw1nO979WOfvW9AXdS
+     #username: uyqaqtoeqwns6g02
+     #url: jdbc:mysql://uyqaqtoeqwns6g02:p7Mw1nO979WOfvW9AXdS@bhzguzwfregpqsalpyry-mysql.services.clever-cloud.com:3306/bhzguzwfregpqsalpyry
+     driver-class-name: com.mysql.cj.jdbc.Driver
+  #Configuracion de JPA
   jpa:
     #Activa el mostrar el SQL ejecutado
-    show-sql: false
+    #show-sql: false
     #Revoco el manejo de la Transaccion a JPA (Recomendable)
     open-in-view: false
     properties:
@@ -44,9 +46,9 @@ spring:
         #Dialecto que usa Hibernate para las querys
         dialect: org.hibernate.dialect.MySQL8Dialect
         #Muestra el SQL ejecutado en consola en Columna
-        format_sql: true
+        format_sql: false
   mail:
-    username: marcoslopezdev18@gmail.com
+    username: gymprimefitnes@gmail.com
   security:
     oauth2:
       client:

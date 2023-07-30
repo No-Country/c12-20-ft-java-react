@@ -1,0 +1,36 @@
+<div
+  *ngIf="service.showPaymentModal"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-white text-xsm"
+>
+  <div class="relative w-full max-w-xl mx-auto">
+    
+    <div
+      class="p-5 overflow-hidden transition-all transform bg-zinc-800 rounded-lg shadow-2xl lg:p-16"
+    >
+    <button class="absolute top-2 right-2" (click)="service.closeModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="flex-shrink-0 w-6 h-6 ">
+        <polygon points="427.314 107.313 404.686 84.687 256 233.373 107.314 84.687 84.686 107.313 233.373 256 84.686 404.687 107.314 427.313 256 278.627 404.686 427.313 427.314 404.687 278.627 256 427.314 107.313"></polygon>
+      </svg>
+    </button>
+    
+      <h2 class="text-xl font-bold mb-4">Payment Data</h2>
+      <div
+      class="grid grid-rows-3 gap-6">
+        <method-select #paymentSelect></method-select>
+        
+        <div class="form__group field">
+          <input type="number" min="1" max="31" step="1" #expiredInput
+          class="form__field font-normal" placeholder="In how many days does it expire?" required="">
+          <label for="name" class="form__label font-semibold">In how many days does it expire?</label>
+        </div>
+        
+        <button
+          type="button" (click)="onSubmit(expiredInput)"
+          class="button text-white w-full"
+        >
+          Registrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

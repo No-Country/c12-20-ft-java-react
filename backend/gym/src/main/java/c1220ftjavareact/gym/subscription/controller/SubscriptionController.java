@@ -1,60 +1,48 @@
 package c1220ftjavareact.gym.subscription.controller;
 
-import c1220ftjavareact.gym.subscription.dto.SubscriptionDTO;
-import c1220ftjavareact.gym.subscription.service.SubscriptionService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import c1220ftjavareact.gym.subscription.other.SubscribedSessionDTO;
+import c1220ftjavareact.gym.subscription.other.SubscriptionInfoDTO;
+import c1220ftjavareact.gym.subscription.dto.SubscriptionSaveDTO;
+import c1220ftjavareact.gym.subscription.dto.SubscriptionUpdateDTO;
+import c1220ftjavareact.gym.subscription.service.ISubscriptionService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
-@RequestMapping("/subscriptions")
+@RequestMapping("api/v1/subscriptions")
+@RequiredArgsConstructor
 public class SubscriptionController {
-    private final SubscriptionService subscriptionService;
+    private final ISubscriptionService subscriptionService;
 
-    @Autowired
-    public SubscriptionController(SubscriptionService subscriptionService) {
-        this.subscriptionService = subscriptionService;
+    @PostMapping(value = "/create")
+    public ResponseEntity<String> saveSubscription(@RequestBody SubscriptionSaveDTO subscriptionSaveDTO) {
+        this.subscriptionService.saveSubscription(subscriptionSaveDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Subscription created.");
     }
 
-    @PostMapping
-    public ResponseEntity<SubscriptionDTO> createSubscription(@RequestBody SubscriptionDTO subscriptionDTO) {
-        SubscriptionDTO createdSubscription = subscriptionService.createSubscription(subscriptionDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdSubscription);
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PutMapping(value = "/update")
+    public ResponseEntity<String> updateSubscriptionById(@RequestBody SubscriptionUpdateDTO subscriptionUpdateDTO) {
+        this.subscriptionService.updateSubscription(subscriptionUpdateDTO);
+        return ResponseEntity.status(HttpStatus.OK).body("Subscription updated.");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SubscriptionDTO> updateSubscription(@PathVariable int id, @RequestBody SubscriptionDTO subscriptionDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.updateSubscription(id, subscriptionDTO));
+    /// MARCOS
+    @GetMapping()
+    public HttpEntity<Set<SubscriptionInfoDTO>> findAllSubscriptionByFormat() {
+        return ResponseEntity.ok(this.subscriptionService.findAllSubscription());
     }
 
-
-    //100 | 99  | 101
-    //verificar que als suscripciones activas solo cuentan cuando estan activas y segun eso el traingi session lo manejo
-    //como 100/100 osea 100 clases y 100 sucripciones activas dar un mensaje que no se puede insertar por que esta lleno la
-    //training session osea ya no te puedes suscribir
-
-    //1 trainginf
-    //10 | 10  10/10 mensaje que ya esta lleno la traing session no puedes suscribirte
-    //capacidad suscripcion id los cuento y de ahi nada valido
-
-    //update canceled
-    //cambiar el nombre delete a cancelSuscription
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSubscription(@PathVariable int id) {
-
-        boolean success = subscriptionService.deleteSubscription(id);
-
-        if (success) {
-            return ResponseEntity.ok("Subscription deleted successfully.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Subscription not found.");
-        }
-
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionDTO> getSubscriptionById(@PathVariable int id) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.subscriptionService.getSubscriptionById(id));
+    /// MARCOS
+    @GetMapping("/users/{id}")
+    public HttpEntity<Set<SubscribedSessionDTO>> findSubscribedSession(@PathVariable Long id) {
+        return ResponseEntity.ok(this.subscriptionService.findSubscribedSession(id));
     }
 }

@@ -1,8 +1,8 @@
 package c1220ftjavareact.gym.security.filter;
 
 import c1220ftjavareact.gym.security.exception.CredentialException;
-import c1220ftjavareact.gym.user.entity.UserEntity;
 import c1220ftjavareact.gym.security.jwt.JwtService;
+import c1220ftjavareact.gym.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,7 +58,8 @@ public class JwtFilter extends OncePerRequestFilter {
                         : UserEntity.builder().build();
 
 
-        if (user.getDeleted()) throw new CredentialException("Error en FiltroJWT", "El usuario que intenta ingresa esta deshabilitado");
+        if (user.getDeleted())
+            throw new CredentialException("Error en FiltroJWT", "El usuario que intenta ingresa esta deshabilitado");
         if (
                 jwtService.isTokenValid(jwt, user) &&
                         SecurityContextHolder.getContext().getAuthentication() == null
